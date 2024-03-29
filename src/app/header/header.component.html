@@ -1,0 +1,15 @@
+<header class="absoulte top-0 left-0 z-50 w-full bg-white shadow-md">
+  <nav class="flex h-16 justify-center items-center">
+    <!-- Add rounded border and grey background to the div -->
+    <div class="border border-black rounded-lg bg-gray-200 w-[50rem]">
+      <ul class="flex flex-row justify-center shadow-lg hover:shadow-[10rem]">
+        <!-- Use flex and space-x classes to create horizontal spacing between list items -->
+        @for(item of items; track item){
+        <li class="px-10">
+          {{ item }}
+        </li>
+        }
+      </ul>
+    </div>
+  </nav>
+</header>
