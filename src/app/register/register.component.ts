@@ -1,54 +1,47 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { AuthService } from '../auth/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
-
-  text = "hello";
-  testIf = true;
-onClick() {
-  this.text='not hello';
-    
-}
-isHidden() {
-  return false;
-}
   profileForm: FormGroup;
+  invalidLogin: boolean = false;
 
-
-  
-
-  constructor(private http: HttpClient, private fb: FormBuilder) {
+  constructor(
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
     this.profileForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: [''],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
   handleSubmit() {
-    if (this.profileForm.invalid) {
-      return;
-    }
-
-    this.http.post<any>('http://localhost:8000/api/v1/auth/register', this.profileForm.value)
-      .subscribe(
-        data => {
-          console.log('Registration successful', data);
-          // Optionally, you can redirect the user to another page
-        },
-        error => {
-          console.error('Registration failed', error);
-          // Handle error (e.g., display error message to the user)
-        }
-      );
+    this.auth.signUp(this.profileForm.value).subscribe((res) => {
+      if (res) {
+        let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        this.router.navigate([returnUrl || '/home']);
+      } else this.invalidLogin = true;
+    });
   }
 }
