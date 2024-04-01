@@ -4,9 +4,14 @@ import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map } from 'rxjs';
 
-export interface User {
+export interface UserLogin {
   firstName: string;
   lastName: string;
+  email: string;
+  password: string;
+}
+
+export interface UserLogin {
   email: string;
   password: string;
 }
@@ -20,7 +25,7 @@ export class AuthService {
     private router: Router,
   ) {}
 
-  signUp(user: User) {
+  signUp(user: UserLogin) {
     return this.http
       .post<any>('http://localhost:8000/api/v1/auth/register', user)
       .pipe(
@@ -34,9 +39,23 @@ export class AuthService {
       );
   }
 
+  logIn(user: UserLogin) {
+    return this.http
+      .post<any>('http://localhost:8000/api/v1/auth/login', user)
+      .pipe(
+        map((response) => {
+          if (response && response.token) {
+            localStorage.setItem('token', response.token);
+            return true;
+          }
+          return false;
+        }),
+      );
+  }
+
   logout() {
     localStorage.removeItem('token');
-    this.router.navigate(['/register']);
+    this.router.navigate(['/signup']);
   }
 
   //Todo add isLoggedIn method and isLoggedOut method based on token and backend

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 import {
   FormGroup,
   FormBuilder,
@@ -13,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, ButtonModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -37,11 +38,31 @@ export class RegisterComponent {
   }
 
   handleSubmit() {
-    this.auth.signUp(this.profileForm.value).subscribe((res) => {
-      if (res) {
-        let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-        this.router.navigate([returnUrl || '/home']);
-      } else this.invalidLogin = true;
+    this.auth.signUp(this.profileForm.value).subscribe({
+      next: (res) => {
+        if (res) {
+          let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+          this.router.navigate([returnUrl || '/home']);
+        } else this.invalidLogin = true;
+      },
+
+      error: (err: Error) => {
+        alert('An error occurred sorry - please try again later nigga!');
+        console.error(err);
+      },
+      complete: () => {
+        alert('signup completed' + this.profileForm.value.firstName);
+      },
     });
   }
 }
+
+// handleSubmit() {
+//   this.auth.signUp(this.profileForm.value).subscribe((res) => {
+
+//     if (res) {
+//       let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+//       this.router.navigate([returnUrl || '/home']);
+//     } else this.invalidLogin = true;
+//   });
+// }
