@@ -5,6 +5,8 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { RouterLink } from '@angular/router';
+import { MessagesModule } from 'primeng/messages';
+import { NgClass } from '@angular/common';
 import {
   FormGroup,
   FormBuilder,
@@ -13,7 +15,9 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { NotFoundError } from '../common/not-found-error';
+import { AppError } from '../common/app-error';
+import { ConflictError } from '../common/conflict-error';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -24,6 +28,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     ToastModule,
     CardModule,
     RouterLink,
+    MessagesModule,
+    NgClass,
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
@@ -31,6 +37,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class SignupComponent {
   profileForm: FormGroup;
+  //to do : what happend when this is true?
   invalidLogin: boolean = false;
   value = '';
   labelColor: string = 'text-gray-950';
@@ -46,7 +53,7 @@ export class SignupComponent {
       firstName: ['', Validators.required],
       lastName: [''],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]], // todo add regexp validation
     });
   }
 
@@ -60,18 +67,39 @@ export class SignupComponent {
           this.router.navigate([returnUrl || '/home']);
         } else this.invalidLogin = true;
       },
-
-      error: (err: HttpErrorResponse) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: err.error.message,
-        });
-        console.error(err);
+      error: (err: AppError) => {
+        if (err instanceof ConflictError) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Email address is already in use`,
+          });
+          console.error(err);
+        } else throw err;
       },
       complete: () => {
         console.log('Observations completed');
       },
     });
+  }
+
+  get firstName() {
+    return this.profileForm.get('firstName');
+  }
+
+  get lastName() {
+    return this.profileForm.get('lastName');
+  }
+
+  get email() {
+    return this.profileForm.get('email');
+  }
+
+  get password() {
+    return this.profileForm.get('password');
+  }
+  isInvalidAndTouched(controlName: string): boolean {
+    const control = this.profileForm.get(controlName);
+    return !!control && control.invalid && control.touched;
   }
 }

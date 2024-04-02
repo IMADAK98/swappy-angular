@@ -13,6 +13,12 @@
           placeholder="Enter your Email"
           formControlName="email"
         />
+        @if (email?.errors?.["required"] && email?.touched) {
+          <small id="email-help" class="p-error px-1">Email is required.</small>
+        }
+        @if (email?.errors?.["email"] && email?.touched) {
+          <small id="email-help" class="p-error px-1">Email not valid</small>
+        }
       </div>
 
       <div class="mb-4">
@@ -20,6 +26,7 @@
           >Password</label
         >
         <input
+          minlength="8"
           pInputText
           type="password"
           id="password"
@@ -28,6 +35,16 @@
           formControlName="password"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
+        @if (password?.errors?.["required"] && password?.touched) {
+          <small id="password-help" class="p-error px-1"
+            >Password is required</small
+          >
+        }
+        @if (password?.errors?.["minlength"]) {
+          <small id="password-help" class="p-error px-1"
+            >Minimum length is 8</small
+          >
+        }
       </div>
 
       <div class="flex items-center justify-between">
