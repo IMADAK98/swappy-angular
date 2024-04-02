@@ -13,8 +13,12 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import { AppError } from '../common/app-error';
+import { NotFoundError } from '../common/not-found-error';
+import { BadInput } from '../common/bad-input';
+import { Unauthorized } from '../common/unauthorized-error';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -47,7 +51,7 @@ export class LoginComponent {
   ) {
     this.profileForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
@@ -61,18 +65,27 @@ export class LoginComponent {
           this.router.navigate([returnUrl || '/home']);
         } else this.invalidLogin = true;
       },
-
-      error: (err: HttpErrorResponse) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: err.error.message,
-        });
-        console.error(err);
+      error: (err: AppError) => {
+        if (err instanceof Unauthorized) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Email address or password incorrect`,
+          });
+          console.error(err);
+        } else throw err;
       },
       complete: () => {
         console.log('Observations completed');
       },
     });
+  }
+
+  get email() {
+    return this.profileForm.get('email');
+  }
+
+  get password() {
+    return this.profileForm.get('password');
   }
 }

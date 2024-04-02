@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { map } from 'rxjs';
+import { catchError, map } from 'rxjs';
+import { customErrorHandler } from '../common/handleError';
 
 export interface UserLogin {
   firstName: string;
@@ -36,6 +37,7 @@ export class AuthService {
           }
           return false;
         }),
+        catchError((err) => customErrorHandler(err)),
       );
   }
 
@@ -50,6 +52,7 @@ export class AuthService {
           }
           return false;
         }),
+        catchError((err) => customErrorHandler(err)), // Correct placement of catchError
       );
   }
 

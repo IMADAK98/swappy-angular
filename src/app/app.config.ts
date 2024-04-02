@@ -1,9 +1,9 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, ErrorHandler } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { authInterceptor } from './auth.interceptor';
+import { authInterceptor } from './auth/auth.interceptor';
 import { AppErrorHandler } from './common/app-error-handler';
 
 export const appConfig: ApplicationConfig = {
@@ -11,6 +11,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimations(),
-    AppErrorHandler,
+    {
+      provide: ErrorHandler,
+      useClass: AppErrorHandler,
+    },
   ],
 };

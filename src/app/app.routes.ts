@@ -6,6 +6,7 @@ import { SelectComponent } from './select/select.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,12 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'login',
+  },
+
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    title: 'dashboard',
   },
 
   {
