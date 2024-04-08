@@ -7,6 +7,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { PortfolioComponent } from './portfolio/portfolio.component';
+import { AssetsTableComponent } from './assets-table/assets-table.component';
 
 export const routes: Routes = [
   {
@@ -43,13 +45,23 @@ export const routes: Routes = [
   {
     path: 'select',
     component: SelectComponent,
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
+  },
+
+  {
+    path: 'portfolio',
+    component: PortfolioComponent,
   },
 
   {
     path: '',
     redirectTo: '/home',
     pathMatch: 'full',
+  },
+
+  {
+    path: 'table',
+    component: AssetsTableComponent,
   },
 
   {

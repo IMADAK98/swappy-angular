@@ -39,6 +39,7 @@ export class SignupComponent {
   profileForm: FormGroup;
   //to do : what happend when this is true?
   invalidLogin: boolean = false;
+  usedEmail: boolean = false;
   value = '';
   labelColor: string = 'text-gray-950';
 
@@ -64,7 +65,7 @@ export class SignupComponent {
       next: (res) => {
         if (res) {
           let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-          this.router.navigate([returnUrl || '/home']);
+          this.router.navigate([returnUrl || '/dashboard']);
         } else this.invalidLogin = true;
       },
       error: (err: AppError) => {
@@ -74,6 +75,8 @@ export class SignupComponent {
             summary: 'Error',
             detail: `Email address is already in use`,
           });
+          this.usedEmail = true;
+          this.profileForm.get('email')?.setErrors({ conflict: true });
           console.error(err);
         } else throw err;
       },

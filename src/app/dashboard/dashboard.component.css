@@ -1,0 +1,81 @@
+
+:host ::ng-deep .p-calendar {
+    width: 165px !important; /* Adjust width as needed */
+    height: 40px !important; /* Adjust height as needed */
+    font-size: 0.8rem !important; /* Adjust font size as needed */
+}
+
+
+
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+
+
+
+/* your-component.component.css */
+:host ::ng-deep .p-card {
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    width: 50rem;
+    height: 300rem;
+    overflow-y: auto;
+  }
+
+
+  :host ::ng-deep .p-card-title { 
+ 
+    font-size: x-large !important;
+    text-align: center;
+    color: #374151;
+} 
+
+
+ :host ::ng-deep{
+    .p-selectbutton.p-button{
+        .p-highlight {
+            background-color: red !important;
+            color : black !important
+    }
+ } 
+}
+
+.p-selectbutton .p-button.p-highlight2 {
+
+    background-color: green !important;
+    color : black !important
+}
+
+
+
+ :host ::ng-deep .p-selectbutton .p-button{
+    transition: all;
+ }
+
+
+ :host ::ng-deep .p-inputnumber  
+    .p-inputnumber-input{ 
+    box-shadow: none; 
+    color: #374151; 
+    width: 100% !important; 
+    object-fit: contain;
+}
+
+:host ::ng-deep .p-dropdown{
+
+    width: 100% !important;
+    object-fit: contain;
+}
+
+
+:host ::ng-deep   .p-datatable .p-datatable-thead > tr > th {
+    color: black;
+    font-weight: 900;
+    background-color: aliceblue;
+    transition: all;
+}

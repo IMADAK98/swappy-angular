@@ -1,0 +1,46 @@
+<div class="w-full flex flex-col border border-black mt-5 rounded-md">
+  <form
+    [formGroup]="portfolioForm"
+    (ngSubmit)="onSubmit()"
+    class="w-full flex flex-row justify-center items-center flex-wrap"
+  >
+    <div class="field p-fluid mt-4 mb-4 mx-[2.24rem]">
+      <label for="portfolioName" class="block text-gray-600 font-medium mb-2"
+        >Asset name</label
+      >
+      <input
+        type="text"
+        id="portfolioName"
+        placeholder="Portfolio Name"
+        class="w-[10rem] px-3 py-2 leading-tight text-gray-700 bg-white focus:bg-gray-50 hover:bg-gray-50 border border-gray-400 focus:border-gray-800 rounded-md shadow-md focus:outline-none focus:shadow-outline transtion-all"
+        formControlName="name"
+      />
+    </div>
+    <p-divider
+      layout="vertical"
+      class="mt-[2.25rem] hidden sm:block"
+    ></p-divider>
+    <div class="mt-[1rem] mb-4 mx-[2.24rem] w-[10rem]">
+      <label for="currency" class="block text-gray-600 font-medium mb-2"
+        >Preferrd Currency</label
+      >
+      <p-dropdown
+        id="currency"
+        formControlName="currency"
+        [options]="currencyOptions"
+        optionValue="value"
+        optionLabel="label"
+        placeholder="Select"
+        class="w-full"
+      ></p-dropdown>
+    </div>
+    <div class="mx-[2.24rem] my-[2.25rem] sm: mx-[10rem]">
+      <button
+        type="submit"
+        class="gap-2 h-[2.50rem] w-[8rem] bg-gray-900 text-white rounded-md outline-none transition-all focus:scale-110 hover:scale-110 active:scale-105 hover:bg-gray-950 disabled:scale-100 disabled:bg-opacity-65"
+      >
+        Add
+      </button>
+    </div>
+  </form>
+</div>

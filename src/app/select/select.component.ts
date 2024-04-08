@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Injectable } from '@angular/core';
 
-type Coin = {
+export type Coin = {
   id: string;
   symbol: string;
   name: string;

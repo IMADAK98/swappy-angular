@@ -16,8 +16,6 @@ import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { AppError } from '../common/app-error';
-import { NotFoundError } from '../common/not-found-error';
-import { BadInput } from '../common/bad-input';
 import { Unauthorized } from '../common/unauthorized-error';
 @Component({
   selector: 'app-signup',
@@ -62,7 +60,7 @@ export class LoginComponent {
       next: (res) => {
         if (res) {
           let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-          this.router.navigate([returnUrl || '/home']);
+          this.router.navigate([returnUrl || '/dashboard']);
         } else this.invalidLogin = true;
       },
       error: (err: AppError) => {

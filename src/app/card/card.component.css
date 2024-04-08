@@ -1,0 +1,22 @@
+/* your-component.component.css */
+:host ::ng-deep .p-card {
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    width: 20rem;
+    height: min-content;
+    overflow-y: auto;
+    margin-left: 1.25rem;
+    margin-bottom: 1.25rem;
+
+  }
+
+
+  :host ::ng-deep .p-card-title { 
+ 
+    font-size: large;
+    text-align: center;
+    color: #374151;
+} 
+
+
+

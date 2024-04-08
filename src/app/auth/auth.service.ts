@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { catchError, map } from 'rxjs';
 import { customErrorHandler } from '../common/handleError';
+import { environment } from '../../environments/environment.development';
 
 export interface UserLogin {
   firstName: string;
@@ -26,9 +27,11 @@ export class AuthService {
     private router: Router,
   ) {}
 
+  apiUrl = environment.apiUrl;
+
   signUp(user: UserLogin) {
     return this.http
-      .post<any>('http://localhost:8000/api/v1/auth/register', user)
+      .post<any>(`${this.apiUrl}swappy-user-service/api/v1/auth/register`, user)
       .pipe(
         map((response) => {
           if (response && response.token) {
@@ -43,7 +46,7 @@ export class AuthService {
 
   logIn(user: UserLogin) {
     return this.http
-      .post<any>('http://localhost:8000/api/v1/auth/login', user)
+      .post<any>(`${this.apiUrl}swappy-user-service/api/v1/auth/login`, user)
       .pipe(
         map((response) => {
           if (response && response.token) {
