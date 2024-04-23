@@ -1,10 +1,4 @@
 
-:host ::ng-deep .p-calendar {
-    width: 165px !important; /* Adjust width as needed */
-    height: 40px !important; /* Adjust height as needed */
-    font-size: 0.8rem !important; /* Adjust font size as needed */
-}
-
 
 
 
@@ -36,21 +30,6 @@ input[type=number]::-webkit-outer-spin-button {
 } 
 
 
- :host ::ng-deep{
-    .p-selectbutton.p-button{
-        .p-highlight {
-            background-color: red !important;
-            color : black !important
-    }
- } 
-}
-
-.p-selectbutton .p-button.p-highlight2 {
-
-    background-color: green !important;
-    color : black !important
-}
-
 
 
  :host ::ng-deep .p-selectbutton .p-button{
@@ -58,13 +37,6 @@ input[type=number]::-webkit-outer-spin-button {
  }
 
 
- :host ::ng-deep .p-inputnumber  
-    .p-inputnumber-input{ 
-    box-shadow: none; 
-    color: #374151; 
-    width: 100% !important; 
-    object-fit: contain;
-}
 
 :host ::ng-deep .p-dropdown{
 

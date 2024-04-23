@@ -1,4 +1,4 @@
-<section class="flex flex-row items-center justify-center w-full h-[20rem]">
+<!-- <section class="flex flex-row items-center justify-center w-full h-[20rem]">
   <select
     class="w-[6rem] h-[4rem] text-center border rounded-full text-md text-gray-800 bg-gray-100 hover:bg-gray-950 hover:text-white"
   >
@@ -12,4 +12,31 @@
   <p class="text-sm text-gray-800">
     {{ optionValue }}
   </p>
-</section>
+</section> -->
+
+<input
+  type="text"
+  placeholder="seacrch"
+  class="border border-black rounded-lg"
+  (input)="onInput($event)"
+/>
+
+@for (option of options; track $index) {
+  <li>
+    <ul (click)="onClick(option.id)">
+      {{
+        option.name
+      }}
+    </ul>
+
+    <ul>
+      <img
+        ngSrc="https://s2.coinmarketcap.com/static/img/coins/64x64/{{
+          option.id
+        }}.png"
+        width="120"
+        height="120"
+      />
+    </ul>
+  </li>
+}

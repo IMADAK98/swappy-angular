@@ -1,106 +1,99 @@
-import { Component } from '@angular/core';
-import { TableModule } from 'primeng/table';
-import { Coin } from '../select/select.component';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { NgOptimizedImage } from '@angular/common';
-import { CalendarModule } from 'primeng/calendar';
-import { DividerModule } from 'primeng/divider';
-import { CardModule } from 'primeng/card';
+import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { CardComponent } from '../card/card.component';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { NgClass, NgStyle } from '@angular/common';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
 import { HeaderComponent } from '../header/header.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { trigger, style, animate, transition } from '@angular/animations';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { WizardComponent } from '../wizard/wizard.component';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Portfolio } from '../interfaces/portfolio.interface';
+import { CommonModule } from '@angular/common';
 import { PortfolioComponent } from '../portfolio/portfolio.component';
-import { initFlowbite } from 'flowbite';
-import {
-  FormsModule,
-  FormGroup,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-  FormControl,
-} from '@angular/forms';
-
-enum Action {
-  BUY,
-  SELL,
-}
+import { PortfolioService } from '../service/portfolio.service';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    PortfolioComponent,
-    TableModule,
     NgOptimizedImage,
-    ReactiveFormsModule,
-    CalendarModule,
-    FormsModule,
-    DividerModule,
-    CardModule,
-    CardComponent,
-    SelectButtonModule,
-    NgClass,
-    NgStyle,
-    DropdownModule,
-    InputNumberModule,
-    InputTextModule,
     HeaderComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    CardComponent,
+    DialogModule,
+    ButtonModule,
+    WizardComponent,
+    CommonModule,
+    AsyncPipe,
+    PortfolioComponent,
+    SkeletonModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
+  animations: [
+    trigger('fadeAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1000ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [animate('1000ms ease-out', style({ opacity: 0 }))]),
+    ]),
+  ],
 })
 export class DashboardComponent {
-  investForm: FormGroup;
+  loading: boolean = true; // Flag to indicate loading state
 
+  private activatedRoute = inject(ActivatedRoute);
+  portfolio$: Observable<Portfolio | null> = new Observable<Portfolio | null>();
+
+  ngOnInit(): void {
+    console.log('on inti');
+
+    setTimeout(() => {
+      console.log(this.loading);
+      this.portfolio$ = this.portfolioService.getPortfolio();
+      this.loading = false;
+    }, 1000);
+    // this.portfolio$ = this.activatedRoute.data.pipe(
+    //   map((data: { portfolio?: Portfolio }) => data.portfolio || null),
+    // );
+  }
+
+  fetchData() {
+    console.time('result');
+    this.http.get('http://localhost:8080/allCoins').subscribe((response) => {
+      console.log(response);
+    });
+    console.timeEnd('result');
+  }
   constructor(
     private http: HttpClient,
-    private fb: FormBuilder,
-  ) {
-    this.investForm = this.fb.group({
-      date: new FormControl<Date | null>(new Date()),
-      name: new FormControl<string>(''),
-      amount: new FormControl<number | null>(null),
-      purchasingAmount: new FormControl<number | null>(null),
-      action: new FormControl<Action | null>(null, Validators.required),
-    });
-  }
-  hasPortfolio: boolean = false;
-  stateOptions: any[] = [
-    { label: 'Buy', value: 'BUY' },
-    { label: 'Sell', value: 'SELL' },
-  ];
+    private portfolioService: PortfolioService,
+  ) {}
 
-  products = [
-    {
-      code: 'PRD-123',
-      name: 'Product A',
-      category: 'Electronics',
-      quantity: 10,
-    },
-    { code: 'PRD-456', name: 'Product B', category: 'Clothing', quantity: 5 },
-    { code: 'PRD-789', name: 'Product C', category: 'Furniture', quantity: 2 },
-    // ... add more product objects as needed
-  ];
-  ngOnInit(): void {
-    initFlowbite();
+  testSignal = signal(0);
+
+  visible: boolean = false;
+
+  portfolioVisible = false;
+
+  showDialog() {
+    this.visible = true;
+    console.log(this.visible);
   }
 
-  printNumber(event: any): void {
-    console.log(event);
+  hideDialog() {
+    this.visible = false;
+    this.loading = true;
+    this.ngOnInit();
   }
 
-  changeStyle(): string {
-    if (this.investForm.get('action')?.value == 'Buy') {
-      return 'p-highlight2';
-    }
-    return '';
-  }
-
-  onSubmit() {
-    console.log(this.investForm.value);
+  showForm() {
+    this.portfolioVisible = true;
   }
 }

@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
 import { authGuard } from './auth/auth.guard';
 import { SelectComponent } from './select/select.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -9,25 +8,32 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { AssetsTableComponent } from './assets-table/assets-table.component';
+import { WizardComponent } from './wizard/wizard.component';
+import { portfolioResovler } from './resolver/portfolio.resvoler';
+import { PortfolioWizardComponent } from './portfolio-wizard/portfolio-wizard.component';
 
 export const routes: Routes = [
   {
     path: 'home',
     title: 'home page',
     component: HomeComponent,
-    // canActivate: [authGuard],
-  },
-
-  {
-    path: 'register',
-    title: 'signup',
-    component: RegisterComponent,
+    canActivate: [authGuard],
   },
 
   {
     path: 'signup',
     component: SignupComponent,
     title: 'signup',
+  },
+
+  {
+    path: 'wizard',
+    component: WizardComponent,
+  },
+
+  {
+    path: 'port-wiz',
+    component: PortfolioWizardComponent,
   },
 
   {
@@ -40,8 +46,11 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     title: 'dashboard',
+    canActivate: [authGuard],
+    resolve: {
+      portfolio: portfolioResovler,
+    },
   },
-
   {
     path: 'select',
     component: SelectComponent,

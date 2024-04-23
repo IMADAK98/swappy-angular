@@ -7,17 +7,12 @@ import { CardModule } from 'primeng/card';
 import { RouterLink } from '@angular/router';
 import { MessagesModule } from 'primeng/messages';
 import { NgClass } from '@angular/common';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-import { NotFoundError } from '../common/not-found-error';
-import { AppError } from '../common/app-error';
-import { ConflictError } from '../common/conflict-error';
+import { AppError } from '../errors/app-error';
+import { ConflictError } from '../errors/conflict-error';
+import { UserSignup } from '../interfaces/auth.interfaces';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -36,12 +31,18 @@ import { ConflictError } from '../common/conflict-error';
   providers: [MessageService],
 })
 export class SignupComponent {
-  profileForm: FormGroup;
   //to do : what happend when this is true?
-  invalidLogin: boolean = false;
-  usedEmail: boolean = false;
+  invalidLogin = false;
+  usedEmail = false;
   value = '';
-  labelColor: string = 'text-gray-950';
+  labelColor = 'text-gray-950';
+
+  profileForm = this.fb.group({
+    firstName: ['', Validators.required],
+    lastName: [''],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]], // todo add regexp validation
+  });
 
   constructor(
     private fb: FormBuilder,
@@ -49,19 +50,19 @@ export class SignupComponent {
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService,
-  ) {
-    this.profileForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: [''],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]], // todo add regexp validation
-    });
-  }
+  ) {}
 
   handleSubmit() {
-    let formValue = this.profileForm.value;
+    const { firstName, lastName, email, password } = this.profileForm.value;
 
-    this.auth.signUp(formValue).subscribe({
+    const signUp: UserSignup = {
+      firstName: firstName!,
+      lastName: lastName!,
+      email: email!,
+      password: password!,
+    };
+
+    this.auth.signUp(signUp).subscribe({
       next: (res) => {
         if (res) {
           let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');

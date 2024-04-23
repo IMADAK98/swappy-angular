@@ -8,6 +8,7 @@ import { Unauthorized } from './unauthorized-error';
 import { ConflictError } from './conflict-error';
 
 export function customErrorHandler(error: HttpErrorResponse) {
+  console.log(error);
   if (error.status === 404) {
     console.error('Service class 404 error');
     return throwError(() => new NotFoundError('Not found 404'));

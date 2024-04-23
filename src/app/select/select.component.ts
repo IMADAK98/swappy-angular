@@ -1,58 +1,68 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, Injectable } from '@angular/core';
-
-export type Coin = {
-  id: string;
-  symbol: string;
-  name: string;
-  image: string;
-  current_price: number;
-  market_cap: number;
-  market_cap_rank: number;
-};
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { NgOptimizedImage } from '@angular/common';
+import { Coin, CoinResponse } from '../interfaces/crypto.interfaces';
 
 @Component({
   selector: 'app-select',
   standalone: true,
-  imports: [],
+  imports: [NgOptimizedImage],
   templateUrl: './select.component.html',
   styleUrl: './select.component.css',
 })
 @Injectable({ providedIn: 'root' })
 export class SelectComponent {
-  private response!: Coin[];
-  constructor(private http: HttpClient) {}
-
+  constructor(private http: HttpClient) {
+    this.onInput$
+      .pipe(
+        debounceTime(500), // Wait 500ms before making the API call
+        distinctUntilChanged(), // Only make the API call if the search term has changed
+      )
+      .subscribe((query) => {
+        this.queryData(query);
+      });
+  }
+  onInput$ = new Subject<string>();
   options!: Coin[];
   optionValue: any;
 
-  ngOnInit(): void {
-    this.fetchData();
-  }
+  // ngOnInit(): void {
+  //   this.fetchData();
+  // }
 
-  fetchData() {
-    const header = new HttpHeaders({
-      'x-cg-demo-api-key': 'CG-t2fULRj8tKAmwZ3VJNJ3uBpt',
-    });
+  // fetchData() {
+  //   this.http
+  //     .get<Coin[]>('http://localhost:8080/coins_list')
+  //     .subscribe((data) => {
+  //       this.options = data;
+  //     });
+  // }
 
+  queryData(query: string) {
     this.http
-      .get<
-        Coin[]
-      >('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd', { headers: header })
-      .subscribe((data) => {
-        this.options = data;
+      .get<Coin[]>('http://localhost:8080/coins', {
+        params: { query },
+      })
+      .subscribe((coins) => {
+        this.options = coins;
       });
   }
 
-  onClick() {
-    const header = new HttpHeaders({
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFkQGdtYWlsLmNvbSIsImlhdCI6MTcxMTg0MjUxMCwiZXhwIjoxNzExODQzOTUwfQ.RQnIF5Q03HTPCCha4fVACQpP2TocMUJJaPUUy29ul0Y',
-    });
-    const req = this.http.get('http://localhost:8000/api/v1/users');
+  onClick(id: number) {
+    this.http
+      .get<CoinResponse>('http://localhost:8080/price', { params: { id: id } })
+      .subscribe((data) => {
+        console.log(data.quote.USD.price);
+      });
+  }
 
-    req.subscribe((res) => {
-      console.log(res);
-    });
+  searchTerm: string = '';
+
+  onInput(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    this.searchTerm = inputElement.value;
+    this.onInput$.next(this.searchTerm);
   }
 }

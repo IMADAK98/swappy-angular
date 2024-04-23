@@ -1,0 +1,59 @@
+ :host ::ng-deep .p-calendar {
+    width: 100% !important; /* Adjust width as needed */
+    height: 40px !important; /* Adjust height as needed */
+    font-size: 0.8rem !important; /* Adjust font size as needed */
+}
+
+:host ::ng-deep .p-inputnumber  
+.p-inputnumber-input{ 
+box-shadow: none; 
+color: #374151; 
+width: 50% !important; 
+object-fit: contain;
+}
+
+/* :host ::ng-deep .p-stepper-header {
+
+
+} */
+
+:host ::ng-deep .p-selectbutton .p-button{
+    width: 100%;
+}
+
+:host ::ng-deep .p-selectbutton {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+/* :host ::ng-deep .p-selectbutton .p-button .p-label{
+    color: #374151;
+    font:bold
+} */
+
+
+:host ::ng-deep .p-stepper-panels {
+    width: 40rem;
+    border: 1px solid #374151; /* Changed to dashed and specified the color directly in the border property */
+    border-radius: 10px;
+}
+@media (max-width: 768px) { /* Adjust the max-width as needed for 'small screens' */
+    :host ::ng-deep .p-stepper-panels {
+        width: 100%; /* Full width on small screens */
+    }
+}
+@media (max-width: 640px) { /* Adjust the max-width as needed for 'small screens' */
+    :host ::ng-deep .p-stepper-panels {
+        width: 100%; /* Full width on small screens */
+       
+    }
+}
+
+.overflow-y-auto {
+    scrollbar-width: none; /* For Firefox */
+  }
+  
+  .overflow-y-scroll::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and other WebKit browsers */
+  }

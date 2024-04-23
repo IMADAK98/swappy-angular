@@ -1,24 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, catchError, map, switchMap } from 'rxjs';
+import { customErrorHandler } from '../errors/handleError';
 import { response } from 'express';
-import { customErrorHandler } from '../common/handleError';
-import { Asset, Portfolio } from '../interfaces/portfolio.interface';
+import { Portfolio } from '../interfaces/portfolio.interface';
+import { Asset } from '../interfaces/crypto.interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PortfolioService {
-  constructor(private http: HttpClient) {
-    http: HttpClient;
-  }
+  constructor(private http: HttpClient) {}
 
   getPortfolio(): Observable<Portfolio> {
     const apiUrl = environment.apiUrl;
     return this.http
-      .get(
-        `${apiUrl}/swappy-portfolio-service/api/v1/portfolio/get-portfolio-by-userEmail`,
+      .get<Portfolio>(
+        `${apiUrl}swappy-portfolio-service/api/v1/get-portfolio-by-userEmail`,
       )
       .pipe(
         map((response: any) => this.mapToPortfolio(response)),
@@ -26,14 +25,28 @@ export class PortfolioService {
       );
   }
 
-  private mapToPortfolio(data: any): Portfolio {
+  createPortfolio(portfolio: Portfolio): Observable<Portfolio> {
+    const apiUrl = environment.apiUrl;
+    return this.http
+      .post<Portfolio>(
+        `${apiUrl}swappy-portfolio-service/api/v1/portfolio`,
+        portfolio,
+      )
+      .pipe(
+        map((response: Portfolio) => this.mapToPortfolio(response)),
+        catchError((err) => customErrorHandler(err)),
+      );
+  }
+
+  private mapToPortfolio(data: Portfolio): Portfolio {
     return {
       id: data.id,
       name: data.name,
       userEmail: data.userEmail,
       preferedCurrency: data.preferedCurrency,
-      asset: data.asset.map((asset: any) => this.mapToAsset(asset)),
+      // asset: data.asset.map((asset: any) => this.mapToAsset(asset)),
       creationDate: new Date(data.creationDate),
+      totalValue: data.totalValue,
     };
   }
 

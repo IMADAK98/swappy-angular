@@ -1,13 +1,12 @@
 /* your-component.component.css */
 :host ::ng-deep .p-card {
-    background-color: #f8f9fa;
-    box-shadow: 0 2px 4px rgba(0,0,0,.1);
-    width: 20rem;
+    /* box-shadow: 0 2px 4px rgba(0,0,0,.1); */
+    width: 12.25rem;
     height: min-content;
     overflow-y: auto;
     margin-left: 1.25rem;
     margin-bottom: 1.25rem;
-
+    border-radius: 0;
   }
 
 
@@ -16,6 +15,13 @@
     font-size: large;
     text-align: center;
     color: #374151;
+} 
+
+
+
+:host ::ng-deep .p-card-body { 
+ 
+  background-color: #f9fafb !important;
 } 
 
 

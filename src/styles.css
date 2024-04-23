@@ -9,27 +9,5 @@
 @layer tailwind-utilities {
     @tailwind components;
     @tailwind utilities;
+   
 }
-
-
-
-.style1  .p-selectbutton .p-button.p-highlight:focus{
-    transition: all;
-    background-color: green ;
-    color : white ;
-  }
-  
-  .style2  .p-selectbutton .p-button.p-highlight:focus {
-    transition: all;
-    background-color: red ;
-    color : black ;
-  }
-  
-
-  .card {
-    background: var(--surface-card);
-    padding: 2rem;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-}
-    

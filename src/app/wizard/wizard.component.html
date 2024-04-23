@@ -1,0 +1,30 @@
+<p-stepper class="flex justify-center p-2" ngSkipHydration [linear]="true">
+  <p-stepperPanel header="Select Coin" class="p-10">
+    <ng-template
+      pTemplate="content"
+      let-nextCallback="nextCallback"
+      let-index="index"
+    >
+      <app-coin-search
+        (next)="nextCallback.emit()"
+        (coinSelected)="handleCoinSelected($event, nextCallback)"
+      >
+      </app-coin-search>
+    </ng-template>
+  </p-stepperPanel>
+  <p-stepperPanel header="Add transaction" class="">
+    <ng-template
+      pTemplate="content"
+      let-prevCallback="prevCallback"
+      let-nextCallback="nextCallback"
+      let-index="index"
+    >
+      <app-transaction-form
+        (back)="prevCallback.emit()"
+        (next)="handleComplete()"
+        [selectedCoin]="selectedCoin"
+      >
+      </app-transaction-form>
+    </ng-template>
+  </p-stepperPanel>
+</p-stepper>
