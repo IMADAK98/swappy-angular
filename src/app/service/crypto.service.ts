@@ -1,13 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  count,
+  delay,
+  map,
+  of,
+  retry,
+  shareReplay,
+} from 'rxjs';
 import { Coin, CoinResponse } from '../interfaces/crypto.interfaces';
+import { customErrorHandler } from '../errors/handleError';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CryptoService {
-  constructor(private http: HttpClient) {}
+  private coinsSubject = new BehaviorSubject<Coin[]>([]);
+
+  private coins$!: Observable<Coin[]>;
+  constructor(private http: HttpClient) {
+    this.fetchAllCoinsList().subscribe((coins) => {
+      this.coinsSubject.next(coins);
+    });
+  }
 
   queryCoin(query: string): Observable<Coin[]> {
     return this.http.get<Coin[]>('http://localhost:8080/api/v1/coins', {
@@ -15,13 +33,38 @@ export class CryptoService {
     });
   }
 
-  fetchList(): Observable<Coin[]> {
-    return this.http.get<Coin[]>('http://localhost:8080/api/v1/coins_list');
+  fetchPrice(id: string): Observable<CoinResponse> {
+    return this.http.get<CoinResponse>('http://localhost:8080/api/v1/price', {
+      params: { coinID: id },
+    });
   }
 
-  fetchPrice(id: number): Observable<CoinResponse> {
-    return this.http.get<CoinResponse>('http://localhost:8080/api/v1/price', {
-      params: { coinID: id.toString() },
-    });
+  fetchList(): Observable<Coin[]> {
+    if (!this.coins$) {
+      this.coins$ = this.http
+        .get<Coin[]>('http://localhost:8080/api/v1/coins_list')
+        .pipe(
+          catchError((error: any) => {
+            console.error('Error fetching coins:', error);
+            return of([]); // Return an empty array on error
+          }),
+          shareReplay(1), // Cache the result and share it among subscribers
+        );
+    }
+    return this.coins$;
+  }
+
+  private fetchAllCoinsList(): Observable<Coin[]> {
+    return this.http.get<Coin[]>('http://localhost:8080/api/v1/allCoins').pipe(
+      retry({ count: 3, delay: 2000 }),
+      catchError((err) => customErrorHandler(err)),
+      shareReplay(1),
+    );
+  }
+
+  getAllCoins(): Observable<Coin[]> {
+    return this.coinsSubject
+      .asObservable()
+      .pipe(map((coin) => coin.filter((coin) => !!coin)));
   }
 }

@@ -1,37 +1,33 @@
-import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
-import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { HeaderComponent } from '../header/header.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { WizardComponent } from '../wizard/wizard.component';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Portfolio } from '../interfaces/portfolio.interface';
 import { CommonModule } from '@angular/common';
 import { PortfolioComponent } from '../portfolio/portfolio.component';
 import { PortfolioService } from '../service/portfolio.service';
 import { SkeletonModule } from 'primeng/skeleton';
+import { AssetsTableComponent } from '../assets-table/assets-table.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    NgOptimizedImage,
     HeaderComponent,
-    ReactiveFormsModule,
-    FormsModule,
     CardComponent,
     DialogModule,
     ButtonModule,
     WizardComponent,
     CommonModule,
-    AsyncPipe,
     PortfolioComponent,
     SkeletonModule,
+    AssetsTableComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -52,13 +48,10 @@ export class DashboardComponent {
   portfolio$: Observable<Portfolio | null> = new Observable<Portfolio | null>();
 
   ngOnInit(): void {
-    console.log('on inti');
-
     setTimeout(() => {
-      console.log(this.loading);
       this.portfolio$ = this.portfolioService.getPortfolio();
       this.loading = false;
-    }, 1000);
+    }, 500);
     // this.portfolio$ = this.activatedRoute.data.pipe(
     //   map((data: { portfolio?: Portfolio }) => data.portfolio || null),
     // );
@@ -75,8 +68,6 @@ export class DashboardComponent {
     private http: HttpClient,
     private portfolioService: PortfolioService,
   ) {}
-
-  testSignal = signal(0);
 
   visible: boolean = false;
 

@@ -4,7 +4,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-
 import {
   FormsModule,
   FormBuilder,
@@ -12,15 +11,9 @@ import {
   ReactiveFormsModule,
   FormControl,
 } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Action } from '../interfaces/portfolio.interface';
-import { Subscription, firstValueFrom } from 'rxjs';
-import { RippleModule } from 'primeng/ripple';
-import {
-  Coin,
-  CoinResponse,
-  Transaction,
-} from '../interfaces/crypto.interfaces';
+import { Subscription, debounceTime } from 'rxjs';
+import { CoinResponse, Transaction } from '../interfaces/crypto.interfaces';
 import { TransactionService } from '../service/transaction.service';
 import { CryptoService } from '../service/crypto.service';
 
@@ -36,27 +29,26 @@ import { CryptoService } from '../service/crypto.service';
     InputNumberModule,
     ButtonModule,
     CommonModule,
-    RippleModule,
   ],
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.css',
 })
 export class TransactionFormComponent {
-  @Output() back: EventEmitter<any> = new EventEmitter<any>();
-  @Output() next: EventEmitter<any> = new EventEmitter<any>();
-  @Input() selectedCoin: Coin | undefined;
-
+  @Output() completedSubmission: EventEmitter<any> = new EventEmitter<any>();
+  @Input() coinID!: string;
+  coin!: CoinResponse;
   valueChangesSubscription: Subscription | undefined;
   stateOptions: any[] = [
     { label: 'Buy', value: 'BUY' },
     { label: 'Sell', value: 'SELL' },
   ];
-  coin!: CoinResponse;
+
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private transactionService: TransactionService,
-    public service: CryptoService,
+    public cryptoService: CryptoService,
   ) {}
 
   wizForm = this.fb.group({
@@ -72,37 +64,61 @@ export class TransactionFormComponent {
     ],
   });
 
-  //TODO check this init method and the logic later
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     console.log('on init on form ');
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+
     this.subscribeToValueChanges();
-    // Fetch initial coin list using a separate function for clarity
-    const coinResponse = await firstValueFrom(
-      this.service.fetchPrice(this.selectedCoin?.id!),
-    );
-    console.log(coinResponse);
-    if (coinResponse) {
-      this.setPrice(coinResponse.quote.USD.price);
-      this.coin = coinResponse;
-    } else {
-      // Handle empty response
-      console.warn('No price data found for selected option.');
-      // ...
+
+    if (this.coinID) {
+      this.fetchCoinPrice(this.coinID);
     }
   }
 
-  subscribeToValueChanges() {
-    this.valueChangesSubscription = this.wizForm.valueChanges.subscribe(() => {
-      this.calculateTotal();
+  private fetchCoinPrice(coinID: string): void {
+    this.cryptoService.fetchPrice(coinID).subscribe({
+      next: (data) => {
+        this.setPrice(data.quote.USD.price);
+        this.coin = data;
+      },
+      error: (err) => {
+        console.log(err);
+      },
     });
   }
 
-  unsubscribeFromValueChanges() {
-    if (this.valueChangesSubscription) {
-      this.valueChangesSubscription.unsubscribe();
-    }
+  onSubmit(): void {
+    if (this.wizForm.valid && this.coinID) {
+      this.load(); // Trigger the loading state
+      const transaction: Transaction = {
+        coinId: this.coin.id,
+        action: this.action?.value!,
+        amount: this.amount?.value!,
+        price: this.price?.value!,
+        date: this.date?.value!,
+        coinName: this.coin.name,
+        coinSymbol: this.coin.symbol,
+      };
+
+      this.submitTransaction(transaction);
+    } else alert('we we wew ewewe');
+  }
+
+  private submitTransaction(transaction: Transaction): void {
+    this.transactionService.createTransaction(transaction).subscribe({
+      next: (data) => console.log(data), // You can remove this line if not needed
+      complete: () => {
+        this.loading = false;
+        this.completedSubmission.emit();
+      },
+      error: (error) => {
+        this.loading = false;
+        console.error('Error creating transaction:', error);
+        // You can emit an event here to notify the parent component about the error
+        // this.transactionError.emit(error);
+        // Or display a toast message using a toast service
+        // this.toastService.error('Error creating transaction: ' + error.message);
+      },
+    });
   }
 
   ngOnDestroy() {
@@ -110,44 +126,45 @@ export class TransactionFormComponent {
     this.wizForm.reset();
   }
 
-  onSubmit() {
-    this.load(); // Trigger the loading state
-    const transaction: Transaction = {
-      coinId: this.coin.id,
-      action: this.action?.value!,
-      amount: this.amount?.value!,
-      price: this.price?.value!,
-      date: this.date?.value!,
-      coinName: this.coin.name,
-      coinSymbol: this.coin.symbol,
-    };
-
-    this.transactionService.createTransaction(transaction).subscribe({
-      next: (data) => console.log(data),
-      complete: () => {
-        this.loading = false;
-        this.next.emit();
-      },
-    });
+  private subscribeToValueChanges(): void {
+    this.valueChangesSubscription = this.wizForm.valueChanges
+      .pipe(debounceTime(300)) // Debounce to reduce the frequency of value changes
+      .subscribe(() => {
+        this.calculateTotal();
+      });
   }
 
-  calculateTotal() {
+  private unsubscribeFromValueChanges() {
+    if (this.valueChangesSubscription) {
+      this.valueChangesSubscription.unsubscribe();
+    }
+  }
+
+  private calculateTotal() {
     const price = this.price?.value;
     const amount = this.amount?.value;
 
     if (!price || !amount || amount <= 0) {
-      this.wizForm.get('total')?.setValue(0, { emitEvent: false });
+      this.total?.setValue(0, { emitEvent: false });
       return;
     }
-
+    // two total variables definetly shit practices ...
     let total: number;
     total = price * amount;
 
-    this.wizForm.get('total')?.setValue(total, { emitEvent: false });
+    this.total?.setValue(total, { emitEvent: false });
+  }
+
+  load() {
+    this.loading = true;
   }
 
   get ActionEnum() {
     return Action;
+  }
+
+  getButtonClass(): string {
+    return this.action?.value === 'SELL' ? 'sell' : 'buy';
   }
 
   setAction(action: Action) {
@@ -181,11 +198,5 @@ export class TransactionFormComponent {
 
   get total() {
     return this.wizForm.get('total');
-  }
-
-  loading: boolean = false;
-
-  load() {
-    this.loading = true;
   }
 }

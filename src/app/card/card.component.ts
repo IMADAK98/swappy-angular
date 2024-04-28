@@ -9,5 +9,5 @@ import { CardModule } from 'primeng/card';
 })
 export class CardComponent {
   @Input() content = '';
-  @Input() title = '';
+  @Input() title: string = '';
 }

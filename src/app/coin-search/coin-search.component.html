@@ -1,4 +1,4 @@
-<div class="flex h-full w-full sm:h-[30rem]">
+<div class="">
   <div class="w-full">
     <div class="p-input-icon-left p-2 w-full">
       <i class="pi pi-search ml-[0.5rem]"></i>
@@ -9,38 +9,47 @@
         class="w-full text-gray-950 bg-gray-200 bg-opacity-30 border rounded-full border-black px-[2.5rem] py-2"
         [(ngModel)]="searchTerm"
         (input)="onInput($event)"
-        (ngModelChange)="onInput$.next($event)"
       />
     </div>
-    @defer (on timer(250ms)) {
-      <section class="p-5rem mt-[1rem] overflow-y-auto h-full sm:h-full">
-        @if (coins$ | async; as coins) {
-          @for (coin of coins; track $index) {
-            <button
-              class="bg-transparent cursor-pointer flex flex-row items-center w-full justify-between px-4 py-2 hover:bg-gray-200 transition-colors duration-300"
-              (click)="handleClick(coin, next)"
-            >
-              <div class="flex items-center space-x-2">
-                <img
-                  ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
-                    coin.id
-                  }}.png"
-                  width="32"
-                  height="32"
-                  class="mr-2"
-                />
-                <p class="font-medium font-bold text-gray-900">
-                  {{ coin.name }}
-                </p>
-                <p class="font-small font-normal text-gray-400">
-                  {{ coin.symbol }}
-                </p>
-              </div>
-              <i class="pi pi-arrow-right text-gray-500"></i>
-            </button>
+    <section class="p-5rem mt-[1rem] h-full sm:h-full">
+      @if (coins$ | async; as coins) {
+        @for (coin of coins; track $index) {
+          @defer (on viewport) {
+            <div>
+              <button
+                class="bg-transparent cursor-pointer flex flex-row items-center w-full justify-between px-4 py-2 hover:bg-gray-200 transition-colors duration-300"
+                (click)="handleClick(coin.id.toString(), next)"
+              >
+                <div class="flex items-center space-x-2 shrink-0">
+                  <img
+                    ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
+                      coin.id
+                    }}.png"
+                    width="32"
+                    height="32"
+                    class="mr-2"
+                  />
+                  <div class="flex flex-wrap">
+                    <!-- Added wrapper div for text elements -->
+                    <p
+                      class="font-medium font-bold text-gray-900 whitespace-normal"
+                    >
+                      <!-- Added whitespace-normal -->
+                      {{ coin.name }}
+                    </p>
+                    <p class="font-small font-normal text-gray-400">
+                      {{ coin.symbol }}
+                    </p>
+                  </div>
+                </div>
+                <i class="pi pi-arrow-right text-gray-500"></i>
+              </button>
+            </div>
+          } @placeholder {
+            <p>loading...</p>
           }
         }
-      </section>
-    }
+      }
+    </section>
   </div>
 </div>

@@ -1,17 +1,49 @@
 <app-header></app-header>
 
 @if (loading) {
-  <p-skeleton styleClass="mb-2" borderRadius="16px"></p-skeleton>
-  <p-skeleton width="10rem" styleClass="mb-2" borderRadius="16px"></p-skeleton>
-  <p-skeleton width="5rem" styleClass="mb-2" borderRadius="16px"></p-skeleton>
-  <p-skeleton height="2rem" styleClass="mb-2" borderRadius="16px"></p-skeleton>
+  <p-skeleton class="mb-2" borderRadius="16px"></p-skeleton>
+  <p-skeleton width="10rem" class="mb-2" borderRadius="16px"></p-skeleton>
+  <p-skeleton width="5rem" class="mb-2" borderRadius="16px"></p-skeleton>
+  <p-skeleton height="2rem" class="mb-2" borderRadius="16px"></p-skeleton>
   <p-skeleton width="10rem" height="4rem" borderRadius="16px"></p-skeleton>
 } @else {
   @if (portfolio$ | async; as portfolio) {
-    <h1>My portfolio</h1>
-    <h2>{{ portfolio.name }}</h2>
-    <p>{{ portfolio.userEmail }}</p>
-    <p>{{ portfolio.totalValue.toFixed(3) }} $</p>
+    <div class="flex flex-col mt-4">
+      <h2 class="text-gray-800 font-semibold text-xl">{{ portfolio.name }}</h2>
+
+      <div class="flex flex-row justify-between">
+        <div class="flex flex-col">
+          <span class="font-bold text-3xl text-gray-900"
+            >${{ portfolio.totalValue.toFixed(3) }}</span
+          >
+          <span class="text-green-400 font-medium text-lg"
+            >+1215478 (24h) 📈</span
+          >
+        </div>
+
+        <div>
+          <p-button
+            (click)="showDialog()"
+            icon="pi pi-spin pi-bitcoin"
+            label="Add Transaction"
+            iconPos="right"
+            [rounded]="true"
+            [raised]="true"
+          >
+          </p-button>
+
+          <p-dialog [(visible)]="visible" [modal]="true" class="w-full">
+            <ng-template pTemplate="headless">
+              <div
+                class="bg-white overflow-auto border-black border rounded-md w-[35rem]"
+              >
+                <app-wizard (complete)="hideDialog()"></app-wizard>
+              </div>
+            </ng-template>
+          </p-dialog>
+        </div>
+      </div>
+    </div>
   } @else {
     @defer (on timer(1s)) {
       <h1>hmmmm it seems that you dont have a portfolio , create one !!</h1>
@@ -35,47 +67,15 @@
       </p-dialog>
     }
   }
+  <div class="flex flex-row mt-[2.5rem] justify-evenly items-center">
+    <app-card title="All Time profit"> <p>what if ?</p> </app-card>
+    <app-card title="P/L "></app-card>
+    <app-card title="Best performer"></app-card>
+    <app-card title="Worst performer"></app-card>
+  </div>
 
-  <!-- <section
-    class="relative mt-[3rem] w-full flex flex-row justify-center flex-wrap"
-    [@fadeAnimation]
-  >
-    <app-card title="test" content="200$"></app-card>
-  
-    <app-card title="test" content="200$"></app-card>
-  
-    <app-card title="test" content="200$"></app-card>
-  
-    <app-card title="test" content="200$"></app-card>
-  </section> -->
-
-  <!-- <div class="mx-[2.24rem] my-[2.25rem] sm: mx-[10rem]">
-    <button
-      type="submit"
-      class="gap-2 h-[2.50rem] w-[8rem] bg-gray-900 text-white rounded-md outline-none transition-all focus:scale-110 hover:scale-110 active:scale-105 hover:bg-gray-950 disabled:scale-100 disabled:bg-opacity-65"
-    >
-      Add
-    </button>
-  </div> -->
-  <p-button
-    (click)="showDialog()"
-    icon="pi pi-spin pi-bitcoin"
-    label="Add Transaction"
-    iconPos="right"
-    [rounded]="true"
-    [raised]="true"
-    class="transition-all focus:scale-110 hover:scale-110 active:scale-105"
-  >
-  </p-button>
-
-  <p-dialog [(visible)]="visible" [modal]="true" class="w-full sm:w-[50rem]">
-    <ng-template pTemplate="headless">
-      <div class="bg-white overflow-auto">
-        <app-wizard (complete)="hideDialog()"></app-wizard>
-      </div>
-
-      <p-button (onClick)="hideDialog()"></p-button>
-    </ng-template>
-  </p-dialog>
-  <p-button (click)="fetchData()"> </p-button>
+  <div class="my-[5rem] border border-black rounded-md p-[1.25rem]">
+    <h2 class="font-bold text-2xl text-gray-950">Assets</h2>
+    <app-assets-table (complete)="hideDialog()"> </app-assets-table>
+  </div>
 }

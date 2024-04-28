@@ -1,17 +1,3 @@
-
-
-
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-
-
-
-
 /* your-component.component.css */
 :host ::ng-deep .p-card {
     background-color: #f8f9fa;
@@ -31,23 +17,10 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 
-
- :host ::ng-deep .p-selectbutton .p-button{
-    transition: all;
- }
-
-
-
-:host ::ng-deep .p-dropdown{
-
-    width: 100% !important;
-    object-fit: contain;
-}
-
-
+/* 
 :host ::ng-deep   .p-datatable .p-datatable-thead > tr > th {
     color: black;
     font-weight: 900;
     background-color: aliceblue;
     transition: all;
-}
+} */

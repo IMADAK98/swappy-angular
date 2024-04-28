@@ -1,7 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Observable, catchError, map, switchMap } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  count,
+  delay,
+  map,
+  retry,
+  switchMap,
+} from 'rxjs';
 import { customErrorHandler } from '../errors/handleError';
 import { response } from 'express';
 import { Portfolio } from '../interfaces/portfolio.interface';
@@ -20,6 +28,7 @@ export class PortfolioService {
         `${apiUrl}swappy-portfolio-service/api/v1/get-portfolio-by-userEmail`,
       )
       .pipe(
+        retry({ count: 3, delay: 3000 }),
         map((response: any) => this.mapToPortfolio(response)),
         catchError((err) => customErrorHandler(err)),
       );
@@ -33,6 +42,7 @@ export class PortfolioService {
         portfolio,
       )
       .pipe(
+        retry({ count: 3, delay: 3000 }),
         map((response: Portfolio) => this.mapToPortfolio(response)),
         catchError((err) => customErrorHandler(err)),
       );
@@ -50,14 +60,13 @@ export class PortfolioService {
     };
   }
 
-  private mapToAsset(assetData: any): Asset {
-    return {
-      id: assetData.id,
-      name: assetData.name,
-      amount: assetData.amount,
-      purchaseAmount: assetData.purchaseAmount,
-      purchaseDate: new Date(assetData.purchaseDate),
-      action: assetData.action,
-    };
-  }
+  // private mapToAsset(assetData: any): Asset {
+  //   return {
+  //     id: assetData.id,
+  //     name: assetData.name,
+  //     purchaseAmount: assetData.purchaseAmount,
+  //     purchaseDate: new Date(assetData.purchaseDate),
+  //     action: assetData.action,
+  //   };
+  // }
 }

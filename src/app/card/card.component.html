@@ -1,5 +1,6 @@
-<p-card [header]="title">
-  <div class="flex justify-center items-center">
-    <span class="text-lg font-semibold text-fuchsia-400"> {{ content }} </span>
+<p-card>
+  <div>
+    <span>{{ title }}</span>
   </div>
+  <ng-content></ng-content>
 </p-card>

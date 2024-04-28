@@ -3,10 +3,10 @@ import { Action } from './portfolio.interface';
 export interface Asset {
   id: number;
   name: string;
-  amount: number;
-  purchaseAmount: number;
+  totalQuantity: number;
+  coinID: string;
   purchaseDate: Date;
-  action: string;
+  price: number;
 }
 
 export type Coin = {

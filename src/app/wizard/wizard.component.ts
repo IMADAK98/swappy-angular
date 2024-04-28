@@ -7,7 +7,8 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CoinSearchComponent } from '../coin-search/coin-search.component';
-import { Coin } from '../interfaces/crypto.interfaces';
+import { ButtonModule } from 'primeng/button';
+
 //TODO implement caching for performance optimization
 @Component({
   selector: 'app-wizard',
@@ -20,6 +21,7 @@ import { Coin } from '../interfaces/crypto.interfaces';
     TransactionFormComponent,
     InputTextModule,
     CoinSearchComponent,
+    ButtonModule,
   ],
   templateUrl: './wizard.component.html',
   styleUrl: './wizard.component.css',
@@ -29,7 +31,7 @@ export class WizardComponent {
 
   constructor(public service: CryptoService) {}
 
-  selectedCoin: Coin | undefined;
+  coinID!: string;
 
   ngOnInit() {
     console.log('onInit on wiz component');
@@ -41,8 +43,8 @@ export class WizardComponent {
     console.log('destroyed the wizard instance');
   }
 
-  handleCoinSelected(coin: Coin, nextCallback: EventEmitter<any>) {
-    this.selectedCoin = coin;
+  handleCoinSelected(coinID: string, nextCallback: EventEmitter<any>) {
+    this.coinID = coinID;
     nextCallback.emit(); // Pass the selected coin to the next step
   }
 

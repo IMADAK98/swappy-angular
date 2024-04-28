@@ -7,7 +7,7 @@ export class AppErrorHandler implements ErrorHandler {
   handleError(error: any): void {
     if (isPlatformBrowser(this.platformId)) {
       console.log(error);
-      alert('An unexpected error occurred!'); // Display alert only on client-side
+      // alert('An unexpected error occurred!'); // Display alert only on client-side
     } else {
       console.error('An error occurred:', error); // Log the error on server-side
     }

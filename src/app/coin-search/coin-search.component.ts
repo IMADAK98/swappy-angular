@@ -8,11 +8,10 @@ import {
   Subject,
   debounceTime,
   distinctUntilChanged,
-  firstValueFrom,
+  map,
   of,
   switchMap,
 } from 'rxjs';
-import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 import { NgOptimizedImage } from '@angular/common';
 
 @Component({
@@ -24,49 +23,68 @@ import { NgOptimizedImage } from '@angular/common';
 })
 export class CoinSearchComponent {
   @Output() next = new EventEmitter();
-  @Output() coinSelected = new EventEmitter<Coin>();
-
-  @ViewChild(TransactionFormComponent)
-  transactionFormComponent!: TransactionFormComponent;
+  @Output() coinSelected = new EventEmitter();
 
   searchTerm: string = '';
   coins$: Observable<Coin[]> = new Observable<Coin[]>();
-  filteredCoins$: Observable<Coin[]> = new Observable<Coin[]>();
   protected onInput$ = new Subject<string>();
 
   constructor(public service: CryptoService) {}
 
   ngOnInit(): void {
-    this.fetchInitialCoins();
+    this.coins$ = this.fetchInitialTopCoins();
 
     this.onInput$
       .pipe(
-        debounceTime(500), // Delay search for 500ms after last keystroke
-        distinctUntilChanged(), // Emit only if search term changes
-        switchMap((query) => this.service.queryCoin(query)),
+        debounceTime(1000), // Wait for 300ms after each keystroke
+        distinctUntilChanged(), // Ignore if the search term hasn't changed
+        switchMap((term) => this.searchCoins(term)),
       )
-      .subscribe((coins) => {
-        console.log(coins);
-        this.coins$ = of(coins);
+      .subscribe((filteredCoins) => {
+        this.coins$ = of(filteredCoins);
       });
+  }
+
+  fetchInitialTopCoins(): Observable<Coin[]> {
+    return this.service
+      .getAllCoins()
+      .pipe(
+        map((coins) => coins.sort((a, b) => a.rank - b.rank).slice(0, 100)),
+      );
   }
 
   fetchInitialCoins() {
     this.coins$ = this.service.fetchList();
   }
 
-  async handleClick(coin: Coin, next: EventEmitter<any>) {
+  async handleClick(coinID: string, next: EventEmitter<any>) {
     next.emit();
-    this.coinSelected.emit(coin);
+    this.coinSelected.emit(coinID);
   }
 
   onInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchTerm = inputElement.value.trim();
-    if (this.searchTerm === '') {
-      this.fetchInitialCoins();
+    this.onInput$.next(this.searchTerm);
+  }
+
+  searchCoins(term: string): Observable<Coin[]> {
+    if (term === '') {
+      return this.fetchInitialTopCoins();
     } else {
-      this.onInput$.next(this.searchTerm);
+      return this.service
+        .getAllCoins()
+        .pipe(
+          map((coins) =>
+            coins
+              .filter(
+                (coin) =>
+                  coin.name.toLowerCase().includes(term.toLowerCase()) ||
+                  coin.symbol.toLowerCase().includes(term.toLowerCase()),
+              )
+              .slice(0, 20),
+          ),
+        );
     }
   }
 }

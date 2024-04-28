@@ -72,7 +72,13 @@ export class LoginComponent {
             detail: `Email address or password incorrect`,
           });
           console.error(err);
-        } else throw err;
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `unexpected error occurred ${err.originalError}`,
+          });
+        }
       },
       complete: () => {
         console.log('Observations completed');
