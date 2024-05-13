@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { HeaderComponent } from '../header/header.component';
-import { trigger, style, animate, transition } from '@angular/animations';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { WizardComponent } from '../wizard/wizard.component';
@@ -31,27 +30,25 @@ import { AssetsTableComponent } from '../assets-table/assets-table.component';
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
-  animations: [
-    trigger('fadeAnimation', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('1000ms ease-in', style({ opacity: 1 })),
-      ]),
-      transition(':leave', [animate('1000ms ease-out', style({ opacity: 0 }))]),
-    ]),
-  ],
 })
 export class DashboardComponent {
-  loading: boolean = true; // Flag to indicate loading state
+  // loading: boolean = true; // Flag to indicate loading state
 
   private activatedRoute = inject(ActivatedRoute);
   portfolio$: Observable<Portfolio | null> = new Observable<Portfolio | null>();
 
+  constructor(
+    private http: HttpClient,
+    private portfolioService: PortfolioService,
+  ) {}
+
   ngOnInit(): void {
-    setTimeout(() => {
-      this.portfolio$ = this.portfolioService.getPortfolio();
-      this.loading = false;
-    }, 500);
+    this.portfolio$ = this.portfolioService.getPortfolio();
+
+    // setTimeout(() => {
+    //   this.portfolio$ = this.portfolioService.getPortfolio();
+    //   // this.loading = false;
+    // }, 500);
     // this.portfolio$ = this.activatedRoute.data.pipe(
     //   map((data: { portfolio?: Portfolio }) => data.portfolio || null),
     // );
@@ -64,10 +61,6 @@ export class DashboardComponent {
     });
     console.timeEnd('result');
   }
-  constructor(
-    private http: HttpClient,
-    private portfolioService: PortfolioService,
-  ) {}
 
   visible: boolean = false;
 
@@ -80,7 +73,7 @@ export class DashboardComponent {
 
   hideDialog() {
     this.visible = false;
-    this.loading = true;
+    // this.loading = true;
     this.ngOnInit();
   }
 

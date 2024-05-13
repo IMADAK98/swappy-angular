@@ -1,11 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
   Observable,
   catchError,
-  count,
-  delay,
   map,
   of,
   retry,
@@ -13,6 +11,7 @@ import {
 } from 'rxjs';
 import { Coin, CoinResponse } from '../interfaces/crypto.interfaces';
 import { customErrorHandler } from '../errors/handleError';
+import { SkipLoading } from '../loadin.interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +20,7 @@ export class CryptoService {
   private coinsSubject = new BehaviorSubject<Coin[]>([]);
 
   private coins$!: Observable<Coin[]>;
+
   constructor(private http: HttpClient) {
     this.fetchAllCoinsList().subscribe((coins) => {
       this.coinsSubject.next(coins);
@@ -36,6 +36,7 @@ export class CryptoService {
   fetchPrice(id: string): Observable<CoinResponse> {
     return this.http.get<CoinResponse>('http://localhost:8080/api/v1/price', {
       params: { coinID: id },
+      context: new HttpContext().set(SkipLoading, true),
     });
   }
 

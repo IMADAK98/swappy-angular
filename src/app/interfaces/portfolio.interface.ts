@@ -1,11 +1,14 @@
+import { Asset } from './crypto.interfaces';
+
 export interface Portfolio {
   id: number;
   name: string;
   userEmail: string;
   preferedCurrency: string;
-  // asset: Asset[];
+  assets: Asset[];
   creationDate: Date;
   totalValue: number;
+  totalProfitAndLossAmount: number;
 }
 
 export enum Action {

@@ -20,4 +20,10 @@ export class AssetService {
         catchError((err) => customErrorHandler(err)),
       );
   }
+
+  deleteAsset(assetId: number) {
+    return this.http
+      .delete<void>(`http://localhost:8100/api/v1/assets/${assetId}`)
+      .pipe(catchError((err) => customErrorHandler(err)));
+  }
 }

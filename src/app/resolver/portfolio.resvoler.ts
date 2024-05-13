@@ -13,5 +13,8 @@ export const portfolioResovler: ResolveFn<Portfolio | null> = (
   state: RouterStateSnapshot,
 ) => {
   console.log('excuting resolver !!');
-  return inject(PortfolioService).getPortfolio();
+
+  const portfolio = inject(PortfolioService).getPortfolio();
+
+  return portfolio;
 };

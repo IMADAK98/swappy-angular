@@ -11,6 +11,8 @@ import { WizardComponent } from './wizard/wizard.component';
 import { portfolioResovler } from './resolver/portfolio.resvoler';
 import { PortfolioWizardComponent } from './portfolio-wizard/portfolio-wizard.component';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
+import { TransactionsComponent } from './transactions/transactions.component';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 export const routes: Routes = [
   {
@@ -55,6 +57,16 @@ export const routes: Routes = [
   {
     path: 'portfolio',
     component: PortfolioComponent,
+  },
+
+  {
+    path: 'transactions/:id',
+    component: TransactionsComponent,
+  },
+
+  {
+    path: 'loading',
+    component: LoadingIndicatorComponent,
   },
 
   {

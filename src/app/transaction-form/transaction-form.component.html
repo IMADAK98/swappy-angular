@@ -39,7 +39,6 @@
             >Amount</label
           >
           <p-inputNumber
-            pRipple
             id="amount"
             inputId="integeronly"
             placeholder="0.00"
@@ -61,7 +60,7 @@
                 } -->
         </div>
 
-        <div class="w-full">
+        <div class="w-full flex flex-col">
           <label for="price" class="block text-gray-600 font-normal"
             >Price$</label
           >
@@ -71,7 +70,7 @@
             mode="currency"
             currency="USD"
             locale="en-US"
-            class="w-full"
+            [style]="{ width: '100%' }"
             formControlName="price"
           >
           </p-inputNumber>

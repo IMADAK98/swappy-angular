@@ -76,7 +76,7 @@ export class LoginComponent {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: `unexpected error occurred ${err.originalError}`,
+            detail: `unexpected error occurred `,
           });
         }
       },

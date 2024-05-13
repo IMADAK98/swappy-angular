@@ -1,81 +1,84 @@
 <app-header></app-header>
 
-@if (loading) {
+<!-- @if (loading) {
   <p-skeleton class="mb-2" borderRadius="16px"></p-skeleton>
   <p-skeleton width="10rem" class="mb-2" borderRadius="16px"></p-skeleton>
   <p-skeleton width="5rem" class="mb-2" borderRadius="16px"></p-skeleton>
   <p-skeleton height="2rem" class="mb-2" borderRadius="16px"></p-skeleton>
   <p-skeleton width="10rem" height="4rem" borderRadius="16px"></p-skeleton>
-} @else {
-  @if (portfolio$ | async; as portfolio) {
-    <div class="flex flex-col mt-4">
-      <h2 class="text-gray-800 font-semibold text-xl">{{ portfolio.name }}</h2>
+} @else { -->
+@if (portfolio$ | async; as portfolio) {
+  <div class="flex flex-col mt-4">
+    <h2 class="text-gray-800 font-semibold text-xl">{{ portfolio.name }}</h2>
 
-      <div class="flex flex-row justify-between">
-        <div class="flex flex-col">
-          <span class="font-bold text-3xl text-gray-900"
-            >${{ portfolio.totalValue.toFixed(3) }}</span
-          >
-          <span class="text-green-400 font-medium text-lg"
-            >+1215478 (24h) 📈</span
-          >
-        </div>
+    <div class="flex flex-row justify-between">
+      <div class="flex flex-col">
+        <span class="font-bold text-3xl text-gray-900">{{
+          portfolio.totalValue | currency
+        }}</span>
+        <span class="font-bold text-3xl text-gray-900">
+          Total Profit/Loss: <br />
+          {{ portfolio.totalProfitAndLossAmount | currency }}</span
+        >
+        <span class="text-green-400 font-medium text-lg"
+          >+1215478 (24h) 📈</span
+        >
+      </div>
 
-        <div>
-          <p-button
-            (click)="showDialog()"
-            icon="pi pi-spin pi-bitcoin"
-            label="Add Transaction"
-            iconPos="right"
-            [rounded]="true"
-            [raised]="true"
-          >
-          </p-button>
+      <div>
+        <p-button
+          (click)="showDialog()"
+          icon="pi pi-spin pi-bitcoin"
+          label="Add Transaction"
+          iconPos="right"
+          [rounded]="true"
+          [raised]="true"
+        >
+        </p-button>
 
-          <p-dialog [(visible)]="visible" [modal]="true" class="w-full">
-            <ng-template pTemplate="headless">
-              <div
-                class="bg-white overflow-auto border-black border rounded-md w-[35rem]"
-              >
-                <app-wizard (complete)="hideDialog()"></app-wizard>
-              </div>
-            </ng-template>
-          </p-dialog>
-        </div>
+        <p-dialog [(visible)]="visible" [modal]="true" class="w-full">
+          <ng-template pTemplate="headless">
+            <div
+              class="bg-white overflow-auto border-black border rounded-md w-[35rem]"
+            >
+              <app-wizard (complete)="hideDialog()"></app-wizard>
+            </div>
+          </ng-template>
+        </p-dialog>
       </div>
     </div>
-  } @else {
-    @defer (on timer(1s)) {
-      <h1>hmmmm it seems that you dont have a portfolio , create one !!</h1>
-      <p-button
-        (click)="showForm()"
-        icon="pi pi-plus"
-        label="Create new form"
-        iconPos="right"
-        [rounded]="true"
-        [raised]="true"
-        class="transition-all focus:scale-110 hover:scale-110 active:scale-105"
-      ></p-button>
-      <p-dialog
-        header="Header"
-        [(visible)]="portfolioVisible"
-        [style]="{ width: '50vw' }"
-        [closable]="true"
-        [modal]="true"
-      >
-        <app-portfolio></app-portfolio>
-      </p-dialog>
-    }
+  </div>
+} @else {
+  @defer (on timer(1s)) {
+    <h1>hmmmm it seems that you dont have a portfolio , create one !!</h1>
+    <p-button
+      (click)="showForm()"
+      icon="pi pi-plus"
+      label="Create new form"
+      iconPos="right"
+      [rounded]="true"
+      [raised]="true"
+      class="transition-all focus:scale-110 hover:scale-110 active:scale-105"
+    ></p-button>
+    <p-dialog
+      header="Header"
+      [(visible)]="portfolioVisible"
+      [style]="{ width: '50vw' }"
+      [closable]="true"
+      [modal]="true"
+    >
+      <app-portfolio></app-portfolio>
+    </p-dialog>
   }
-  <div class="flex flex-row mt-[2.5rem] justify-evenly items-center">
-    <app-card title="All Time profit"> <p>what if ?</p> </app-card>
-    <app-card title="P/L "></app-card>
-    <app-card title="Best performer"></app-card>
-    <app-card title="Worst performer"></app-card>
-  </div>
-
-  <div class="my-[5rem] border border-black rounded-md p-[1.25rem]">
-    <h2 class="font-bold text-2xl text-gray-950">Assets</h2>
-    <app-assets-table (complete)="hideDialog()"> </app-assets-table>
-  </div>
 }
+<div class="flex flex-row mt-[2.5rem] justify-evenly items-center">
+  <app-card title="All Time profit"> <p>what if ?</p> </app-card>
+  <app-card title="P/L "></app-card>
+  <app-card title="Best performer"></app-card>
+  <app-card title="Worst performer"></app-card>
+</div>
+
+<div class="my-[5rem] border border-black rounded-md p-[1.25rem]">
+  <h2 class="font-bold text-2xl text-gray-950">Assets</h2>
+  <app-assets-table (complete)="hideDialog()"> </app-assets-table>
+</div>

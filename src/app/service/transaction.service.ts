@@ -10,21 +10,30 @@ import { customErrorHandler } from '../errors/handleError';
 })
 export class TransactionService {
   constructor(private http: HttpClient) {}
-
+  url = environment.apiUrl;
   createTransaction(transaction: Transaction): Observable<boolean> {
-    const url = environment.apiUrl;
     return this.http
       .post<Transaction>(
-        `${url}swappy-portfolio-service/api/v1/transaction`,
+        `${this.url}swappy-portfolio-service/api/v1/transaction`,
         transaction,
       )
       .pipe(
         map(() => true),
-        retry({ count: 3, delay: 1000 }),
         catchError((err) => {
           customErrorHandler(err);
           return of(false);
         }),
+      );
+  }
+
+  getTransactionsByAssetId(assetId: number): Observable<Transaction[]> {
+    return this.http
+      .get<
+        Transaction[]
+      >(`${this.url}swappy-portfolio-service/api/v1/transactions/asset/${assetId}`)
+      .pipe(
+        retry(3),
+        catchError((err) => customErrorHandler(err)),
       );
   }
 }

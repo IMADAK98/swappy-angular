@@ -1,0 +1,19 @@
+<div class="w-full">
+  <h1>Transactions</h1>
+
+  <div class="flex flex-row items-center justify-center">
+    <app-card></app-card>
+    <app-card></app-card>
+    <app-card></app-card>
+    <app-card></app-card>
+  </div>
+</div>
+
+<div>
+  @if (transaction$ | async; as transactions) {
+    @for (transaction of transactions; track $index) {
+      <p>{{ transaction.action }}</p>
+      <p>{{ transaction.coinName }}</p>
+    }
+  }
+</div>

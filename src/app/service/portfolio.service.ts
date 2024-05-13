@@ -9,11 +9,12 @@ import {
   map,
   retry,
   switchMap,
+  tap,
 } from 'rxjs';
 import { customErrorHandler } from '../errors/handleError';
 import { response } from 'express';
 import { Portfolio } from '../interfaces/portfolio.interface';
-import { Asset } from '../interfaces/crypto.interfaces';
+import { Asset, CoinResponse } from '../interfaces/crypto.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -25,11 +26,13 @@ export class PortfolioService {
     const apiUrl = environment.apiUrl;
     return this.http
       .get<Portfolio>(
-        `${apiUrl}swappy-portfolio-service/api/v1/get-portfolio-by-userEmail`,
+        `${apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
       )
       .pipe(
-        retry({ count: 3, delay: 3000 }),
+        tap((response) => console.log('API Response:', response)),
+        retry({ count: 3, delay: 4000 }),
         map((response: any) => this.mapToPortfolio(response)),
+
         catchError((err) => customErrorHandler(err)),
       );
   }
@@ -54,19 +57,26 @@ export class PortfolioService {
       name: data.name,
       userEmail: data.userEmail,
       preferedCurrency: data.preferedCurrency,
-      // asset: data.asset.map((asset: any) => this.mapToAsset(asset)),
+      assets: data.assets.map((asset: any) => this.mapToAsset(asset)),
       creationDate: new Date(data.creationDate),
       totalValue: data.totalValue,
+      totalProfitAndLossAmount: data.totalProfitAndLossAmount,
     };
   }
 
-  // private mapToAsset(assetData: any): Asset {
-  //   return {
-  //     id: assetData.id,
-  //     name: assetData.name,
-  //     purchaseAmount: assetData.purchaseAmount,
-  //     purchaseDate: new Date(assetData.purchaseDate),
-  //     action: assetData.action,
-  //   };
-  // }
+  private mapToAsset(assetData: Asset): Asset {
+    return {
+      id: assetData.id,
+      coinID: assetData.coinID,
+      currentPrice: assetData.currentPrice,
+      name: assetData.name,
+      totalValue: assetData.totalValue,
+      totalQuantity: assetData.totalQuantity,
+      realizedProfitLossAmount: assetData.realizedProfitLossAmount,
+      unrealizedProfitLossAmount: assetData.unrealizedProfitLossAmount,
+      totalProfitAndLossAmount: assetData.totalProfitAndLossAmount,
+      purchaseDate: new Date(assetData.purchaseDate),
+      transactions: assetData.transactions,
+    };
+  }
 }

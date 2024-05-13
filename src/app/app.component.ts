@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, LoadingIndicatorComponent],
 })
 export class AppComponent {}

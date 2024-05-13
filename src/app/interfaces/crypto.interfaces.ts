@@ -6,7 +6,20 @@ export interface Asset {
   totalQuantity: number;
   coinID: string;
   purchaseDate: Date;
+  totalValue: number;
+  currentPrice: number;
+  realizedProfitLossAmount: number;
+  unrealizedProfitLossAmount: number;
+  totalProfitAndLossAmount: number;
+  transactions: Transactions[];
+}
+
+export interface Transactions {
+  coinId: string;
+  action: Action;
+  transactionAmount: number;
   price: number;
+  timestamp: Date;
 }
 
 export type Coin = {

@@ -16,6 +16,7 @@ import { Subscription, debounceTime } from 'rxjs';
 import { CoinResponse, Transaction } from '../interfaces/crypto.interfaces';
 import { TransactionService } from '../service/transaction.service';
 import { CryptoService } from '../service/crypto.service';
+import { LoadingService } from '../loading.service';
 
 @Component({
   selector: 'app-transaction-form',
@@ -49,6 +50,7 @@ export class TransactionFormComponent {
     private fb: FormBuilder,
     private transactionService: TransactionService,
     public cryptoService: CryptoService,
+    private loadingService: LoadingService,
   ) {}
 
   wizForm = this.fb.group({
@@ -87,8 +89,8 @@ export class TransactionFormComponent {
   }
 
   onSubmit(): void {
+    this.loadingService.loadingOn();
     if (this.wizForm.valid && this.coinID) {
-      this.load(); // Trigger the loading state
       const transaction: Transaction = {
         coinId: this.coin.id,
         action: this.action?.value!,
@@ -98,25 +100,19 @@ export class TransactionFormComponent {
         coinName: this.coin.name,
         coinSymbol: this.coin.symbol,
       };
-
       this.submitTransaction(transaction);
-    } else alert('we we wew ewewe');
+    } else {
+      this.loadingService.loadingOff();
+    }
   }
 
   private submitTransaction(transaction: Transaction): void {
     this.transactionService.createTransaction(transaction).subscribe({
-      next: (data) => console.log(data), // You can remove this line if not needed
+      next: (res) => console.log(res),
+      error: (err) => console.log(err),
       complete: () => {
-        this.loading = false;
+        this.loadingService.loadingOff();
         this.completedSubmission.emit();
-      },
-      error: (error) => {
-        this.loading = false;
-        console.error('Error creating transaction:', error);
-        // You can emit an event here to notify the parent component about the error
-        // this.transactionError.emit(error);
-        // Or display a toast message using a toast service
-        // this.toastService.error('Error creating transaction: ' + error.message);
       },
     });
   }

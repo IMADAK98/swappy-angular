@@ -32,7 +32,10 @@ export class AuthService {
 
   signUp(user: UserSignup) {
     return this.http
-      .post<any>(`${this.apiUrl}swappy-user-service/api/v1/auth/register`, user)
+      .post<any>(
+        `${this.apiUrl}/swappy-user-service/api/v1/auth/register`,
+        user,
+      )
       .pipe(
         map((response: any) => {
           if (response && response.token) {
