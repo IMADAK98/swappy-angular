@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { HeaderComponent } from '../header/header.component';
 import { DialogModule } from 'primeng/dialog';
@@ -13,6 +13,8 @@ import { PortfolioComponent } from '../portfolio/portfolio.component';
 import { PortfolioService } from '../service/portfolio.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AssetsTableComponent } from '../assets-table/assets-table.component';
+import { CardModule } from 'primeng/card';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,24 +29,37 @@ import { AssetsTableComponent } from '../assets-table/assets-table.component';
     PortfolioComponent,
     SkeletonModule,
     AssetsTableComponent,
+    CardModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
+ 
 })
 export class DashboardComponent {
-  // loading: boolean = true; // Flag to indicate loading state
-
-  private activatedRoute = inject(ActivatedRoute);
-  portfolio$: Observable<Portfolio | null> = new Observable<Portfolio | null>();
+  // private activatedRoute = inject(ActivatedRoute);
+  portfolio$!: Observable<Portfolio | null>;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private http: HttpClient,
     private portfolioService: PortfolioService,
   ) {}
 
   ngOnInit(): void {
+    //shared service solution
     this.portfolio$ = this.portfolioService.getPortfolio();
 
+    //resolver solution
+
+    // this.portfolio$ = this.activatedRoute.data.pipe(
+    //   map((data) => data['portfolio']), // Extract portfolio directly using 'map'
+    //   catchError((error) => {
+    //     console.error('Error fetching portfolio:', error);
+    //     return of(null);
+    //   }),
+    // );
+
+    // this.portfolio$ = this.portfolioService.getPortfolio();
     // setTimeout(() => {
     //   this.portfolio$ = this.portfolioService.getPortfolio();
     //   // this.loading = false;
@@ -52,14 +67,6 @@ export class DashboardComponent {
     // this.portfolio$ = this.activatedRoute.data.pipe(
     //   map((data: { portfolio?: Portfolio }) => data.portfolio || null),
     // );
-  }
-
-  fetchData() {
-    console.time('result');
-    this.http.get('http://localhost:8080/allCoins').subscribe((response) => {
-      console.log(response);
-    });
-    console.timeEnd('result');
   }
 
   visible: boolean = false;
@@ -80,4 +87,5 @@ export class DashboardComponent {
   showForm() {
     this.portfolioVisible = true;
   }
+
 }

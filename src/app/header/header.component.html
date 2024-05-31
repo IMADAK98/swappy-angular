@@ -8,24 +8,13 @@
     </section>
 
     <!-- Navigation remains in the center -->
-    <nav
-      class="absolute left-1/2 transform -translate-x-1/2 py-2 top-[0.15rem] sm:top-[1.7rem] sm:py-0"
-    >
-      <ul
-        class="flex w-[22rem] flex-wrap items-center justify-center text-[0.9rem] font-medium text-gray-500 sm:w-[initial] sm:flex-nowrap sm:gap-5"
-      >
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-      </ul>
-    </nav>
 
     <!-- Section at the end -->
     <section
       class="relative top-0 mr-[2.5rem] pt-2 flex flex-row justify-between"
     >
-      <p-button label="Log out" [link]="true"> </p-button>
-      <p class="ml-4">avatar icon maybe ?</p>
+      <p-button label="Log out" [link]="true" (click)="onLogout()"> </p-button>
+      <p-button label="Home" [link]="true" (click)="onHome()"> </p-button>
     </section>
   </div>
 </header>

@@ -1,15 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Observable, catchError, map, of, retry } from 'rxjs';
+import { Observable, catchError, map, of, retry, tap } from 'rxjs';
 import { Transaction } from '../interfaces/crypto.interfaces';
 import { customErrorHandler } from '../errors/handleError';
+import { PortfolioService } from './portfolio.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransactionService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private ps: PortfolioService,
+  ) {}
   url = environment.apiUrl;
   createTransaction(transaction: Transaction): Observable<boolean> {
     return this.http
@@ -18,6 +22,10 @@ export class TransactionService {
         transaction,
       )
       .pipe(
+        tap(() => {
+          this.ps.refreshPortfolio(),
+            console.log('success creating transaction');
+        }),
         map(() => true),
         catchError((err) => {
           customErrorHandler(err);

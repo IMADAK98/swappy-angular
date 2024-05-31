@@ -3,11 +3,13 @@ import { Action } from './portfolio.interface';
 export interface Asset {
   id: number;
   name: string;
+  symbol: string;
   totalQuantity: number;
-  coinID: string;
+  coinId: string;
   purchaseDate: Date;
   totalValue: number;
   currentPrice: number;
+  avgBuyPrice: number;
   realizedProfitLossAmount: number;
   unrealizedProfitLossAmount: number;
   totalProfitAndLossAmount: number;

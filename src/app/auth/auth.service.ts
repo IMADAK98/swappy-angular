@@ -68,7 +68,7 @@ export class AuthService {
 
   logout() {
     this.localStorage.removeItem('token');
-    this.router.navigate(['/signup']);
+    this.router.navigateByUrl('/home');
   }
 
   //Todo add isLoggedIn method and isLoggedOut method based on token and backend

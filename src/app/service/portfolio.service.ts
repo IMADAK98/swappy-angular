@@ -2,27 +2,31 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import {
+  BehaviorSubject,
   Observable,
   catchError,
-  count,
-  delay,
   map,
   retry,
-  switchMap,
+  shareReplay,
   tap,
 } from 'rxjs';
 import { customErrorHandler } from '../errors/handleError';
 import { response } from 'express';
 import { Portfolio } from '../interfaces/portfolio.interface';
-import { Asset, CoinResponse } from '../interfaces/crypto.interfaces';
+import { Asset, Transactions } from '../interfaces/crypto.interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PortfolioService {
-  constructor(private http: HttpClient) {}
+  private portfolioSubject = new BehaviorSubject<Portfolio | null>(null);
+  constructor(private http: HttpClient) {
+    this.fetchPortfolio().subscribe((portfolio) => {
+      this.portfolioSubject.next(portfolio);
+    });
+  }
 
-  getPortfolio(): Observable<Portfolio> {
+  fetchPortfolio(): Observable<Portfolio> {
     const apiUrl = environment.apiUrl;
     return this.http
       .get<Portfolio>(
@@ -30,10 +34,9 @@ export class PortfolioService {
       )
       .pipe(
         tap((response) => console.log('API Response:', response)),
-        retry({ count: 3, delay: 4000 }),
         map((response: any) => this.mapToPortfolio(response)),
-
         catchError((err) => customErrorHandler(err)),
+        shareReplay(1),
       );
   }
 
@@ -67,7 +70,9 @@ export class PortfolioService {
   private mapToAsset(assetData: Asset): Asset {
     return {
       id: assetData.id,
-      coinID: assetData.coinID,
+      symbol: assetData.symbol,
+      coinId: assetData.coinId,
+      avgBuyPrice: assetData.avgBuyPrice,
       currentPrice: assetData.currentPrice,
       name: assetData.name,
       totalValue: assetData.totalValue,
@@ -78,5 +83,15 @@ export class PortfolioService {
       purchaseDate: new Date(assetData.purchaseDate),
       transactions: assetData.transactions,
     };
+  }
+
+  getPortfolio(): Observable<Portfolio | null> {
+    return this.portfolioSubject.asObservable();
+  }
+
+  refreshPortfolio() {
+    this.fetchPortfolio().subscribe((portfolio) => {
+      this.portfolioSubject.next(portfolio);
+    });
   }
 }

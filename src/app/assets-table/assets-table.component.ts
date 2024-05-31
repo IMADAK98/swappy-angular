@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { PanelModule } from 'primeng/panel';
 import { AssetService } from '../service/asset.service';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of, switchMap } from 'rxjs';
 import { Asset } from '../interfaces/crypto.interfaces';
 import { AsyncPipe } from '@angular/common';
 import { NgOptimizedImage } from '@angular/common';
@@ -18,6 +18,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Router } from '@angular/router';
+import { PortfolioService } from '../service/portfolio.service';
 @Component({
   selector: 'app-assets-table',
   standalone: true,
@@ -42,7 +43,7 @@ import { Router } from '@angular/router';
 })
 export class AssetsTableComponent {
   @Output() complete = new EventEmitter();
-  asset$: Observable<Asset[]> = new Observable<Asset[]>();
+
   items: MenuItem[] | undefined;
   $event!: Event;
 
@@ -53,11 +54,20 @@ export class AssetsTableComponent {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private router: Router,
+    private portService: PortfolioService,
   ) {}
 
+  assets$: Observable<Asset[]> = of([]); // Initialize as empty array
+  // Remove the @Input() assets property
+
   ngOnInit(): void {
-    console.log('asset table initialized');
-    this.asset$ = this.assetService.fetchAssetsByPortfolioId(305);
+    this.assets$ = this.portService.getPortfolio().pipe(
+      switchMap((portfolio) => (portfolio ? of(portfolio.assets) : of([]))),
+      catchError((error) => {
+        console.error('Error fetching assets:', error);
+        return of([]); // Handle errors gracefully
+      }),
+    );
 
     this.items = [
       {
@@ -80,9 +90,6 @@ export class AssetsTableComponent {
         ],
       },
     ];
-    // this.assetService
-    //   .fetchAssetsByPortfolioId(305)
-    //   .subscribe((data) => console.log(data));
   }
 
   handleFormCompletion() {

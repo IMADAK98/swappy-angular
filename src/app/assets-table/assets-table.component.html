@@ -1,6 +1,6 @@
 <div class="w-full flex flex-row justify-center items-center mt-10">
   <div class="w-full">
-    @if (asset$ | async; as assets) {
+    @if (assets$ | async; as assets) {
       <p-table
         styleClass="p-datatable-striped p-datatable-sm "
         class="w-full"
@@ -22,14 +22,14 @@
           </tr>
         </ng-template>
 
-        <ng-template pTemplate="body" let-asset>
+        <ng-template pTemplate="body" let-assets>
           <tr>
             <td>
               <div class="flex flex-row">
                 <span>
                   <img
                     ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
-                      asset.coinId
+                      assets.coinId
                     }}.png"
                     width="32"
                     height="32"
@@ -37,16 +37,16 @@
                   />
                 </span>
                 <span>
-                  {{ asset.name }}
+                  {{ assets.name }}
                 </span>
               </div>
             </td>
-            <td>{{ asset.currentPrice | currency }}</td>
-            <td>{{ asset.totalQuantity }}</td>
+            <td>{{ assets.currentPrice | currency }}</td>
+            <td>{{ assets.totalQuantity }}</td>
             <td>
               <p-button
                 icon="pi pi-plus"
-                (onClick)="showDialog(asset.coinId)"
+                (onClick)="showDialog(assets.coinId)"
                 [raised]="true"
                 [rounded]="true"
                 [text]="true"
@@ -63,12 +63,12 @@
                 [outlined]="true"
                 size="small"
                 icon="pi pi-ellipsis-v"
-                (click)="selectedItem = asset; menu.toggle($event)"
+                (click)="selectedItem = assets; menu.toggle($event)"
               />
             </td>
-            <td>{{ asset.realizedProfitLossAmount | currency }}</td>
-            <td>{{ asset.unrealizedProfitLossAmount | currency }}</td>
-            <td>{{ asset.totalProfitAndLossAmount | currency }}</td>
+            <td>{{ assets.realizedProfitLossAmount | currency }}</td>
+            <td>{{ assets.unrealizedProfitLossAmount | currency }}</td>
+            <td>{{ assets.totalProfitAndLossAmount | currency }}</td>
           </tr>
         </ng-template>
       </p-table>

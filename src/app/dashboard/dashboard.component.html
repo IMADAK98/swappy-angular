@@ -9,44 +9,83 @@
 } @else { -->
 @if (portfolio$ | async; as portfolio) {
   <div class="flex flex-col mt-4">
-    <h2 class="text-gray-800 font-semibold text-xl">{{ portfolio.name }}</h2>
-
-    <div class="flex flex-row justify-between">
+    <h1 class="text-gray-400 font-semibold text-xl">{{ portfolio.name }} 🚀</h1>
+    <div class="flex flex-row justify-between flex-wrap">
       <div class="flex flex-col">
-        <span class="font-bold text-3xl text-gray-900">{{
+        <span class="text-4xl text-gray-900 font-extrabold">{{
           portfolio.totalValue | currency
         }}</span>
-        <span class="font-bold text-3xl text-gray-900">
-          Total Profit/Loss: <br />
-          {{ portfolio.totalProfitAndLossAmount | currency }}</span
-        >
+
         <span class="text-green-400 font-medium text-lg"
-          >+1215478 (24h) 📈</span
+          >+1215478 (24h prices change) 📈</span
         >
       </div>
 
-      <div>
-        <p-button
-          (click)="showDialog()"
-          icon="pi pi-spin pi-bitcoin"
-          label="Add Transaction"
-          iconPos="right"
-          [rounded]="true"
-          [raised]="true"
-        >
-        </p-button>
+      <div class="flex flex-row flex-wrap mr-[3rem]">
+        <div class="px-2 flex flex-wrap">
+          <p-button
+            (click)="showDialog()"
+            icon="pi pi-spin pi-bitcoin"
+            label="Add Transaction"
+            iconPos="right"
+            [rounded]="true"
+            [raised]="true"
+          >
+          </p-button>
 
-        <p-dialog [(visible)]="visible" [modal]="true" class="w-full">
-          <ng-template pTemplate="headless">
-            <div
-              class="bg-white overflow-auto border-black border rounded-md w-[35rem]"
-            >
-              <app-wizard (complete)="hideDialog()"></app-wizard>
-            </div>
-          </ng-template>
-        </p-dialog>
+          <p-dialog [(visible)]="visible" [modal]="true">
+            <ng-template pTemplate="headless">
+              <div
+                class="bg-white overflow-auto border-black border rounded-md sm:w-[35rem] w-full"
+              >
+                <app-wizard (complete)="hideDialog()"></app-wizard>
+              </div>
+            </ng-template>
+          </p-dialog>
+        </div>
+
+        <div class="px-2">
+          <p-button
+            icon="pi pi-ellipsis-v"
+            [rounded]="true"
+            [raised]="true"
+            text="true"
+          >
+          </p-button>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div class="flex flex-row mt-[2.5rem] justify-normal items-start flex-wrap">
+    <p-card header="Profit/Loss">
+      @if (portfolio.totalProfitAndLossAmount > 0) {
+        <span class="m-0 text-green-700 text-lg font-bold">
+          +{{ portfolio.totalProfitAndLossAmount | currency }} 💸
+        </span>
+      } @else if (portfolio.totalProfitAndLossAmount < 0) {
+        <span class="m-0 text-red-700 text-lg font-bold">
+          {{ portfolio.totalProfitAndLossAmount | currency }} 🩸
+        </span>
+      } @else if (portfolio.totalProfitAndLossAmount === 0) {
+        <span class="m-0 text-grey-900 text-lg">
+          {{ portfolio.totalProfitAndLossAmount | currency }}
+        </span>
+      }
+    </p-card>
+
+    <p-card header="Number of Assets held">
+      <p class="m-0 text-center">{{ portfolio.assets.length }}</p>
+    </p-card>
+
+    <p-card header="Simple Card">
+      <p class="m-0">Lorem ipsum dolor sit amet...</p>
+    </p-card>
+  </div>
+
+  <div class="my-[5rem] border border-black rounded-md p-[1.25rem]">
+    <h2 class="font-bold text-2xl text-gray-950">Assets</h2>
+    <app-assets-table (complete)="hideDialog()"> </app-assets-table>
   </div>
 } @else {
   @defer (on timer(1s)) {
@@ -71,14 +110,3 @@
     </p-dialog>
   }
 }
-<div class="flex flex-row mt-[2.5rem] justify-evenly items-center">
-  <app-card title="All Time profit"> <p>what if ?</p> </app-card>
-  <app-card title="P/L "></app-card>
-  <app-card title="Best performer"></app-card>
-  <app-card title="Worst performer"></app-card>
-</div>
-
-<div class="my-[5rem] border border-black rounded-md p-[1.25rem]">
-  <h2 class="font-bold text-2xl text-gray-950">Assets</h2>
-  <app-assets-table (complete)="hideDialog()"> </app-assets-table>
-</div>

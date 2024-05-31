@@ -94,14 +94,6 @@ export class PortfolioComponent {
     });
   }
 
-  onFuck() {
-    this.portfolioService.getPortfolio().subscribe({
-      next: (data: any) => {
-        console.log(data);
-      },
-    });
-  }
-
   // ngOnInit(): void {
   //   this.portfolioService.getPortfolio().subscribe({
   //     next: (data: any) => {
