@@ -5,7 +5,6 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import {
-  FormGroup,
   FormBuilder,
   Validators,
   FormsModule,
@@ -13,12 +12,10 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { AppError } from '../common/app-error';
-import { NotFoundError } from '../common/not-found-error';
-import { BadInput } from '../common/bad-input';
-import { Unauthorized } from '../common/unauthorized-error';
+import { AppError } from '../errors/app-error';
+import { Unauthorized } from '../errors/unauthorized-error';
+import { UserLogin } from '../interfaces/auth.interfaces';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -36,33 +33,35 @@ import { Unauthorized } from '../common/unauthorized-error';
   providers: [MessageService],
 })
 export class LoginComponent {
-  profileForm: FormGroup;
   invalidLogin: boolean = false;
-  value = '';
+
   labelColor: string = 'text-gray-950';
 
+  profileForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+  });
+
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService,
-  ) {
-    this.profileForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-    });
-  }
+  ) {}
 
   handleSubmit() {
-    let formValue = this.profileForm.value;
+    const { email, password } = this.profileForm.value;
+    const userLogin: UserLogin = {
+      email: email!,
+      password: password!,
+    };
 
-    this.auth.logIn(formValue).subscribe({
+    this.auth.logIn(userLogin).subscribe({
       next: (res) => {
         if (res) {
           let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-          this.router.navigate([returnUrl || '/home']);
+          this.router.navigate([returnUrl || '/dashboard']);
         } else this.invalidLogin = true;
       },
       error: (err: AppError) => {
@@ -73,7 +72,13 @@ export class LoginComponent {
             detail: `Email address or password incorrect`,
           });
           console.error(err);
-        } else throw err;
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `unexpected error occurred `,
+          });
+        }
       },
       complete: () => {
         console.log('Observations completed');

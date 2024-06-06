@@ -58,6 +58,11 @@
         @if (email?.errors?.["email"] && email?.touched) {
           <small id="email-help" class="p-error px-1">Email not valid</small>
         }
+        @if (usedEmail) {
+          <small id="email-help" class="p-error px-1"
+            >Email address is already in use</small
+          >
+        }
       </div>
 
       <div class="mb-4">

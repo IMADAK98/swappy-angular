@@ -1,3 +1,80 @@
-<button class="bg-blue-700" (click)="onClickLogout()">log out</button>
+<div class="min-h-screen flex flex-col">
+  <nav class="flex justify-between bg-gray-900 p-2">
+    <div class="p-1">
+      <img
+        src="assets/logo.png"
+        class="h-10 w-auto rounded-md hidden sm:block"
+        alt=""
+      />
+    </div>
 
-<h1>you are seeing this because ?</h1>
+    <div class="flex justify-center flex-wrap gap-5 p-1">
+      <button class="btn text-slate-400 hover:text-slate-100">Home</button>
+
+      <button class="btn text-slate-400 hover:text-slate-100">About</button>
+
+      <button class="btn text-slate-400 hover:text-slate-100">Services</button>
+
+      <button class="btn text-slate-400 hover:text-slate-100">Contact</button>
+    </div>
+
+    <div class="flex justify-center flex-wrap gap-2">
+      <button
+        class="btn text-slate-50 rounded-md p-1 bg-[#14b8a6] shadow-lg shadow-teal-500/50 hover:text-slate-400 hover:bg-slate-700 hover:shadow-none"
+      >
+        <a href="/login">Login</a>
+      </button>
+      <button
+        class="btn text-slate-50 rounded-md p-1 bg-[#14b8a6] shadow-lg shadow-teal-500/50 hover:text-slate-400 hover:bg-slate-700 hover:shadow-none"
+      >
+        <a
+          routerLink="/signup"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          >Sign Up</a
+        >
+      </button>
+    </div>
+  </nav>
+  <div class="flex justify-between gap-3 p-2">
+    <div class="flex flex-col gap-4 p-3">
+      <h1 class="text-7xl text-slate-800">The world Is In Your Hands</h1>
+      <h3 class="text-6xl text-slate-600">Discover the potential</h3>
+      <p class="pl-2 text-base opacity-75 text-slate-500">
+        <span class="text-red-600">Beta version </span>
+      </p>
+      <p-button label="Access App" (click)="onAccess()" />
+    </div>
+    <div class="p-5 hidden md:block">
+      <img src="assets/logo-transparent.png" alt="" [@rotate]="imageState" />
+    </div>
+  </div>
+</div>
+<footer class="flex w-full bg-gray-800 text-stone-50 p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="flex flex-col">
+      <h1>Contact Us:</h1>
+      <h2>
+        Email:
+        <span class="text-red-600 font-bold hover:text-red-400"
+          >test&#64;test.com</span
+        >
+      </h2>
+      <h2>
+        Phone:
+        <span class="text-red-600 font-bold hover:text-red-400">50505050</span>
+      </h2>
+      <h2>
+        Address:
+        <span class="text-red-600 font-bold hover:text-red-400"
+          >istanbul, tukey
+        </span>
+      </h2>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <h3 class="text-slate-400">we have everything</h3>
+      <p-button class="inline-block" label="language" />
+    </div>
+  </div>
+</footer>

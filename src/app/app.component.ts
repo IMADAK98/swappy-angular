@@ -1,20 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { HeaderComponent } from "./header/header.component";
-import { SelectComponent } from './select/select.component';
-import { DropDownComponent } from "./drop-down/drop-down.component";
-
+import { RouterOutlet } from '@angular/router';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 @Component({
-    selector: 'app-root',
-    standalone: true,
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.css',
-    imports: [RouterOutlet, HeaderComponent,
-      SelectComponent, 
-      RouterLink, DropDownComponent , 
-     ]
+  selector: 'app-root',
+  standalone: true,
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
+  imports: [RouterOutlet, LoadingIndicatorComponent],
 })
-export class AppComponent {
-  items = ['Home', 'About', 'Contact'];
-}
+export class AppComponent {}
