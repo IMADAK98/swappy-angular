@@ -1,11 +1,9 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { HeaderComponent } from '../header/header.component';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { WizardComponent } from '../wizard/wizard.component';
-import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Portfolio } from '../interfaces/portfolio.interface';
 import { CommonModule } from '@angular/common';
@@ -14,8 +12,7 @@ import { PortfolioService } from '../service/portfolio.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AssetsTableComponent } from '../assets-table/assets-table.component';
 import { CardModule } from 'primeng/card';
-import { animate, style, transition, trigger } from '@angular/animations';
-
+import { PiChartComponent } from '../pi-chart/pi-chart.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -30,20 +27,16 @@ import { animate, style, transition, trigger } from '@angular/animations';
     SkeletonModule,
     AssetsTableComponent,
     CardModule,
+    PiChartComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
- 
 })
 export class DashboardComponent {
   // private activatedRoute = inject(ActivatedRoute);
   portfolio$!: Observable<Portfolio | null>;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private http: HttpClient,
-    private portfolioService: PortfolioService,
-  ) {}
+  constructor(private portfolioService: PortfolioService) {}
 
   ngOnInit(): void {
     //shared service solution
@@ -87,5 +80,4 @@ export class DashboardComponent {
   showForm() {
     this.portfolioVisible = true;
   }
-
 }

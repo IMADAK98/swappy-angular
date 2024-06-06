@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { PanelModule } from 'primeng/panel';
 import { AssetService } from '../service/asset.service';
@@ -20,6 +25,7 @@ import { ToastModule } from 'primeng/toast';
 import { Router } from '@angular/router';
 import { PortfolioService } from '../service/portfolio.service';
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-assets-table',
   standalone: true,
   imports: [
@@ -54,14 +60,13 @@ export class AssetsTableComponent {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private router: Router,
-    private portService: PortfolioService,
+    private ps: PortfolioService,
   ) {}
 
   assets$: Observable<Asset[]> = of([]); // Initialize as empty array
-  // Remove the @Input() assets property
 
   ngOnInit(): void {
-    this.assets$ = this.portService.getPortfolio().pipe(
+    this.assets$ = this.assetService.data$.pipe(
       switchMap((portfolio) => (portfolio ? of(portfolio.assets) : of([]))),
       catchError((error) => {
         console.error('Error fetching assets:', error);

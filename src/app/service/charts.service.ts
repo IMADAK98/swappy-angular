@@ -5,62 +5,61 @@ import {
   BehaviorSubject,
   Observable,
   catchError,
-  map,
+  combineLatest,
   merge,
   of,
-  retry,
   switchMap,
   tap,
 } from 'rxjs';
-import { Transaction } from '../interfaces/crypto.interfaces';
 import { customErrorHandler } from '../errors/handleError';
 import { PortfolioService } from './portfolio.service';
+import { PiChart } from '../interfaces/charts.interfaces';
 import { CentralizedStateService } from '../centralized-state.service';
-import { Portfolio } from '../interfaces/portfolio.interface';
+
+export interface IChartsService {
+  getPieChart(): Observable<PiChart[]>;
+  triggerFetch(): void;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class TransactionService {
+export class ChartsService implements IChartsService {
   private dataSubject = new BehaviorSubject<void>(undefined);
-  data$: Observable<Portfolio | null>;
+  data$: Observable<PiChart[]>;
+
   constructor(
     private http: HttpClient,
     private ps: PortfolioService,
     private cs: CentralizedStateService,
   ) {
+    //initial way of triggering the fetch request when state changes
+    // but after refactoring , the combineLatest is not needed
+    // this.data$ = combineLatest<[void, boolean]>([
+    //   this.dataSubject,
+    //   this.cs.refresh$,
+    // ]).pipe(switchMap(() => this.getPieChart()));
+
+    //Easier to read and simpler implementation
+    //the merge function should emit an observable when refresh OR subject emits
     this.data$ = merge(this.dataSubject, this.cs.refresh$).pipe(
-      switchMap(() => this.ps.getPortfolio()),
+      switchMap(() => this.getPieChart()),
     );
   }
-  url = environment.apiUrl;
-  createTransaction(transaction: Transaction): Observable<boolean> {
+  url: string = environment.apiUrl;
+
+  getPieChart(): Observable<PiChart[]> {
     return this.http
-      .post<Transaction>(
-        `${this.url}swappy-portfolio-service/api/v1/transaction`,
-        transaction,
-      )
+      .get<
+        PiChart[]
+      >(`${this.url}swappy-portfolio-service/api/v1/portfolio/assets/pie`)
       .pipe(
-        map(() => true),
-        tap(() => this.cs.triggerRefresh()),
         catchError((err) => {
           customErrorHandler(err);
-          return of(false);
+          return of([]);
         }),
       );
   }
-
-  getTransactionsByAssetId(assetId: number): Observable<Transaction[]> {
-    return this.http
-      .get<
-        Transaction[]
-      >(`${this.url}swappy-portfolio-service/api/v1/transactions/asset/${assetId}`)
-      .pipe(
-        retry(3),
-        catchError((err) => customErrorHandler(err)),
-      );
-  }
-
   triggerFetch() {
     this.dataSubject.next();
   }

@@ -8,20 +8,23 @@ import {
   map,
   retry,
   shareReplay,
-  tap,
 } from 'rxjs';
 import { customErrorHandler } from '../errors/handleError';
-import { response } from 'express';
 import { Portfolio } from '../interfaces/portfolio.interface';
-import { Asset, Transactions } from '../interfaces/crypto.interfaces';
+import { Asset } from '../interfaces/crypto.interfaces';
+
+export interface IPortfolioService {
+  getPortfolio(): Observable<Portfolio | null>;
+  refreshPortfolio(): void;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class PortfolioService {
+export class PortfolioService implements IPortfolioService {
   private portfolioSubject = new BehaviorSubject<Portfolio | null>(null);
   constructor(private http: HttpClient) {
-    this.fetchPortfolio().subscribe((portfolio) => {
+    this.fetchPortfolio().subscribe((portfolio: Portfolio) => {
       this.portfolioSubject.next(portfolio);
     });
   }
@@ -33,8 +36,7 @@ export class PortfolioService {
         `${apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
       )
       .pipe(
-        tap((response) => console.log('API Response:', response)),
-        map((response: any) => this.mapToPortfolio(response)),
+        map((response: Portfolio) => this.mapToPortfolio(response)),
         catchError((err) => customErrorHandler(err)),
         shareReplay(1),
       );
@@ -60,7 +62,7 @@ export class PortfolioService {
       name: data.name,
       userEmail: data.userEmail,
       preferedCurrency: data.preferedCurrency,
-      assets: data.assets.map((asset: any) => this.mapToAsset(asset)),
+      assets: data.assets.map((asset: Asset) => this.mapToAsset(asset)),
       creationDate: new Date(data.creationDate),
       totalValue: data.totalValue,
       totalProfitAndLossAmount: data.totalProfitAndLossAmount,

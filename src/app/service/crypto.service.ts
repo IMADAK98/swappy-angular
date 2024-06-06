@@ -11,7 +11,7 @@ import {
 } from 'rxjs';
 import { Coin, CoinResponse } from '../interfaces/crypto.interfaces';
 import { customErrorHandler } from '../errors/handleError';
-import { SkipLoading } from '../loadin.interceptor';
+import { SkipLoading } from '../loading-indicator/loading-utils/loadin.interceptor';
 
 @Injectable({
   providedIn: 'root',

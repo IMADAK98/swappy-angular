@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
@@ -16,9 +22,11 @@ import { Subscription, debounceTime } from 'rxjs';
 import { CoinResponse, Transaction } from '../interfaces/crypto.interfaces';
 import { TransactionService } from '../service/transaction.service';
 import { CryptoService } from '../service/crypto.service';
-import { LoadingService } from '../loading.service';
+import { LoadingService } from '../loading-indicator/loading-utils/loading.service';
+import { CentralizedStateService } from '../centralized-state.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-transaction-form',
   standalone: true,
   imports: [
@@ -51,6 +59,7 @@ export class TransactionFormComponent {
     private transactionService: TransactionService,
     public cryptoService: CryptoService,
     private loadingService: LoadingService,
+    private cs: CentralizedStateService,
   ) {}
 
   wizForm = this.fb.group({

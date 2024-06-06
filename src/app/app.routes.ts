@@ -13,6 +13,7 @@ import { PortfolioWizardComponent } from './portfolio-wizard/portfolio-wizard.co
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
+import { PiChartComponent } from './pi-chart/pi-chart.component';
 
 export const routes: Routes = [
   {
@@ -81,6 +82,11 @@ export const routes: Routes = [
   {
     path: 'form',
     component: TransactionFormComponent,
+  },
+
+  {
+    path: 'chart',
+    component: PiChartComponent,
   },
 
   {

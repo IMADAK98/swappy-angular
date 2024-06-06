@@ -1,7 +1,7 @@
 import { Component, Inject, Input, PLATFORM_ID, inject } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Observable, filter, tap } from 'rxjs';
-import { LoadingService } from '../loading.service';
+import { LoadingService } from './loading-utils/loading.service';
 import { AsyncPipe, isPlatformBrowser } from '@angular/common';
 import {
   NavigationCancel,

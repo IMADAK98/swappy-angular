@@ -1,20 +1,43 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Asset } from '../interfaces/crypto.interfaces';
-import { catchError, count, delay, retry, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  combineLatest,
+  merge,
+  retry,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { customErrorHandler } from '../errors/handleError';
 import { PortfolioService } from './portfolio.service';
 import { environment } from '../../environments/environment.development';
+import { CentralizedStateService } from '../centralized-state.service';
+import { Portfolio } from '../interfaces/portfolio.interface';
+
+export interface IAssetService {
+  fetchAssetsByPortfolioId(portfolioId: number): Observable<Asset[]>;
+  deleteAsset(assetId: number): Observable<void>;
+  triggerFetch(): void;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class AssetService {
+export class AssetService implements IAssetService {
+  private dataSubject = new BehaviorSubject<void>(undefined);
+  data$: Observable<Portfolio | null>;
   constructor(
     private http: HttpClient,
     private ps: PortfolioService,
-  ) {}
-
+    private cs: CentralizedStateService,
+  ) {
+    this.data$ = merge(this.dataSubject, this.cs.refresh$).pipe(
+      switchMap(() => this.ps.getPortfolio()),
+    );
+  }
   apiurl = environment.apiUrl;
   fetchAssetsByPortfolioId(portfolioId: number) {
     return this.http
@@ -33,8 +56,12 @@ export class AssetService {
         `${this.apiurl}swappy-portfolio-service/api/v1/assets/${assetId}`,
       )
       .pipe(
-        tap(() => this.ps.refreshPortfolio()),
+        tap(() => this.cs.triggerRefresh()),
         catchError((err) => customErrorHandler(err)),
       );
+  }
+
+  triggerFetch() {
+    this.dataSubject.next();
   }
 }

@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { StepperModule } from 'primeng/stepper';
 import { CommonModule } from '@angular/common';
 import { NgOptimizedImage } from '@angular/common';
@@ -11,6 +16,7 @@ import { ButtonModule } from 'primeng/button';
 
 //TODO implement caching for performance optimization
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-wizard',
   standalone: true,
   imports: [
@@ -35,12 +41,6 @@ export class WizardComponent {
 
   ngOnInit() {
     console.log('onInit on wiz component');
-  }
-
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    console.log('destroyed the wizard instance');
   }
 
   handleCoinSelected(coinID: string, nextCallback: EventEmitter<any>) {

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { PiChartComponent } from '../pi-chart/pi-chart.component';
 import {
   animate,
   keyframes,
@@ -13,9 +14,10 @@ import {
 } from '@angular/animations';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, ButtonModule],
+  imports: [RouterLink, ButtonModule, PiChartComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   animations: [
