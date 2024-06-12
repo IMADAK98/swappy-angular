@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { Coin } from '../interfaces/crypto.interfaces';
 import { FormsModule } from '@angular/forms';
-import { CryptoService } from '../service/crypto.service';
 import {
   Observable,
   Subject,
@@ -13,6 +11,8 @@ import {
   switchMap,
 } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common';
+import { CryptoService } from '../service/crypto.service';
+import { Coin } from '../interfaces/crypto.interfaces';
 
 @Component({
   selector: 'app-coin-search',

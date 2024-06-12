@@ -1,0 +1,34 @@
+<div class="flex flex-col items-center justify-center space-y-3 mt-10">
+  <img
+    ngSrc="/assets/no-portfolio.png"
+    width="240"
+    height="240"
+    priority="true"
+  />
+  <h1 class="text-gray-950 text-3xl font-semibold text-center">
+    Let's get started with your first portfolio!
+  </h1>
+  <h2 class="text-gray-500 font-medium text-lg text-center">
+    Track profits, losses, and valuation all in one place.
+  </h2>
+  <h3 class="text-gray-600 font-bold text-lg text-center">
+    Ready to get started?
+  </h3>
+
+  <!-- Create Portfolio Button -->
+  <p-button
+    (click)="showForm()"
+    label="Create your portfolio"
+    [raised]="true"
+  ></p-button>
+  <p-dialog
+    [(visible)]="showFormDialog"
+    [showHeader]="false"
+    [style]="{ width: '100%', 'max-width': '40rem', margin: 'auto' }"
+    [closable]="true"
+    [modal]="true"
+    [breakpoint]="640"
+  >
+    <portfolio-form></portfolio-form>
+  </p-dialog>
+</div>

@@ -6,16 +6,22 @@ import {
   Observable,
   catchError,
   map,
+  of,
   retry,
   shareReplay,
+  tap,
 } from 'rxjs';
 import { customErrorHandler } from '../errors/handleError';
-import { Portfolio } from '../interfaces/portfolio.interface';
+import { Portfolio, PortfolioRequest } from '../interfaces/portfolio.interface';
 import { Asset } from '../interfaces/crypto.interfaces';
+import { CentralizedStateService } from '../centralized-state.service';
 
 export interface IPortfolioService {
   getPortfolio(): Observable<Portfolio | null>;
+  fetchPortfolio(): Observable<Portfolio | null>;
+  createPortfolio(portfolioReq: PortfolioRequest): Observable<void>;
   refreshPortfolio(): void;
+  deletePortfolio(portfolioId: number): Observable<void>;
 }
 
 @Injectable({
@@ -23,13 +29,16 @@ export interface IPortfolioService {
 })
 export class PortfolioService implements IPortfolioService {
   private portfolioSubject = new BehaviorSubject<Portfolio | null>(null);
-  constructor(private http: HttpClient) {
-    this.fetchPortfolio().subscribe((portfolio: Portfolio) => {
+  constructor(
+    private http: HttpClient,
+    private cs: CentralizedStateService,
+  ) {
+    this.fetchPortfolio().subscribe((portfolio: Portfolio | null) => {
       this.portfolioSubject.next(portfolio);
     });
   }
 
-  fetchPortfolio(): Observable<Portfolio> {
+  fetchPortfolio(): Observable<Portfolio | null> {
     const apiUrl = environment.apiUrl;
     return this.http
       .get<Portfolio>(
@@ -37,31 +46,57 @@ export class PortfolioService implements IPortfolioService {
       )
       .pipe(
         map((response: Portfolio) => this.mapToPortfolio(response)),
-        catchError((err) => customErrorHandler(err)),
+        catchError((err) => {
+          customErrorHandler(err);
+          return of(null); // Return null in case of an error
+        }),
         shareReplay(1),
       );
   }
 
-  createPortfolio(portfolio: Portfolio): Observable<Portfolio> {
+  createPortfolio(portfolioReq: PortfolioRequest): Observable<void> {
     const apiUrl = environment.apiUrl;
     return this.http
-      .post<Portfolio>(
+      .post<void>(
         `${apiUrl}swappy-portfolio-service/api/v1/portfolio`,
-        portfolio,
+        portfolioReq,
       )
       .pipe(
         retry({ count: 3, delay: 3000 }),
-        map((response: Portfolio) => this.mapToPortfolio(response)),
         catchError((err) => customErrorHandler(err)),
       );
+  }
+
+  getPortfolio(): Observable<Portfolio | null> {
+    return this.portfolioSubject.asObservable();
+  }
+
+  deletePortfolio(portfolioId: number): Observable<void> {
+    const apiUrl = environment.apiUrl;
+    return this.http
+      .delete<void>(
+        `${apiUrl}swappy-portfolio-service/api/v1/portfolio/${portfolioId}`,
+      )
+      .pipe(
+        tap(() => {
+          this.refreshPortfolio(), console.log('tap gettng action');
+        }),
+        catchError((error: any) => customErrorHandler(error)),
+      );
+  }
+
+  refreshPortfolio() {
+    this.fetchPortfolio().subscribe((portfolio) => {
+      this.portfolioSubject.next(portfolio);
+    });
+    this.cs.triggerRefresh();
   }
 
   private mapToPortfolio(data: Portfolio): Portfolio {
     return {
       id: data.id,
-      name: data.name,
+      portfolioName: data.portfolioName,
       userEmail: data.userEmail,
-      preferedCurrency: data.preferedCurrency,
       assets: data.assets.map((asset: Asset) => this.mapToAsset(asset)),
       creationDate: new Date(data.creationDate),
       totalValue: data.totalValue,
@@ -85,15 +120,5 @@ export class PortfolioService implements IPortfolioService {
       purchaseDate: new Date(assetData.purchaseDate),
       transactions: assetData.transactions,
     };
-  }
-
-  getPortfolio(): Observable<Portfolio | null> {
-    return this.portfolioSubject.asObservable();
-  }
-
-  refreshPortfolio() {
-    this.fetchPortfolio().subscribe((portfolio) => {
-      this.portfolioSubject.next(portfolio);
-    });
   }
 }

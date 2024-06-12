@@ -56,7 +56,7 @@ export class AssetService implements IAssetService {
         `${this.apiurl}swappy-portfolio-service/api/v1/assets/${assetId}`,
       )
       .pipe(
-        tap(() => this.cs.triggerRefresh()),
+        tap(() => this.ps.refreshPortfolio()),
         catchError((err) => customErrorHandler(err)),
       );
   }

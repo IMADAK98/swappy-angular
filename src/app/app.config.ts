@@ -3,7 +3,7 @@ import {
   ErrorHandler,
   importProvidersFrom,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { RouterModule, provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import {
   provideHttpClient,
@@ -31,5 +31,13 @@ export const appConfig: ApplicationConfig = {
     },
     provideClientHydration(),
     importProvidersFrom(LoadingService),
+    importProvidersFrom(
+      RouterModule.forRoot(routes, {
+        scrollPositionRestoration: 'enabled',
+        anchorScrolling: 'enabled',
+        onSameUrlNavigation: 'reload',
+        scrollOffset: [0, 50],
+      }),
+    ),
   ],
 };

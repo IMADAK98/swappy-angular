@@ -1,0 +1,127 @@
+<div class="p-10">
+  @if (portfolio$ | async; as portfolio) {
+    <!-- Main Container for Portfolio -->
+    <div class="flex flex-col">
+      <!-- Portfolio Name and Total Value -->
+      <!-- <h1 class="text-gray-400 font-semibold text-xl">{{ portfolio.name }} 🚀</h1> -->
+      <div class="flex flex-row justify-between flex-wrap">
+        <div class="flex flex-col p-2.5 space-y-2 border">
+          <p class="font-semibold text-gray-600">
+            {{ portfolio.portfolioName | titlecase }}
+          </p>
+          <p class="text-4xl text-gray-900 font-extrabold">
+            {{ portfolio.totalValue | currency }}
+          </p>
+          <p class="text-green-400 font-medium text-lg">
+            +1215478 (24h prices change) 📈
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-row items-center justify-center">
+          <div class="px-2 flex flex-wrap">
+            <!-- Add Transaction Button -->
+            <p-button
+              (click)="showDialog()"
+              icon="pi pi-spin pi-bitcoin"
+              label="Add Transaction"
+              iconPos="right"
+              [raised]="true"
+            ></p-button>
+
+            <!-- Add Transaction Dialog -->
+            <p-dialog [(visible)]="visible" [modal]="true">
+              <ng-template pTemplate="headless">
+                <div
+                  class="bg-white overflow-auto border-black border rounded-md sm:w-[35rem] w-full"
+                >
+                  <app-wizard (complete)="hideDialog()"></app-wizard>
+                </div>
+              </ng-template>
+            </p-dialog>
+          </div>
+
+          <!-- Options Button -->
+          <div class="px-2">
+            <menu-actions
+              (complete)="hideDialog()"
+              [portfolioId]="portfolio.id"
+            ></menu-actions>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- If Theres no assets so the no asset layout  -->
+    @if (portfolio.assets.length != 0) {
+      <!-- Portfolio Summary Cards -->
+      <div
+        class="flex flex-row mt-[2.5rem] justify-normal items-start flex-wrap"
+      >
+        <p-card header="Profit/Loss">
+          @if (portfolio.totalProfitAndLossAmount > 0) {
+            <span class="m-0 text-green-700 text-lg font-bold">
+              +{{ portfolio.totalProfitAndLossAmount | currency }} 💸
+            </span>
+          } @else if (portfolio.totalProfitAndLossAmount < 0) {
+            <span class="m-0 text-red-700 text-lg font-bold">
+              {{ portfolio.totalProfitAndLossAmount | currency }} 🩸
+            </span>
+          } @else if (portfolio.totalProfitAndLossAmount === 0) {
+            <span class="m-0 text-grey-900 text-lg">
+              {{ portfolio.totalProfitAndLossAmount | currency }}
+            </span>
+          }
+        </p-card>
+
+        <p-card header="Number of Assets held">
+          <p class="m-0 text-center">{{ portfolio.assets.length }}</p>
+        </p-card>
+
+        <p-card header="Simple Card">
+          <p class="m-0">Lorem ipsum dolor sit amet...</p>
+        </p-card>
+      </div>
+
+      <!-- Pie Chart -->
+      <div class="flex flex-row items-center">
+        <app-pie-chart></app-pie-chart>
+      </div>
+
+      <!-- Assets Table -->
+      <section
+        id="assets"
+        class="my-[1.25rem] border border-black rounded-md p-[1.25rem]"
+      >
+        <h2 class="font-bold text-2xl text-gray-950">Assets</h2>
+        <app-assets-table (complete)="hideDialog()"> </app-assets-table>
+      </section>
+    } @else {
+      <!-- No Assets Placeholder -->
+      <div class="flex flex-col items-center justify-center space-y-5">
+        <img
+          ngSrc="/assets/no-assets-portfolio.png"
+          width="240"
+          height="240"
+          priority="true"
+        />
+        <h1 class="text-3xl font-bold text-gray-950">
+          This portfolio needs some final touches…
+        </h1>
+        <h2 class="text-lg font-semibold text-gray-500">
+          Add a coin to get started
+        </h2>
+        <p-button
+          (click)="showDialog()"
+          icon="pi pi-spin pi-bitcoin"
+          label="Add Transaction"
+          iconPos="right"
+          [raised]="true"
+        ></p-button>
+      </div>
+    }
+  } @else {
+    <!-- No Portfolio Placeholder -->
+    <no-portfolio></no-portfolio>
+  }
+</div>

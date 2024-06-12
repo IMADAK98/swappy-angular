@@ -17,7 +17,7 @@ import { PiChart } from '../interfaces/charts.interfaces';
 import { CentralizedStateService } from '../centralized-state.service';
 
 export interface IChartsService {
-  getPieChart(): Observable<PiChart[]>;
+  getPieChart(): Observable<PiChart[] | []>;
   triggerFetch(): void;
 }
 

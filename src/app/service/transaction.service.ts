@@ -18,10 +18,16 @@ import { PortfolioService } from './portfolio.service';
 import { CentralizedStateService } from '../centralized-state.service';
 import { Portfolio } from '../interfaces/portfolio.interface';
 
+export interface ITransactionService {
+  createTransaction(transaction: Transaction): Observable<boolean>;
+  getTransactionsByAssetId(assetId: number): Observable<Transaction[] | []>;
+  triggerFetch(): void;
+}
+
 @Injectable({
   providedIn: 'root',
 })
-export class TransactionService {
+export class TransactionService implements ITransactionService {
   private dataSubject = new BehaviorSubject<void>(undefined);
   data$: Observable<Portfolio | null>;
   constructor(
@@ -42,7 +48,7 @@ export class TransactionService {
       )
       .pipe(
         map(() => true),
-        tap(() => this.cs.triggerRefresh()),
+        tap(() => this.ps.refreshPortfolio()),
         catchError((err) => {
           customErrorHandler(err);
           return of(false);
@@ -50,14 +56,17 @@ export class TransactionService {
       );
   }
 
-  getTransactionsByAssetId(assetId: number): Observable<Transaction[]> {
+  getTransactionsByAssetId(assetId: number): Observable<Transaction[] | []> {
     return this.http
       .get<
         Transaction[]
       >(`${this.url}swappy-portfolio-service/api/v1/transactions/asset/${assetId}`)
       .pipe(
         retry(3),
-        catchError((err) => customErrorHandler(err)),
+        catchError((err) => {
+          customErrorHandler(err);
+          return of([]);
+        }),
       );
   }
 

@@ -1,20 +1,49 @@
 <header class="z-[999] relative">
-  <div
-    class="w-full border border-round-md top-0 h-[4.5rem] mt-2 flex justify-between bg-gray-50 backdrop-blur-md rounded-lg"
-  >
-    <!-- Section at the start -->
-    <section class="relative left-[3rem] w-[5.25rem] flex items-center">
-      <img ngSrc="/assets/stonks.png" width="120" height="120" />
-    </section>
-
-    <!-- Navigation remains in the center -->
-
-    <!-- Section at the end -->
-    <section
-      class="relative top-0 mr-[2.5rem] pt-2 flex flex-row justify-between"
-    >
-      <p-button label="Log out" [link]="true" (click)="onLogout()"> </p-button>
-      <p-button label="Home" [link]="true" (click)="onHome()"> </p-button>
-    </section>
-  </div>
+  <nav class="flex items-center justify-center">
+    <ul class="flex flex-row">
+      <li>
+        <p-button
+          label="Log out"
+          [link]="true"
+          [rounded]="true"
+          [raised]="true"
+          size="small"
+          severity="info"
+          (click)="onLogout()"
+        >
+        </p-button>
+      </li>
+      <li>
+        <p-button
+          label="Home"
+          link="true"
+          size="small"
+          severity="info"
+          (click)="onHome()"
+        >
+        </p-button>
+      </li>
+      <li><a fragment="#assets">press </a></li>
+    </ul>
+  </nav>
 </header>
+
+<!-- <div
+  class="flex w-3/4 border border-round-md top-0 h-[4.5rem] mt-2 justify-between bg-gray-100/60 backdrop-blur-md rounded-lg"
+>
+
+
+</div> -->
+
+<!-- <section class="relative left-[3rem] w-[5.25rem] flex items-center">
+  <img ngSrc="/assets/stonks.png" width="120" height="120" />
+</section>
+
+
+<section
+  class="relative top-0 mr-[2.5rem] pt-2 flex flex-row justify-between"
+>
+  <p-button label="Log out" [link]="true" (click)="onLogout()"> </p-button>
+  <p-button label="Home" [link]="true" (click)="onHome()"> </p-button>
+</section>
+</div> -->
