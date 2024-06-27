@@ -107,7 +107,6 @@ export class AuthService {
 
     let expirationDate = jwtHelper.getTokenExpirationDate(token);
     let isExpired = jwtHelper.isTokenExpired(token);
-    console.log(expirationDate, isExpired);
     return !isExpired;
   }
 

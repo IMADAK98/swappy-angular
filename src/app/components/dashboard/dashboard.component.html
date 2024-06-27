@@ -1,4 +1,4 @@
-<div class="p-10">
+<div class="p-10 mt-5">
   @if (portfolio$ | async; as portfolio) {
     <!-- Main Container for Portfolio -->
     <div class="flex flex-col">
@@ -120,8 +120,5 @@
         ></p-button>
       </div>
     }
-  } @else {
-    <!-- No Portfolio Placeholder -->
-    <no-portfolio></no-portfolio>
   }
 </div>

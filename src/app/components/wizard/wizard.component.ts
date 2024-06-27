@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 import { CryptoService } from '../../service/crypto.service';
-import { CoinSearchComponent } from '../../coin-search/coin-search.component';
+import { CoinSearchComponent } from '../coin-search/coin-search.component';
 
 //TODO implement caching for performance optimization
 @Component({
@@ -29,7 +29,7 @@ import { CoinSearchComponent } from '../../coin-search/coin-search.component';
 export class WizardComponent {
   @Output() complete = new EventEmitter();
 
-  constructor(public service: CryptoService) {}
+  constructor(private service: CryptoService) {}
 
   coinID!: string;
 

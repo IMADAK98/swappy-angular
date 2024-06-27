@@ -5,7 +5,6 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { SignupComponent } from './components/signup/signup.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AssetsTableComponent } from './components/assets-table/assets-table.component';
-import { portfolioResovler } from './resolver/portfolio.resvoler';
 import { PortfolioWizardComponent } from './components/portfolio-wizard/portfolio-wizard.component';
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
 import { TransactionsComponent } from './components/transactions/transactions.component';
@@ -17,12 +16,17 @@ import { LoginComponent } from './components/login/login.component';
 import { WizardComponent } from './components/wizard/wizard.component';
 import { PortfolioComponent } from './components/new-portfolio-form/new-portfolio-form.component';
 import { NoPortfolioComponent } from './components/no-portfolio/no-portfolio.component';
+import { portfolioGuard } from './portfolio.guard';
+import { noPortfolioGuard } from './no-portfolio.guard';
+import { slideInAnimation } from './animations'; // Adjust the path as necessary
+import { animation } from '@angular/animations';
 
 export const routes: Routes = [
   {
     path: 'home',
     title: 'home page',
     component: HomeComponent,
+    data: { animation: 'HomePage' },
   },
 
   {
@@ -41,16 +45,15 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     title: 'dashboard',
-    canActivate: [authGuard],
-    resolve: {
-      portfolio: portfolioResovler,
-    },
+    canActivate: [authGuard, portfolioGuard],
+    data: { animation: 'DashboardPage' },
   },
 
   {
     path: 'no-portfolio',
     component: NoPortfolioComponent,
     title: 'no portfolio',
+    canActivate: [authGuard, noPortfolioGuard],
   },
 
   {

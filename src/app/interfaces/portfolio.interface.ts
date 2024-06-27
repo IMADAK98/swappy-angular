@@ -1,3 +1,4 @@
+import { BaseResponse } from './BaseResponse';
 import { Asset } from './crypto.interfaces';
 
 export interface Portfolio {
@@ -18,3 +19,5 @@ export enum Action {
   BUY = 'BUY',
   SELL = 'SELL',
 }
+
+export interface PortfolioResponse extends BaseResponse<Portfolio> {}

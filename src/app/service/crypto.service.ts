@@ -12,6 +12,7 @@ import {
 import { Coin, CoinResponse } from '../interfaces/crypto.interfaces';
 import { customErrorHandler } from '../errors/handleError';
 import { SkipLoading } from '../loading-indicator/loading-utils/loadin.interceptor';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,8 @@ export class CryptoService {
 
   private coins$!: Observable<Coin[]>;
 
+  private apiUrl = environment.apiUrl;
+
   constructor(private http: HttpClient) {
     this.fetchAllCoinsList().subscribe((coins) => {
       this.coinsSubject.next(coins);
@@ -28,39 +31,47 @@ export class CryptoService {
   }
 
   queryCoin(query: string): Observable<Coin[]> {
-    return this.http.get<Coin[]>('http://localhost:8080/api/v1/coins', {
-      params: { query },
-    });
+    return this.http.get<Coin[]>(
+      `${this.apiUrl}swappy-exchange-service/api/v1/coins`,
+      {
+        params: { query },
+      },
+    );
   }
 
   fetchPrice(id: string): Observable<CoinResponse> {
-    return this.http.get<CoinResponse>('http://localhost:8080/api/v1/price', {
-      params: { coinID: id },
-      context: new HttpContext().set(SkipLoading, true),
-    });
+    return this.http.get<CoinResponse>(
+      `${this.apiUrl}swappy-exchange-service/api/v1/price`,
+      {
+        params: { coinID: id },
+        // context: new HttpContext().set(SkipLoading, false),
+      },
+    );
   }
 
-  fetchList(): Observable<Coin[]> {
-    if (!this.coins$) {
-      this.coins$ = this.http
-        .get<Coin[]>('http://localhost:8080/api/v1/coins_list')
-        .pipe(
-          catchError((error: any) => {
-            console.error('Error fetching coins:', error);
-            return of([]); // Return an empty array on error
-          }),
-          shareReplay(1), // Cache the result and share it among subscribers
-        );
-    }
-    return this.coins$;
-  }
+  // fetchList(): Observable<Coin[]> {
+  //   if (!this.coins$) {
+  //     this.coins$ = this.http
+  //       .get<Coin[]>(`http://localhost:8080/api/v1/coins_list`)
+  //       .pipe(
+  //         catchError((error: any) => {
+  //           console.error('Error fetching coins:', error);
+  //           return of([]); // Return an empty array on error
+  //         }),
+  //         shareReplay(1), // Cache the result and share it among subscribers
+  //       );
+  //   }
+  //   return this.coins$;
+  // }
 
   private fetchAllCoinsList(): Observable<Coin[]> {
-    return this.http.get<Coin[]>('http://localhost:8080/api/v1/allCoins').pipe(
-      retry({ count: 3, delay: 2000 }),
-      catchError((err) => customErrorHandler(err)),
-      shareReplay(1),
-    );
+    return this.http
+      .get<Coin[]>(`${this.apiUrl}swappy-exchange-service/api/v1/allCoins`)
+      .pipe(
+        retry({ count: 3, delay: 2000 }),
+        catchError((err) => customErrorHandler(err)),
+        shareReplay(1),
+      );
   }
 
   getAllCoins(): Observable<Coin[]> {

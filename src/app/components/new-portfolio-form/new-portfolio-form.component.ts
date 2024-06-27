@@ -50,7 +50,6 @@ export class PortfolioComponent {
       const pReq: PortfolioRequest = {
         portfolioName: this.portfolioName?.value,
       };
-      debugger;
       this.ps.createPortfolio(pReq).subscribe({
         next: () => this.router.navigate(['/dashboard']),
       });
