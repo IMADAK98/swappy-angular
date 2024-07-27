@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Asset } from '../interfaces/crypto.interfaces';
+import { Asset, AssetResponse } from '../interfaces/crypto.interfaces';
 import {
   BehaviorSubject,
   Observable,
@@ -16,6 +16,7 @@ import { PortfolioService } from './portfolio.service';
 import { environment } from '../../environments/environment.development';
 import { CentralizedStateService } from '../centralized-state.service';
 import { Portfolio } from '../interfaces/portfolio.interface';
+import { count } from 'console';
 
 export interface IAssetService {
   fetchAssetsByPortfolioId(portfolioId: number): Observable<Asset[]>;
@@ -56,7 +57,7 @@ export class AssetService implements IAssetService {
         `${this.apiurl}swappy-portfolio-service/api/v1/assets/${assetId}`,
       )
       .pipe(
-        tap(() => this.ps.refreshPortfolio()),
+        tap(() => this.cs.triggerRefresh()),
         catchError((err) => customErrorHandler(err)),
       );
   }

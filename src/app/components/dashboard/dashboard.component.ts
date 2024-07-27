@@ -18,6 +18,7 @@ import { MenuActionsComponent } from '../menu-actions/menu-actions.component';
 import { WizardComponent } from '../wizard/wizard.component';
 import { PortfolioComponent } from '../new-portfolio-form/new-portfolio-form.component';
 import { NoPortfolioComponent } from '../no-portfolio/no-portfolio.component';
+import { LineChartComponent } from '../line-chart/line-chart.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -40,6 +41,7 @@ import { NoPortfolioComponent } from '../no-portfolio/no-portfolio.component';
     RouterLink,
     MenuActionsComponent,
     NoPortfolioComponent,
+    LineChartComponent,
   ],
 })
 export class DashboardComponent {

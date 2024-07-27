@@ -12,15 +12,19 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { Transaction } from '../interfaces/crypto.interfaces';
+import {
+  AssetResponse,
+  DeleteResponse,
+  TransactionRequest,
+  TransactionsResponse,
+} from '../interfaces/crypto.interfaces';
 import { customErrorHandler } from '../errors/handleError';
 import { PortfolioService } from './portfolio.service';
 import { CentralizedStateService } from '../centralized-state.service';
 import { Portfolio } from '../interfaces/portfolio.interface';
 
 export interface ITransactionService {
-  createTransaction(transaction: Transaction): Observable<boolean>;
-  getTransactionsByAssetId(assetId: number): Observable<Transaction[] | []>;
+  createTransaction(transaction: TransactionRequest): Observable<boolean>;
   triggerFetch(): void;
 }
 
@@ -29,26 +33,22 @@ export interface ITransactionService {
 })
 export class TransactionService implements ITransactionService {
   private dataSubject = new BehaviorSubject<void>(undefined);
-  data$: Observable<Portfolio | null>;
+
+  data$: Observable<Portfolio | null> | undefined;
   constructor(
     private http: HttpClient,
-    private ps: PortfolioService,
     private cs: CentralizedStateService,
-  ) {
-    this.data$ = merge(this.dataSubject, this.cs.refresh$).pipe(
-      switchMap(() => this.ps.getPortfolio()),
-    );
-  }
+  ) {}
   url = environment.apiUrl;
-  createTransaction(transaction: Transaction): Observable<boolean> {
+  createTransaction(transaction: TransactionRequest): Observable<boolean> {
     return this.http
-      .post<Transaction>(
+      .post<TransactionRequest>(
         `${this.url}swappy-portfolio-service/api/v1/transaction`,
         transaction,
       )
       .pipe(
         map(() => true),
-        tap(() => this.ps.refreshPortfolio()),
+        tap(() => this.cs.triggerRefresh()),
         catchError((err) => {
           customErrorHandler(err);
           return of(false);
@@ -56,17 +56,25 @@ export class TransactionService implements ITransactionService {
       );
   }
 
-  getTransactionsByAssetId(assetId: number): Observable<Transaction[] | []> {
+  fetchTransactionsByAssetId(assetId: number) {
     return this.http
-      .get<
-        Transaction[]
-      >(`${this.url}swappy-portfolio-service/api/v1/transactions/asset/${assetId}`)
+      .get<AssetResponse>(
+        `${this.url}swappy-portfolio-service/api/v1/assets/transactions/${assetId}`,
+      )
       .pipe(
-        retry(3),
-        catchError((err) => {
-          customErrorHandler(err);
-          return of([]);
-        }),
+        retry({ count: 3, delay: 2000 }),
+        catchError((err) => customErrorHandler(err)),
+      );
+  }
+
+  deleteTransactionById(transactionId: number) {
+    return this.http
+      .delete<DeleteResponse>(
+        `${this.url}swappy-portfolio-service/api/v1/transaction/${transactionId}`,
+      )
+      .pipe(
+        tap(() => this.cs.triggerRefresh()),
+        catchError((err) => customErrorHandler(err)),
       );
   }
 

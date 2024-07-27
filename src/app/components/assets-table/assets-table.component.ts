@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { PanelModule } from 'primeng/panel';
 import { AssetService } from '../../service/asset.service';
@@ -50,9 +45,11 @@ export class AssetsTableComponent {
   @Output() complete = new EventEmitter();
 
   items: MenuItem[] | undefined;
-  $event!: Event;
+  $event: Event | undefined;
 
   selectedItem: any = null;
+  visible: boolean = false;
+  coinID = '';
 
   constructor(
     private assetService: AssetService,
@@ -65,6 +62,10 @@ export class AssetsTableComponent {
   assets$: Observable<Asset[]> = of([]); // Initialize as empty array
 
   ngOnInit(): void {
+    this.initObvservable();
+    this.initMenuItems();
+  }
+  initObvservable() {
     this.assets$ = this.assetService.data$.pipe(
       switchMap((portfolio) => (portfolio ? of(portfolio.assets) : of([]))),
       catchError((error) => {
@@ -72,7 +73,9 @@ export class AssetsTableComponent {
         return of([]); // Handle errors gracefully
       }),
     );
+  }
 
+  initMenuItems() {
     this.items = [
       {
         label: 'Options',
@@ -101,13 +104,9 @@ export class AssetsTableComponent {
     this.complete.emit();
   }
 
-  visible: boolean = false;
-  coinID = '';
   showDialog(assetCoinID: string) {
-    console.log(assetCoinID);
     this.visible = true;
     this.coinID = assetCoinID;
-    console.log(this.visible);
   }
 
   onDelete(assetId: number) {

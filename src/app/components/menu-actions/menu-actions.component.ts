@@ -66,7 +66,10 @@ export class MenuActionsComponent implements OnInit {
           summary: 'Deleted',
           detail: `Deleted successfully`,
         });
-        this.complete.emit();
+
+        setTimeout(() => {
+          this.complete.emit(), window.location.reload();
+        }, 1000);
       },
     });
   }

@@ -1,3 +1,4 @@
+import { BaseResponse } from './BaseResponse';
 import { Action } from './portfolio.interface';
 
 export interface Asset {
@@ -54,7 +55,7 @@ export interface CoinResponse {
   last_updated: string;
 }
 
-export interface Transaction {
+export interface TransactionRequest {
   coinId: string;
   action: Action;
   amount: number;
@@ -63,3 +64,34 @@ export interface Transaction {
   coinName: string;
   coinSymbol: string;
 }
+
+export interface TransactionDto {
+  id: number;
+  price: number;
+  action: Action;
+  transactionAmount: number;
+  timestamp: Date;
+  asset: Asset;
+}
+
+export interface AssetDto {
+  name: string;
+  symbol: string;
+  totalQuantity: number;
+  coinId: string;
+  purchaseDate: Date;
+  totalValue: number;
+  currentPrice: number;
+  avgBuyPrice: number;
+  realizedProfitLossAmount: number;
+  unrealizedProfitLossAmount: number;
+  totalProfitAndLossAmount: number;
+  unrealizedProfitLossPercentage: number;
+  realizedProfitLossPercentage: number;
+  piPercentage: number;
+  transactions: TransactionDto[];
+}
+
+export interface AssetResponse extends BaseResponse<AssetDto> {}
+export interface TransactionsResponse extends BaseResponse<TransactionDto[]> {}
+export interface DeleteResponse extends BaseResponse<string> {}

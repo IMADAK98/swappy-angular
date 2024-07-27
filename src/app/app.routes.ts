@@ -7,7 +7,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AssetsTableComponent } from './components/assets-table/assets-table.component';
 import { PortfolioWizardComponent } from './components/portfolio-wizard/portfolio-wizard.component';
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
-import { TransactionsComponent } from './components/transactions/transactions.component';
+import { TransactionsComponent } from './components/transactions-table/transactions.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { PiChartComponent } from './components/pi-chart/pi-chart.component';
 import { HeaderComponent } from './header/header.component';
@@ -20,6 +20,7 @@ import { portfolioGuard } from './portfolio.guard';
 import { noPortfolioGuard } from './no-portfolio.guard';
 import { slideInAnimation } from './animations'; // Adjust the path as necessary
 import { animation } from '@angular/animations';
+import { LineChartComponent } from './components/line-chart/line-chart.component';
 
 export const routes: Routes = [
   {
@@ -109,6 +110,11 @@ export const routes: Routes = [
   {
     path: 'sidebar',
     component: SidebarComponent,
+  },
+
+  {
+    path: 'line-chart',
+    component: LineChartComponent,
   },
 
   {

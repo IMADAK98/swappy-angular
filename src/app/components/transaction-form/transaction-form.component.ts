@@ -16,17 +16,20 @@ import {
   Validators,
   ReactiveFormsModule,
   FormControl,
+  FormGroup,
 } from '@angular/forms';
 import { Action } from '../../interfaces/portfolio.interface';
 import { Subscription, debounceTime } from 'rxjs';
-import { CoinResponse, Transaction } from '../../interfaces/crypto.interfaces';
+import {
+  CoinResponse,
+  TransactionRequest,
+} from '../../interfaces/crypto.interfaces';
 import { TransactionService } from '../../service/transaction.service';
 import { CryptoService } from '../../service/crypto.service';
 import { LoadingService } from '../../loading-indicator/loading-utils/loading.service';
 import { CentralizedStateService } from '../../centralized-state.service';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-transaction-form',
   standalone: true,
   imports: [
@@ -44,99 +47,127 @@ import { CentralizedStateService } from '../../centralized-state.service';
 })
 export class TransactionFormComponent {
   @Output() completedSubmission: EventEmitter<any> = new EventEmitter<any>();
-  @Input() coinID!: string;
+  @Input() coinID: string = '';
   coin!: CoinResponse;
   valueChangesSubscription: Subscription | undefined;
   stateOptions: any[] = [
     { label: 'Buy', value: 'BUY' },
     { label: 'Sell', value: 'SELL' },
   ];
-
-  loading: boolean = false;
+  wizForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private transactionService: TransactionService,
     public cryptoService: CryptoService,
     private loadingService: LoadingService,
-    private cs: CentralizedStateService,
   ) {}
 
-  wizForm = this.fb.group({
-    action: new FormControl<Action | null>(Action.BUY, Validators.required),
-    date: [new Date(), [Validators.required]],
-    amount: [0, [Validators.required, Validators.min(0.002)]],
-    //TODO apply custom validation for price > 0
-    price: [0, [Validators.required]],
-    total: [
-      { value: 0, disabled: true },
-      Validators.required,
-      Validators.min(1),
-    ],
-  });
-
   ngOnInit(): void {
-    console.log('on init on form ');
-
+    this.initForm();
     this.subscribeToValueChanges();
-
-    if (this.coinID) {
-      this.fetchCoinPrice(this.coinID);
-    }
-  }
-
-  private fetchCoinPrice(coinID: string): void {
-    this.cryptoService.fetchPrice(coinID).subscribe({
-      next: (data) => {
-        this.setPrice(data.quote.USD.price);
-        this.coin = data;
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-  }
-
-  onSubmit(): void {
-    this.loadingService.loadingOn();
-    if (this.wizForm.valid && this.coinID) {
-      const transaction: Transaction = {
-        coinId: this.coin.id,
-        action: this.action?.value!,
-        amount: this.amount?.value!,
-        price: this.price?.value!,
-        date: this.date?.value!,
-        coinName: this.coin.name,
-        coinSymbol: this.coin.symbol,
-      };
-      this.submitTransaction(transaction);
-    } else {
-      this.loadingService.loadingOff();
-    }
-  }
-
-  private submitTransaction(transaction: Transaction): void {
-    this.transactionService.createTransaction(transaction).subscribe({
-      next: (res) => console.log(res),
-      error: (err) => console.log(err),
-      complete: () => {
-        this.loadingService.loadingOff();
-        this.completedSubmission.emit();
-      },
-    });
-  }
-
-  ngOnDestroy() {
-    this.unsubscribeFromValueChanges();
-    this.wizForm.reset();
+    this.fetchCoinPrice(this.coinID);
   }
 
   private subscribeToValueChanges(): void {
-    this.valueChangesSubscription = this.wizForm.valueChanges
+    this.valueChangesSubscription = this.wizForm?.valueChanges
       .pipe(debounceTime(300)) // Debounce to reduce the frequency of value changes
       .subscribe(() => {
         this.calculateTotal();
       });
+  }
+
+  initForm() {
+    this.wizForm = this.fb.group({
+      action: [Action.BUY, Validators.required],
+      date: [new Date(), [Validators.required]],
+      amount: [0, [Validators.required, Validators.min(0.002)]],
+      price: [0, [Validators.required]],
+      total: [
+        { value: 0, disabled: true },
+        Validators.required,
+        Validators.min(1),
+      ],
+    });
+  }
+
+  private fetchCoinPrice(coinID: string): void {
+    if (!coinID) {
+      console.error('Coin ID is required');
+      return;
+    }
+
+    // this.loadingService.loadingOn();
+    this.cryptoService.fetchPrice(coinID).subscribe({
+      next: (data) => this.handleFetchPriceSuccess(data),
+      error: (err) => this.handleFetchPriceError(err),
+      // complete: () => this.loadingService.loadingOff(),
+    });
+  }
+
+  private handleFetchPriceSuccess(data: CoinResponse): void {
+    this.setPrice(data.quote.USD.price);
+    this.coin = data;
+  }
+
+  private handleFetchPriceError(err: any): void {
+    console.error('Failed to fetch coin price', err);
+    // Optionally, show an error message to the user
+    // this.notificationService.showError('Failed to fetch coin price');
+  }
+
+  onSubmit(): void {
+    this.loadingService.loadingOn();
+
+    if (this.isFormValid()) {
+      const transaction = this.createTransactionRequest();
+      this.submitTransaction(transaction);
+    } else {
+      this.loadingService.loadingOff();
+      // Optionally, show a validation error message to the user
+      console.error('Form is invalid or coin ID is missing');
+    }
+  }
+
+  private isFormValid(): boolean | undefined {
+    return this.wizForm?.valid && !!this.coinID;
+  }
+
+  private createTransactionRequest(): TransactionRequest {
+    return {
+      coinId: this.coin.id,
+      action: this.action?.value!,
+      amount: this.amount?.value!,
+      price: this.price?.value!,
+      date: this.date?.value!,
+      coinName: this.coin.name,
+      coinSymbol: this.coin.symbol,
+    };
+  }
+
+  private submitTransaction(transaction: TransactionRequest): void {
+    this.transactionService.createTransaction(transaction).subscribe({
+      next: (res) => this.handleTransactionSuccess(res),
+      error: (err) => this.handleTransactionError(err),
+      complete: () => this.loadingService.loadingOff(),
+    });
+  }
+
+  private handleTransactionSuccess(res: any): void {
+    console.log('Transaction successful:', res);
+    this.completedSubmission.emit();
+    // Optionally, reset the form or navigate away
+  }
+
+  private handleTransactionError(err: any): void {
+    console.error('Transaction failed:', err);
+    // Optionally, show an error message to the user
+    // this.notificationService.showError('Transaction failed. Please try again.');
+  }
+
+  ngOnDestroy() {
+    this.unsubscribeFromValueChanges();
+    this.wizForm?.reset();
   }
 
   private unsubscribeFromValueChanges() {
@@ -160,10 +191,6 @@ export class TransactionFormComponent {
     this.total?.setValue(total, { emitEvent: false });
   }
 
-  load() {
-    this.loading = true;
-  }
-
   get ActionEnum() {
     return Action;
   }
@@ -173,35 +200,35 @@ export class TransactionFormComponent {
   }
 
   setAction(action: Action) {
-    this.wizForm.get('action')?.setValue(action);
+    this.wizForm?.get('action')?.setValue(action);
   }
 
   get action() {
-    return this.wizForm.get('action');
+    return this.wizForm?.get('action');
   }
 
   setPrice(price: number) {
-    this.wizForm.get('price')?.setValue(price);
+    this.wizForm?.get('price')?.setValue(price);
   }
   get price() {
-    return this.wizForm.get('price');
+    return this.wizForm?.get('price');
   }
 
   setAmount(amount: number): void {
-    this.wizForm.get('amount')?.setValue(amount);
+    this.wizForm?.get('amount')?.setValue(amount);
   }
   get amount() {
-    return this.wizForm.get('amount');
+    return this.wizForm?.get('amount');
   }
 
   setDate(date: Date) {
-    this.wizForm.get('date')?.setValue(date);
+    this.wizForm?.get('date')?.setValue(date);
   }
   get date() {
-    return this.wizForm.get('date');
+    return this.wizForm?.get('date');
   }
 
   get total() {
-    return this.wizForm.get('total');
+    return this.wizForm?.get('total');
   }
 }

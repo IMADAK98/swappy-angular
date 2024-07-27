@@ -15,45 +15,45 @@
     <div class="flex flex-row">
       <img
         ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
-          tp.asset?.coinId
+          tp?.coinId
         }}.png"
         width="32"
         height="32"
         class="mr-2"
       />
-      <h2 class="text-gray-400 font-semibold">{{ tp.asset?.name }}</h2>
+      <h2 class="text-gray-400 font-semibold">{{ tp?.name }}</h2>
     </div>
     <div>
       <h1 class="text-4xl text-gray-900 font-extrabold">
-        {{ tp.asset?.totalValue | currency }}
+        {{ tp?.totalValue | currency }}
       </h1>
     </div>
 
     <div class="flex flex-row mt-[2.5rem] justify-normal items-start flex-wrap">
       <p-card header="Total Quantity">
         <span class="text-gray-950 font-bold text-2xl">{{
-          tp.asset?.totalQuantity
+          tp?.totalQuantity
         }}</span>
       </p-card>
       <p-card header="Avg buy Price">
         <span class="text-gray-950 font-bold text-2xl">{{
-          tp.asset?.avgBuyPrice | currency
+          tp?.avgBuyPrice | currency
         }}</span>
       </p-card>
 
       <div>
         <p-card header="P/L">
-          @if (tp.asset?.totalProfitAndLossAmount! > 0) {
+          @if (tp?.totalProfitAndLossAmount! > 0) {
             <span class="text-green-800 font-bold text-2xl text-center">{{
-              tp.asset?.totalProfitAndLossAmount | currency
+              tp?.totalProfitAndLossAmount | currency
             }}</span>
-          } @else if (tp.asset?.totalProfitAndLossAmount! < 0) {
+          } @else if (tp?.totalProfitAndLossAmount! < 0) {
             <span class="text-red-800 font-bold text-2xl text-center">{{
-              tp.asset?.totalProfitAndLossAmount | currency
+              tp?.totalProfitAndLossAmount | currency
             }}</span>
           } @else {
             <span class="text-grey-900 text-lg text-center">
-              {{ tp.asset?.totalProfitAndLossAmount }}</span
+              {{ tp?.totalProfitAndLossAmount }}</span
             >
           }
         </p-card>
@@ -90,15 +90,16 @@
             <td>{{ transactions.transactionAmount }}</td>
 
             <td>
+              <p-menu #menu [model]="items" [popup]="true" appendTo="body" />
               <p-button
-                icon="pi pi-ellipsis-v"
                 [raised]="true"
                 [rounded]="true"
                 [text]="true"
                 [outlined]="true"
                 size="small"
-              >
-              </p-button>
+                icon="pi pi-ellipsis-v"
+                (click)="selectedItem = transactions; menu.toggle($event)"
+              />
             </td>
           </tr>
         </ng-template>
@@ -107,4 +108,13 @@
   } @else {
     <p>hmmmm it seems there are no assets for this</p>
   }
+</div>
+
+<div class="flex items-center justify-center">
+  <p-toast />
+  <p-confirmDialog
+    [breakpoints]="{ '0px': '100vw' }"
+    [style]="{ width: 'auto' }"
+  >
+  </p-confirmDialog>
 </div>

@@ -40,29 +40,13 @@ export class CryptoService {
   }
 
   fetchPrice(id: string): Observable<CoinResponse> {
-    return this.http.get<CoinResponse>(
-      `${this.apiUrl}swappy-exchange-service/api/v1/price`,
-      {
+    return this.http
+      .get<CoinResponse>(`${this.apiUrl}swappy-exchange-service/api/v1/price`, {
         params: { coinID: id },
-        // context: new HttpContext().set(SkipLoading, false),
-      },
-    );
+        // context: new HttpContext().set(SkipLoading, true),
+      })
+      .pipe(catchError((err) => customErrorHandler(err)));
   }
-
-  // fetchList(): Observable<Coin[]> {
-  //   if (!this.coins$) {
-  //     this.coins$ = this.http
-  //       .get<Coin[]>(`http://localhost:8080/api/v1/coins_list`)
-  //       .pipe(
-  //         catchError((error: any) => {
-  //           console.error('Error fetching coins:', error);
-  //           return of([]); // Return an empty array on error
-  //         }),
-  //         shareReplay(1), // Cache the result and share it among subscribers
-  //       );
-  //   }
-  //   return this.coins$;
-  // }
 
   private fetchAllCoinsList(): Observable<Coin[]> {
     return this.http
