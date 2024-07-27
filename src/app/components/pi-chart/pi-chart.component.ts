@@ -13,12 +13,12 @@ export class PiChartComponent implements OnInit {
   data: any;
   options: any;
 
-  constructor(private cs: ChartsService) {}
+  constructor(private chartService: ChartsService) {}
 
   ngOnInit() {
-    this.cs.data$.subscribe((responseData) => {
-      if (responseData && responseData.length > 0) {
-        this.data = this.transformData(responseData);
+    this.chartService.data$.subscribe((responseData) => {
+      if (responseData && responseData.data.length > 0) {
+        this.data = this.transformData(responseData.data);
       }
     });
     this.options = {
@@ -35,8 +35,8 @@ export class PiChartComponent implements OnInit {
   }
 
   transformData(responseData: PiChart[]): any {
-    const labels = responseData.map((item) => item.coinName);
-    const data = responseData.map((item) => item.piPercentage);
+    const labels = responseData.map((data) => data.coinName);
+    const data = responseData.map((data) => data.piPercentage);
     const backgroundColors = this.generateColors(responseData.length);
     const hoverBackgroundColors = backgroundColors; // Same colors for hover effect
 

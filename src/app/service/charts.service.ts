@@ -13,11 +13,15 @@ import {
 } from 'rxjs';
 import { customErrorHandler } from '../errors/handleError';
 import { PortfolioService } from './portfolio.service';
-import { PiChart } from '../interfaces/charts.interfaces';
+import {
+  PiChart,
+  PiChartResponse,
+  SnapshotResponse,
+} from '../interfaces/charts.interfaces';
 import { CentralizedStateService } from '../centralized-state.service';
 
 export interface IChartsService {
-  getPieChart(): Observable<PiChart[] | []>;
+  getPieChart(): Observable<PiChartResponse> | undefined;
   triggerFetch(): void;
 }
 
@@ -26,7 +30,7 @@ export interface IChartsService {
 })
 export class ChartsService implements IChartsService {
   private dataSubject = new BehaviorSubject<void>(undefined);
-  data$: Observable<PiChart[]>;
+  data$: Observable<PiChartResponse>;
 
   constructor(
     private http: HttpClient,
@@ -48,18 +52,22 @@ export class ChartsService implements IChartsService {
   }
   url: string = environment.apiUrl;
 
-  getPieChart(): Observable<PiChart[]> {
+  getPieChart(): Observable<PiChartResponse> {
     return this.http
-      .get<
-        PiChart[]
-      >(`${this.url}swappy-portfolio-service/api/v1/portfolio/assets/pie`)
-      .pipe(
-        catchError((err) => {
-          customErrorHandler(err);
-          return of([]);
-        }),
-      );
+      .get<PiChartResponse>(
+        `${this.url}swappy-portfolio-service/api/v1/charts/pie-chart`,
+      )
+      .pipe(catchError((err) => customErrorHandler(err)));
   }
+
+  getLineChartData(): Observable<SnapshotResponse> {
+    return this.http
+      .get<SnapshotResponse>(
+        `${this.url}swappy-portfolio-service/api/v1/charts/line-chart-snapshots`,
+      )
+      .pipe(catchError((err) => customErrorHandler(err)));
+  }
+
   triggerFetch() {
     this.dataSubject.next();
   }
