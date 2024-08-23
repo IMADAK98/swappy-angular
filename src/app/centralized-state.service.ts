@@ -11,7 +11,7 @@ type TCenterlizedStateService = {
 })
 export class CentralizedStateService implements TCenterlizedStateService {
   private refreshSubject = new BehaviorSubject<boolean>(true);
-  refresh$ = this.refreshSubject.asObservable();
+  refresh$: Observable<boolean> = this.refreshSubject.asObservable();
 
   triggerRefresh() {
     this.refreshSubject.next(true);

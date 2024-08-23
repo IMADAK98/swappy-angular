@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { PanelModule } from 'primeng/panel';
-import { AssetService } from '../../service/asset.service';
-import { Observable, catchError, of, switchMap } from 'rxjs';
+import { AssetService } from '../../services/asset.service';
+import { Observable, Subject, catchError, of, switchMap } from 'rxjs';
 import { Asset } from '../../interfaces/crypto.interfaces';
 import { AsyncPipe } from '@angular/common';
 import { NgOptimizedImage } from '@angular/common';
@@ -17,8 +17,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Router } from '@angular/router';
-import { PortfolioService } from '../../service/portfolio.service';
-import { WizardComponent } from '../wizard/wizard.component';
+import { PortfolioService } from '../../services/portfolio.service';
 @Component({
   selector: 'app-assets-table',
   standalone: true,
@@ -28,7 +27,6 @@ import { WizardComponent } from '../wizard/wizard.component';
     AsyncPipe,
     NgOptimizedImage,
     ButtonModule,
-    WizardComponent,
     DialogModule,
     TransactionFormComponent,
     CommonModule,
@@ -50,6 +48,7 @@ export class AssetsTableComponent {
   selectedItem: any = null;
   visible: boolean = false;
   coinID = '';
+  destroy$: Subject<void> | undefined;
 
   constructor(
     private assetService: AssetService,

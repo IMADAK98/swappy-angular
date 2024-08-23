@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -9,12 +9,15 @@ import {
   Validators,
   FormsModule,
   ReactiveFormsModule,
+  FormControl,
+  FormGroup,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
-import { UserLogin } from '../../interfaces/auth.interfaces';
+import { LoginForm, UserLogin } from '../../interfaces/auth.interfaces';
 import { AppError } from '../../errors/app-error';
 import { Unauthorized } from '../../errors/unauthorized-error';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -32,16 +35,11 @@ import { Unauthorized } from '../../errors/unauthorized-error';
   styleUrl: './login.component.css',
   providers: [MessageService],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
   invalidLogin: boolean = false;
-
   labelColor: string = 'text-gray-950';
-
-  profileForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-  });
-
+  loginForm!: FormGroup;
+  destroy$: Subject<void> = new Subject();
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -50,47 +48,71 @@ export class LoginComponent {
     private messageService: MessageService,
   ) {}
 
+  ngOnInit(): void {
+    this.initLoginForm();
+  }
+
+  ngOnDestroy(): void {
+    this.loginForm.reset();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  initLoginForm(): void {
+    this.loginForm = this.fb.group<LoginForm>({
+      email: new FormControl('', {
+        validators: [Validators.email, Validators.required],
+      }),
+      password: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(8)],
+      }),
+    });
+  }
+
   handleSubmit() {
-    const { email, password } = this.profileForm.value;
+    const { email, password } = this.loginForm.value;
     const userLogin: UserLogin = {
       email: email!,
       password: password!,
     };
 
-    this.auth.logIn(userLogin).subscribe({
-      next: (res) => {
-        if (res) {
-          let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-          this.router.navigate([returnUrl || '/dashboard']);
-        } else this.invalidLogin = true;
-      },
-      error: (err: AppError) => {
-        if (err instanceof Unauthorized) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Email address or password incorrect`,
-          });
-          console.error(err);
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `unexpected error occurred `,
-          });
-        }
-      },
-      complete: () => {
-        console.log('Observations completed');
-      },
-    });
+    this.auth
+      .logIn(userLogin)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+            this.router.navigate([returnUrl || '/dashboard']);
+          } else this.invalidLogin = true;
+        },
+        error: (err: AppError) => {
+          if (err instanceof Unauthorized) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: `Email address or password incorrect`,
+            });
+            console.error(err);
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: `unexpected error occurred `,
+            });
+          }
+        },
+        complete: () => {
+          console.log('Observations completed');
+        },
+      });
   }
 
   get email() {
-    return this.profileForm.get('email');
+    return this.loginForm.get('email');
   }
 
   get password() {
-    return this.profileForm.get('password');
+    return this.loginForm.get('password');
   }
 }

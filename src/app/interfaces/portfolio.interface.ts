@@ -20,4 +20,18 @@ export enum Action {
   SELL = 'SELL',
 }
 
+export interface StatsDto {
+  topPerformerCoinId: string;
+  topPerformerName: string;
+  topPerformerSymbol: string;
+  topPerformerPercentChange: number;
+  topPerformerValueChange: number;
+  worstPerformerCoinId: string;
+  worstPerformerName: string;
+  worstPerformerSymbol: string;
+  worstPerformerPercentChange: number;
+  worstPerformerValueChange: number;
+}
+
 export interface PortfolioResponse extends BaseResponse<Portfolio> {}
+export interface StatsResponse extends BaseResponse<StatsDto> {}

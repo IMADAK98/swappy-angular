@@ -12,7 +12,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { PortfolioService } from '../../service/portfolio.service';
+import { PortfolioService } from '../../services/portfolio.service';
 import { PortfolioRequest } from '../../interfaces/portfolio.interface';
 import { Router } from '@angular/router';
 

@@ -23,7 +23,7 @@
             <!-- Add Transaction Button -->
             <p-button
               (click)="showDialog()"
-              icon="pi pi-spin pi-bitcoin"
+              icon="pi pi-spin  pi-bitcoin"
               label="Add Transaction"
               iconPos="right"
               [raised]="true"
@@ -78,17 +78,49 @@
           <p class="m-0 text-center">{{ portfolio.assets.length }}</p>
         </p-card>
 
-        <p-card header="Simple Card">
-          <p class="m-0">Lorem ipsum dolor sit amet...</p>
-        </p-card>
+        @if (portfolioStats$ | async; as stats) {
+          <p-card header="Top performer">
+            <img
+              ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
+                stats.topPerformerCoinId
+              }}.png"
+              width="32"
+              height="32"
+              priority="true"
+              class="mr-2"
+            />
+            <p class="m-0">{{ stats.topPerformerName | titlecase }}</p>
+            <p class="m-0">{{ stats.topPerformerSymbol | titlecase }}</p>
+            <p class="m-0">{{ stats.topPerformerValueChange | number }}</p>
+            <p class="m-0">{{ stats.topPerformerPercentChange }}</p>
+          </p-card>
+
+          <p-card header="Worst performer">
+            <img
+              ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
+                stats.worstPerformerCoinId
+              }}.png"
+              width="32"
+              height="32"
+              priority="true"
+              class="mr-2"
+            />
+            <p class="m-0">{{ stats.worstPerformerName | titlecase }}</p>
+            <p class="m-0">{{ stats.worstPerformerSymbol | titlecase }}</p>
+            <p class="m-0">{{ stats.worstPerformerValueChange | number }}</p>
+            <p class="m-0">{{ stats.worstPerformerPercentChange }}</p>
+          </p-card>
+        }
       </div>
 
       <!-- Pie Chart -->
-      <div class="flex flex-row items-center space-x-10">
-        <app-pie-chart></app-pie-chart>
+      <div class="flex flex-row items-center space-x-10"></div>
 
-        <app-line-chart></app-line-chart>
-      </div>
+      <app-pie-chart></app-pie-chart>
+
+      <app-line-chart></app-line-chart>
+
+      <bar-chart></bar-chart>
 
       <!-- Assets Table -->
       <section

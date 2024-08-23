@@ -1,23 +1,7 @@
+<loading-indicator></loading-indicator>
 <div class="w-full">
-  <form [formGroup]="wizForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
     <div class="flex flex-col h-full space-y-3">
-      <div>
-        <label for="action" class="block text-gray-600 font-medium">
-          Action</label
-        >
-        <p-selectButton
-          id="action"
-          formControlName="action"
-          [options]="stateOptions"
-          optionLabel="label"
-          optionValue="value"
-          (onChange)="setAction($event.value)"
-          [ngClass]="getButtonClass()"
-        ></p-selectButton>
-        @if (action?.errors?.["required"] && action?.touched) {
-          <small class="p-error px-1"> Action is required</small>
-        }
-      </div>
       <div>
         <label for="date" class="block text-gray-600 font-medium">
           Purchase Date
@@ -56,11 +40,6 @@
           ) {
             <small class="p-error px-1"> Amount is required</small>
           }
-          <!-- @if (amount?.value! <= 0) {
-                  <small class="p-error px-1">
-                    Amount must be greater than 0</small
-                  >
-                } -->
         </div>
 
         <div class="w-full flex flex-col">
@@ -105,15 +84,23 @@
     </div>
 
     <div class="w-full flex flex-row justify-center mt-4 space-x-5">
-      <ng-content></ng-content>
       <p-button
         type="submit"
         label="Add Transaction"
         icon="pi pi-plus"
         iconPos="right"
-        [disabled]="!wizForm.valid"
+        [disabled]="!editForm.valid"
         [text]="true"
       ></p-button>
     </div>
   </form>
+
+  <div class="flex items-center justify-center">
+    <p-toast />
+    <p-confirmDialog
+      [breakpoints]="{ '0px': '100vw' }"
+      [style]="{ width: 'auto' }"
+    >
+    </p-confirmDialog>
+  </div>
 </div>

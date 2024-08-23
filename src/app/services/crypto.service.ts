@@ -43,7 +43,7 @@ export class CryptoService {
     return this.http
       .get<CoinResponse>(`${this.apiUrl}swappy-exchange-service/api/v1/price`, {
         params: { coinID: id },
-        // context: new HttpContext().set(SkipLoading, true),
+        context: new HttpContext().set(SkipLoading, true),
       })
       .pipe(catchError((err) => customErrorHandler(err)));
   }

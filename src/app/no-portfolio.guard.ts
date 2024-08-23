@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map } from 'rxjs';
-import { PortfolioService } from './service/portfolio.service';
+import { PortfolioService } from './services/portfolio.service';
 import { isPlatformServer } from '@angular/common';
 
 export const noPortfolioGuard: CanActivateFn = (route, state) => {

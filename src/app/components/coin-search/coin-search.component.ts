@@ -12,7 +12,7 @@ import {
 } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common';
 import { Coin } from '../../interfaces/crypto.interfaces';
-import { CryptoService } from '../../service/crypto.service';
+import { CryptoService } from '../../services/crypto.service';
 
 @Component({
   selector: 'app-coin-search',

@@ -16,6 +16,7 @@ import { AppErrorHandler } from './errors/app-error-handler';
 import { provideClientHydration } from '@angular/platform-browser';
 import { loadinInterceptor } from './loading-indicator/loading-utils/loadin.interceptor';
 import { LoadingService } from './loading-indicator/loading-utils/loading.service';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,6 +31,7 @@ export const appConfig: ApplicationConfig = {
       useClass: AppErrorHandler,
     },
     provideClientHydration(),
+    MessageService,
     importProvidersFrom(LoadingService),
     importProvidersFrom(
       RouterModule.forRoot(routes, {

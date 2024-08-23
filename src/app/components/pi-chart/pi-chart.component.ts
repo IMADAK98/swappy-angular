@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartsService } from '../../service/charts.service';
+import { ChartsService } from '../../services/charts.service';
 import { PiChart } from '../../interfaces/charts.interfaces';
 import { ChartModule } from 'primeng/chart';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-pie-chart',
   standalone: true,
@@ -13,14 +14,17 @@ export class PiChartComponent implements OnInit {
   data: any;
   options: any;
 
+  destroy$: Subject<void> = new Subject();
   constructor(private chartService: ChartsService) {}
 
   ngOnInit() {
-    this.chartService.data$.subscribe((responseData) => {
-      if (responseData && responseData.data.length > 0) {
-        this.data = this.transformData(responseData.data);
-      }
-    });
+    this.chartService.data$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((responseData) => {
+        if (responseData && responseData.data.length > 0) {
+          this.data = this.transformData(responseData.data);
+        }
+      });
     this.options = {
       responsive: true,
       maintainAspectRatio: false,
@@ -32,6 +36,13 @@ export class PiChartComponent implements OnInit {
         },
       },
     };
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   transformData(responseData: PiChart[]): any {

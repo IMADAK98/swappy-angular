@@ -74,6 +74,15 @@ export interface TransactionDto {
   asset: Asset;
 }
 
+export interface UpdateTransactionDto {
+  id: number;
+  price: number;
+  action: Action;
+  transactionAmount: number;
+  timestamp: Date;
+  assetId: number;
+}
+
 export interface AssetDto {
   name: string;
   symbol: string;
@@ -94,4 +103,5 @@ export interface AssetDto {
 
 export interface AssetResponse extends BaseResponse<AssetDto> {}
 export interface TransactionsResponse extends BaseResponse<TransactionDto[]> {}
+export interface TransactionResponse extends BaseResponse<TransactionDto> {}
 export interface DeleteResponse extends BaseResponse<string> {}

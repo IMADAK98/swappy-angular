@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { PortfolioComponent } from '../new-portfolio-form/new-portfolio-form.component';
-import { PortfolioService } from '../../service/portfolio.service';
+import { PortfolioService } from '../../services/portfolio.service';
 
 @Component({
   selector: 'no-portfolio',
@@ -13,12 +13,6 @@ import { PortfolioService } from '../../service/portfolio.service';
   imports: [DialogModule, NgOptimizedImage, ButtonModule, PortfolioComponent],
 })
 export class NoPortfolioComponent {
-  service = inject(PortfolioService);
-
-  onClick() {
-    this.service.getPortfolioV2().subscribe((data) => console.log(data.data));
-  }
-
   visible: boolean = false;
 
   showFormDialog = false;

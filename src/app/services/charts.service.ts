@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import {
@@ -14,6 +14,8 @@ import {
 import { customErrorHandler } from '../errors/handleError';
 import { PortfolioService } from './portfolio.service';
 import {
+  BarChartResponse,
+  ChartTypeParams,
   PiChart,
   PiChartResponse,
   SnapshotResponse,
@@ -30,7 +32,7 @@ export interface IChartsService {
 })
 export class ChartsService implements IChartsService {
   private dataSubject = new BehaviorSubject<void>(undefined);
-  data$: Observable<PiChartResponse>;
+  data$: Observable<any>;
 
   constructor(
     private http: HttpClient,
@@ -47,7 +49,9 @@ export class ChartsService implements IChartsService {
     //Easier to read and simpler implementation
     //the merge function should emit an observable when refresh OR subject emits
     this.data$ = merge(this.dataSubject, this.cs.refresh$).pipe(
-      switchMap(() => this.getPieChart()),
+      switchMap(() => {
+        return this.getPieChart();
+      }),
     );
   }
   url: string = environment.apiUrl;
@@ -64,6 +68,21 @@ export class ChartsService implements IChartsService {
     return this.http
       .get<SnapshotResponse>(
         `${this.url}swappy-portfolio-service/api/v1/charts/line-chart-snapshots`,
+      )
+      .pipe(catchError((err) => customErrorHandler(err)));
+  }
+
+  getBarChartData(input?: ChartTypeParams): Observable<BarChartResponse> {
+    let params = new HttpParams();
+
+    if (input) {
+      params = params.append('input', input);
+    }
+
+    return this.http
+      .get<BarChartResponse>(
+        `${this.url}swappy-portfolio-service/api/v1/charts/bar-chart`,
+        { params },
       )
       .pipe(catchError((err) => customErrorHandler(err)));
   }

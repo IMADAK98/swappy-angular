@@ -15,6 +15,7 @@ import {
   Portfolio,
   PortfolioRequest,
   PortfolioResponse,
+  StatsResponse,
 } from '../interfaces/portfolio.interface';
 import { Asset } from '../interfaces/crypto.interfaces';
 import { CentralizedStateService } from '../centralized-state.service';
@@ -35,6 +36,8 @@ export interface IPortfolioService {
 })
 export class PortfolioService implements IPortfolioService {
   private portfolioSubject = new BehaviorSubject<Portfolio | null>(null);
+
+  apiUrl = environment.apiUrl;
   constructor(
     private http: HttpClient,
     private cs: CentralizedStateService,
@@ -46,9 +49,8 @@ export class PortfolioService implements IPortfolioService {
   }
 
   getPortfolioV2(): Observable<PortfolioResponse> {
-    const apiUrl = environment.apiUrl;
     return this.http.get<PortfolioResponse>(
-      `${apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
+      `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
     );
     //  .pipe(
     //     map((response: Portfolio) => this.mapToPortfolio(response)),
@@ -59,11 +61,19 @@ export class PortfolioService implements IPortfolioService {
     //     shareReplay(1),
     //   );
   }
+
+  getPortfolioStats(): Observable<StatsResponse> {
+    return this.http
+      .get<StatsResponse>(
+        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio/statistics`,
+      )
+      .pipe(catchError((err) => customErrorHandler(err)));
+  }
+
   checkPortfolioExistance(): Observable<boolean> {
-    const apiUrl = environment.apiUrl;
     return this.http
       .get<PortfolioResponse>(
-        `${apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
+        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
       )
       .pipe(
         tap((response: PortfolioResponse) => {
@@ -87,10 +97,9 @@ export class PortfolioService implements IPortfolioService {
   }
 
   hasPortfolio(): Observable<boolean> {
-    const apiUrl = environment.apiUrl;
     return this.http
       .get<PortfolioResponse>(
-        `${apiUrl}swappy-portfolio-service/api/v1/has-portfolio`,
+        `${this.apiUrl}swappy-portfolio-service/api/v1/has-portfolio`,
       )
       .pipe(
         map((response: PortfolioResponse) => !!response.data), //!! converts to boolean
@@ -126,10 +135,9 @@ export class PortfolioService implements IPortfolioService {
 
   // Fetches portfolio data from the backend and returns an observable
   fetchPortfolio(): Observable<Portfolio | null> {
-    const apiUrl = environment.apiUrl;
     return this.http
       .get<PortfolioResponse>(
-        `${apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
+        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
       )
       .pipe(
         map((response: PortfolioResponse) =>
@@ -154,10 +162,9 @@ export class PortfolioService implements IPortfolioService {
   createPortfolio(
     portfolioReq: PortfolioRequest,
   ): Observable<PortfolioResponse | void> {
-    const apiUrl = environment.apiUrl;
     return this.http
       .post<PortfolioResponse>(
-        `${apiUrl}swappy-portfolio-service/api/v1/portfolio`,
+        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio`,
         portfolioReq,
       )
       .pipe(
@@ -178,10 +185,9 @@ export class PortfolioService implements IPortfolioService {
   }
 
   deletePortfolio(portfolioId: number): Observable<void> {
-    const apiUrl = environment.apiUrl;
     return this.http
       .delete<void>(
-        `${apiUrl}swappy-portfolio-service/api/v1/portfolio/${portfolioId}`,
+        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio/${portfolioId}`,
       )
       .pipe(catchError((error: any) => customErrorHandler(error)));
   }
@@ -194,10 +200,9 @@ export class PortfolioService implements IPortfolioService {
   }
 
   updatePortfolioData(): Observable<any> {
-    const apiUrl = environment.apiUrl;
     return this.http
       .get<PortfolioResponse>(
-        `${apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
+        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
       )
       .pipe(
         tap((response: PortfolioResponse) => {

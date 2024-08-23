@@ -32,5 +32,15 @@ export function customErrorHandler(error: HttpErrorResponse) {
     return throwError(() => new ConflictError('Conflict 409'));
   }
 
+  if (error.status === 503) {
+    console.error('Service Unavailable');
+    return throwError(() => new AppError('Service Unavailable'));
+  }
+
+  if (error.status === 500) {
+    console.error('Internal Server Error');
+    return throwError(() => new AppError('Internal Server Error'));
+  }
+
   return throwError(() => new AppError(error));
 }

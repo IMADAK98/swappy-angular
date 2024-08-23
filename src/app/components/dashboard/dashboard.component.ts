@@ -3,10 +3,14 @@ import { CardComponent } from '../../card/card.component';
 import { HeaderComponent } from '../../header/header.component';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { Observable } from 'rxjs';
-import { Portfolio } from '../../interfaces/portfolio.interface';
+import { map, Observable } from 'rxjs';
+import {
+  Portfolio,
+  StatsDto,
+  StatsResponse,
+} from '../../interfaces/portfolio.interface';
 import { CommonModule } from '@angular/common';
-import { PortfolioService } from '../../service/portfolio.service';
+import { PortfolioService } from '../../services/portfolio.service';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AssetsTableComponent } from '../assets-table/assets-table.component';
 import { CardModule } from 'primeng/card';
@@ -19,6 +23,7 @@ import { WizardComponent } from '../wizard/wizard.component';
 import { PortfolioComponent } from '../new-portfolio-form/new-portfolio-form.component';
 import { NoPortfolioComponent } from '../no-portfolio/no-portfolio.component';
 import { LineChartComponent } from '../line-chart/line-chart.component';
+import { BarChartComponent } from '../bar-chart/bar-chart.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -42,16 +47,21 @@ import { LineChartComponent } from '../line-chart/line-chart.component';
     MenuActionsComponent,
     NoPortfolioComponent,
     LineChartComponent,
+    BarChartComponent,
   ],
 })
 export class DashboardComponent {
   portfolio$!: Observable<Portfolio | null>;
+  portfolioStats$!: Observable<StatsDto | null>;
 
   constructor(private pService: PortfolioService) {}
 
   ngOnInit(): void {
     this.pService.triggerUpdatePortfolioData();
     this.portfolio$ = this.pService.getPortfolio();
+    this.portfolioStats$ = this.pService
+      .getPortfolioStats()
+      .pipe(map((res: StatsResponse) => res.data));
   }
 
   visible: boolean = false;

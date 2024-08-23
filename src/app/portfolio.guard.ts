@@ -1,6 +1,6 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject, PLATFORM_ID } from '@angular/core';
-import { PortfolioService } from './service/portfolio.service';
+import { PortfolioService } from './services/portfolio.service';
 import { tap, map } from 'rxjs';
 import { isPlatformServer } from '@angular/common';
 

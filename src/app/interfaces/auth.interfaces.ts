@@ -1,3 +1,5 @@
+import { FormControl } from '@angular/forms';
+
 export interface UserSignup {
   firstName: string | null;
   lastName: string | null;
@@ -8,4 +10,9 @@ export interface UserSignup {
 export interface UserLogin {
   email: string;
   password: string;
+}
+
+export interface LoginForm {
+  email: FormControl<string | null>;
+  password: FormControl<string | null>;
 }

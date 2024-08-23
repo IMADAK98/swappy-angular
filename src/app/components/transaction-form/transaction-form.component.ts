@@ -19,21 +19,19 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { Action } from '../../interfaces/portfolio.interface';
-import { Subscription, debounceTime } from 'rxjs';
+import { Subject, debounceTime, map, takeUntil } from 'rxjs';
 import {
   CoinResponse,
   TransactionRequest,
 } from '../../interfaces/crypto.interfaces';
-import { TransactionService } from '../../service/transaction.service';
-import { CryptoService } from '../../service/crypto.service';
+import { TransactionService } from '../../services/transaction.service';
+import { CryptoService } from '../../services/crypto.service';
 import { LoadingService } from '../../loading-indicator/loading-utils/loading.service';
-import { CentralizedStateService } from '../../centralized-state.service';
 
 @Component({
   selector: 'app-transaction-form',
   standalone: true,
   imports: [
-    FormsModule,
     ReactiveFormsModule,
     SelectButtonModule,
     InputNumberModule,
@@ -49,12 +47,13 @@ export class TransactionFormComponent {
   @Output() completedSubmission: EventEmitter<any> = new EventEmitter<any>();
   @Input() coinID: string = '';
   coin!: CoinResponse;
-  valueChangesSubscription: Subscription | undefined;
   stateOptions: any[] = [
     { label: 'Buy', value: 'BUY' },
     { label: 'Sell', value: 'SELL' },
   ];
   wizForm!: FormGroup;
+  today!: Date;
+  destroy$: Subject<void> = new Subject();
 
   constructor(
     private fb: FormBuilder,
@@ -67,14 +66,7 @@ export class TransactionFormComponent {
     this.initForm();
     this.subscribeToValueChanges();
     this.fetchCoinPrice(this.coinID);
-  }
-
-  private subscribeToValueChanges(): void {
-    this.valueChangesSubscription = this.wizForm?.valueChanges
-      .pipe(debounceTime(300)) // Debounce to reduce the frequency of value changes
-      .subscribe(() => {
-        this.calculateTotal();
-      });
+    this.today = new Date();
   }
 
   initForm() {
@@ -91,6 +83,14 @@ export class TransactionFormComponent {
     });
   }
 
+  private subscribeToValueChanges(): void {
+    this.wizForm?.valueChanges
+      .pipe(takeUntil(this.destroy$), debounceTime(300)) // Debounce to reduce the frequency of value changes
+      .subscribe(() => {
+        this.calculateTotal();
+      });
+  }
+
   private fetchCoinPrice(coinID: string): void {
     if (!coinID) {
       console.error('Coin ID is required');
@@ -98,11 +98,14 @@ export class TransactionFormComponent {
     }
 
     // this.loadingService.loadingOn();
-    this.cryptoService.fetchPrice(coinID).subscribe({
-      next: (data) => this.handleFetchPriceSuccess(data),
-      error: (err) => this.handleFetchPriceError(err),
-      // complete: () => this.loadingService.loadingOff(),
-    });
+    this.cryptoService
+      .fetchPrice(coinID)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => this.handleFetchPriceSuccess(data),
+        error: (err) => this.handleFetchPriceError(err),
+        // complete: () => this.loadingService.loadingOff(),
+      });
   }
 
   private handleFetchPriceSuccess(data: CoinResponse): void {
@@ -146,11 +149,14 @@ export class TransactionFormComponent {
   }
 
   private submitTransaction(transaction: TransactionRequest): void {
-    this.transactionService.createTransaction(transaction).subscribe({
-      next: (res) => this.handleTransactionSuccess(res),
-      error: (err) => this.handleTransactionError(err),
-      complete: () => this.loadingService.loadingOff(),
-    });
+    this.transactionService
+      .createTransaction(transaction)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => this.handleTransactionSuccess(res),
+        error: (err) => this.handleTransactionError(err),
+        complete: () => this.loadingService.loadingOff(),
+      });
   }
 
   private handleTransactionSuccess(res: any): void {
@@ -166,14 +172,9 @@ export class TransactionFormComponent {
   }
 
   ngOnDestroy() {
-    this.unsubscribeFromValueChanges();
     this.wizForm?.reset();
-  }
-
-  private unsubscribeFromValueChanges() {
-    if (this.valueChangesSubscription) {
-      this.valueChangesSubscription.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private calculateTotal() {

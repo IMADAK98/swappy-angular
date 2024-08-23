@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
-import { ChartsService } from '../../service/charts.service';
+import { ChartsService } from '../../services/charts.service';
 import { SnapshotResponse } from '../../interfaces/charts.interfaces';
 @Component({
   selector: 'app-line-chart',

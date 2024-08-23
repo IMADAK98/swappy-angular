@@ -1,4 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpContext,
+  HttpContextToken,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import {
@@ -6,22 +10,21 @@ import {
   Observable,
   catchError,
   map,
-  merge,
   of,
   retry,
-  switchMap,
   tap,
 } from 'rxjs';
 import {
   AssetResponse,
   DeleteResponse,
   TransactionRequest,
-  TransactionsResponse,
+  TransactionResponse,
+  UpdateTransactionDto,
 } from '../interfaces/crypto.interfaces';
 import { customErrorHandler } from '../errors/handleError';
-import { PortfolioService } from './portfolio.service';
 import { CentralizedStateService } from '../centralized-state.service';
 import { Portfolio } from '../interfaces/portfolio.interface';
+import { SkipLoading } from '../loading-indicator/loading-utils/loadin.interceptor';
 
 export interface ITransactionService {
   createTransaction(transaction: TransactionRequest): Observable<boolean>;
@@ -56,7 +59,7 @@ export class TransactionService implements ITransactionService {
       );
   }
 
-  fetchTransactionsByAssetId(assetId: number) {
+  fetchTransactionsByAssetId(assetId: number): Observable<AssetResponse> {
     return this.http
       .get<AssetResponse>(
         `${this.url}swappy-portfolio-service/api/v1/assets/transactions/${assetId}`,
@@ -65,6 +68,30 @@ export class TransactionService implements ITransactionService {
         retry({ count: 3, delay: 2000 }),
         catchError((err) => customErrorHandler(err)),
       );
+  }
+
+  fetchTransactionById(transactionId: number): Observable<TransactionResponse> {
+    return this.http
+      .get<TransactionResponse>(
+        `${this.url}swappy-portfolio-service/api/v1/transaction/${transactionId}`,
+        { context: new HttpContext().set(SkipLoading, true) },
+      )
+      .pipe(
+        retry({ count: 3, delay: 2000 }),
+        catchError((err) => customErrorHandler(err)),
+      );
+  }
+
+  updateTransaction(
+    input: UpdateTransactionDto,
+  ): Observable<TransactionResponse> {
+    return this.http
+      .put<TransactionResponse>(
+        `${this.url}swappy-portfolio-service/api/v1/transaction`,
+        input,
+        { context: new HttpContext().set(SkipLoading, true) },
+      )
+      .pipe(catchError((err) => customErrorHandler(err)));
   }
 
   deleteTransactionById(transactionId: number) {
