@@ -21,6 +21,7 @@ import { noPortfolioGuard } from './no-portfolio.guard';
 import { slideInAnimation } from './animations'; // Adjust the path as necessary
 import { animation } from '@angular/animations';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
+import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 
 export const routes: Routes = [
   {
@@ -98,7 +99,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'chart',
+    path: 'pi-chart',
     component: PiChartComponent,
   },
 
@@ -115,6 +116,11 @@ export const routes: Routes = [
   {
     path: 'line-chart',
     component: LineChartComponent,
+  },
+
+  {
+    path: 'bar-chart',
+    component: BarChartComponent,
   },
 
   {

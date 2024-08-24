@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { ChartsService } from '../../services/charts.service';
 import {
@@ -6,6 +12,7 @@ import {
   BarChartResponse,
 } from '../../interfaces/charts.interfaces';
 import { Subject, takeUntil } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'bar-chart',
@@ -14,13 +21,15 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './bar-chart.component.html',
   styleUrl: './bar-chart.component.css',
 })
-export class BarChartComponent implements OnInit {
+export class BarChartComponent implements OnInit, OnDestroy {
   basicData: any;
-
   basicOptions: any;
   destroy$: Subject<void> = new Subject();
 
-  constructor(private chartService: ChartsService) {}
+  constructor(
+    private chartService: ChartsService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {}
 
   ngOnInit() {
     this.chartService
@@ -34,21 +43,26 @@ export class BarChartComponent implements OnInit {
         },
       });
 
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
+    this.setupChartOptions();
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  setupChartOptions() {
+    const textColor = this.getStyleValue('--text-color', '#495057');
+    const textColorSecondary = this.getStyleValue(
       '--text-color-secondary',
+      '#6c757d',
     );
-    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+    const surfaceBorder = this.getStyleValue('--surface-border', '#ced4da');
 
     this.basicOptions = {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          labels: {
-            color: textColor,
-          },
+          display: false,
         },
       },
       scales: {
@@ -75,16 +89,25 @@ export class BarChartComponent implements OnInit {
     };
   }
 
+  getStyleValue(varName: string, fallback: string): string {
+    if (isPlatformBrowser(this.platformId)) {
+      const style = getComputedStyle(document.documentElement);
+      return style.getPropertyValue(varName) || fallback;
+    }
+    return fallback;
+  }
+
   transformData(responseData: BarChartDto[]): any {
     const labels = responseData.map((data) => data.assetSymbol);
     const data = responseData.map((data) => data.assetValue);
     const backgroundColors = this.generateColors(responseData.length);
-    const hoverBackgroundColors = backgroundColors; // Same colors for hover effect
+    const hoverBackgroundColors = backgroundColors;
 
     return {
       labels: labels,
       datasets: [
         {
+          label: 'Asset Value',
           data: data,
           backgroundColor: backgroundColors,
           hoverBackgroundColor: hoverBackgroundColors,

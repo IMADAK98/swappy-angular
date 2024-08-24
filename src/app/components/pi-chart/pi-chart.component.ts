@@ -18,7 +18,8 @@ export class PiChartComponent implements OnInit {
   constructor(private chartService: ChartsService) {}
 
   ngOnInit() {
-    this.chartService.data$
+    this.chartService
+      .getPieChart()
       .pipe(takeUntil(this.destroy$))
       .subscribe((responseData) => {
         if (responseData && responseData.data.length > 0) {
