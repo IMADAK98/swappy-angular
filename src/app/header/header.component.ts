@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
     { name: 'Home', route: '/home' },
     { name: 'Dashboard', route: '/dashboard' },
     { name: 'Login', route: '/login' },
-    { name: 'Signup', route: '/signup' },
+    // { name: 'Signup', route: '/signup' },
     { name: 'Logout', route: '/logout' },
   ] as const;
 
@@ -50,4 +50,5 @@ export class HeaderComponent implements OnInit {
   isActive(route: string): boolean {
     return this.currentUrl === route;
   }
+  
 }

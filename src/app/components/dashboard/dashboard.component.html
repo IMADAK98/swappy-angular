@@ -1,25 +1,56 @@
-<div class="p-10 mt-5">
+<div class="p-3">
   @if (portfolio$ | async; as portfolio) {
     <!-- Main Container for Portfolio -->
-    <div class="flex flex-col">
+    <div class="flex flex-col font-bold">
       <!-- Portfolio Name and Total Value -->
       <!-- <h1 class="text-gray-400 font-semibold text-xl">{{ portfolio.name }} 🚀</h1> -->
-      <div class="flex flex-row justify-between flex-wrap">
-        <div class="flex flex-col p-2.5 space-y-2 border">
-          <p class="font-semibold text-gray-600">
-            {{ portfolio.portfolioName | titlecase }}
-          </p>
-          <p class="text-4xl text-gray-900 font-extrabold">
-            {{ portfolio.totalValue | currency }}
-          </p>
-          <p class="text-green-400 font-medium text-lg">
-            <!-- +1215478 (24h prices change) 📈 -->
-          </p>
+      <h1 class="text-3xl pb-3">{{ portfolio.portfolioName | titlecase }}</h1>
+      <div class="flex flex-row justify-between flex-wrap gap-3">
+        <div class="flex flex-wrap gap-3">
+          <div class="p-3 bg-gray-200 rounded-md shadow-md">
+
+            <p class=" text-gray-600">
+              Current Balance
+            </p>
+            <p class="text-2xl font-extrabold">
+              
+              {{ portfolio.totalValue | currency }}
+            </p>
+            <p class="text-green-400 font-medium text-lg">
+              <!-- +1215478 (24h prices change) 📈 -->
+            </p>
+          </div>
+          <div>
+            <div class="flex items-center gap-3">
+              <div header="Profit/Loss" class="flex flex-col p-3 bg-gray-200 rounded-md shadow-md  gap-3">
+                <h1>Profit/Loss</h1>
+                @if (portfolio.totalProfitAndLossAmount > 0) {
+                  <span class=" text-green-700 text-lg font-bold">
+                    +{{ portfolio.totalProfitAndLossAmount | currency }} 💸
+                  </span>
+                } @else if (portfolio.totalProfitAndLossAmount < 0) {
+                  <span class=" text-red-700 text-lg font-bold">
+                    {{ portfolio.totalProfitAndLossAmount | currency }} 🩸
+                  </span>
+                } @else if (portfolio.totalProfitAndLossAmount === 0) {
+                  <span class="text-grey-900 text-lg">
+                    {{ portfolio.totalProfitAndLossAmount | currency }}
+                  </span>
+                }
+              </div>
+          </div>
+        </div>
+
+    
+          <div header="Number of Assets held"  class="flex flex-col text-wrap gap-3  p-3 bg-gray-200 rounded-md shadow-md">
+            <h1>Number of Assets held</h1>
+            <p class=" text-center">{{ portfolio.assets.length }}</p>
+          </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="flex flex-row items-center justify-center">
-          <div class="px-2 flex flex-wrap">
+          <div class="flex flex-wrap gap-3">
             <!-- Add Transaction Button -->
             <p-button
               (click)="showDialog()"
@@ -42,125 +73,126 @@
           </div>
 
           <!-- Options Button -->
-          <div class="px-2">
+          <div>
             <menu-actions
               (complete)="hideDialog()"
               [portfolioId]="portfolio.id"
             ></menu-actions>
           </div>
+
         </div>
       </div>
+
+      
+
     </div>
 
-    <!-- If Theres no assets so the no asset layout  -->
-    @if (portfolio.assets.length != 0) {
-      <!-- Portfolio Summary Cards -->
-      <div
-        class="flex flex-row mt-[2.5rem] justify-normal items-start flex-wrap"
-      >
-        <p-card header="Profit/Loss">
-          @if (portfolio.totalProfitAndLossAmount > 0) {
-            <span class="m-0 text-green-700 text-lg font-bold">
-              +{{ portfolio.totalProfitAndLossAmount | currency }} 💸
-            </span>
-          } @else if (portfolio.totalProfitAndLossAmount < 0) {
-            <span class="m-0 text-red-700 text-lg font-bold">
-              {{ portfolio.totalProfitAndLossAmount | currency }} 🩸
-            </span>
-          } @else if (portfolio.totalProfitAndLossAmount === 0) {
-            <span class="m-0 text-grey-900 text-lg">
-              {{ portfolio.totalProfitAndLossAmount | currency }}
-            </span>
-          }
-        </p-card>
+    <div>
+      
+    </div>
+    <!-- Pie Chart -->
+    <div class="flex  lg:justify-start md:justify-evenly  gap-3  pt-5 flex-wrap ">
+      <div class=" p-3 w-6/12  bg-gray-200 rounded-md shadow-md">
+        <app-line-chart ></app-line-chart>
+      </div>
 
-        <p-card header="Number of Assets held">
-          <p class="m-0 text-center">{{ portfolio.assets.length }}</p>
-        </p-card>
+      <div class="flex flex-col items-center gap-6">
 
-        @if (portfolioStats$ | async; as stats) {
-          <p-card header="Top performer">
+        <div class="bg-gray-200 rounded-md shadow-md p-3">
+          <app-pie-chart ></app-pie-chart>
+        </div>
+        <div class=" bg-gray-200 rounded-md shadow-md p-3">
+          <bar-chart ></bar-chart>
+        </div>
+        
+        
+      </div>
+      
+
+      <div class="flex  ">
+        <!-- If Theres no assets so the no asset layout -->
+        <!-- Portfolio Summary Cards -->
+        @if (portfolio.assets.length != 0) {
+          <div class="flex lg:flex-col md:flex-row items-center gap-5 ">
+    
+            @if (portfolioStats$ | async; as stats) {
+              <p-card header="Top performer">
+                <img
+                  ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
+                    stats.topPerformerCoinId
+                  }}.png"
+                  width="32"
+                  height="32"
+                  priority="true"
+                  class="mr-2"
+                />
+                <p class="m-0">{{ stats.topPerformerName | titlecase }}</p>
+                <p class="m-0">{{ stats.topPerformerSymbol | titlecase }}</p>
+                <p class="m-0">
+                  Value changes {{ stats.topPerformerValueChange | number }}
+                </p>
+                <p class="m-0">
+                  Percent change {{ stats.topPerformerPercentChange }}
+                </p>
+              </p-card>
+    
+              <p-card header="Worst performer">
+                <img
+                  ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
+                    stats.worstPerformerCoinId
+                  }}.png"
+                  width="32"
+                  height="32"
+                  priority="true"
+                  class="mr-2"
+                />
+                <p class="m-0">{{ stats.worstPerformerName | titlecase }}</p>
+                <p class="m-0">{{ stats.worstPerformerSymbol | titlecase }}</p>
+                <p class="m-0">
+                  "Value changes" {{ stats.worstPerformerValueChange | number }}
+                </p>
+                <p class="m-0">
+                  "Percent change " {{ stats.worstPerformerPercentChange }}
+                </p>
+              </p-card>
+            }
+          </div>
+        } @else {
+          <!-- No Assets Placeholder -->
+          <div class="flex flex-col items-center justify-center space-y-5">
             <img
-              ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
-                stats.topPerformerCoinId
-              }}.png"
-              width="32"
-              height="32"
+              ngSrc="/assets/no-assets-portfolio.png"
+              width="240"
+              height="240"
               priority="true"
-              class="mr-2"
             />
-            <p class="m-0">{{ stats.topPerformerName | titlecase }}</p>
-            <p class="m-0">{{ stats.topPerformerSymbol | titlecase }}</p>
-            <p class="m-0">
-              Value changes {{ stats.topPerformerValueChange | number }}
-            </p>
-            <p class="m-0">
-              Percent change {{ stats.topPerformerPercentChange }}
-            </p>
-          </p-card>
-
-          <p-card header="Worst performer">
-            <img
-              ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
-                stats.worstPerformerCoinId
-              }}.png"
-              width="32"
-              height="32"
-              priority="true"
-              class="mr-2"
-            />
-            <p class="m-0">{{ stats.worstPerformerName | titlecase }}</p>
-            <p class="m-0">{{ stats.worstPerformerSymbol | titlecase }}</p>
-            <p class="m-0">
-              "Value changes" {{ stats.worstPerformerValueChange | number }}
-            </p>
-            <p class="m-0">
-              "Percent change " {{ stats.worstPerformerPercentChange }}
-            </p>
-          </p-card>
+            <h1 class="text-3xl font-bold text-gray-950">
+              This portfolio needs some final touches…
+            </h1>
+            <h2 class="text-lg font-semibold text-gray-500">
+              Add a coin to get started
+            </h2>
+            <p-button
+              (click)="showDialog()"
+              icon="pi pi-spin pi-bitcoin"
+              label="Add Transaction"
+              iconPos="right"
+              [raised]="true"
+            ></p-button>
+          </div>
         }
+        
       </div>
 
-      <!-- Pie Chart -->
-      <div class="flex flex-row justify-evenly items-center space-x-10">
-        <app-pie-chart></app-pie-chart>
-
-        <app-line-chart></app-line-chart>
-
-        <bar-chart></bar-chart>
-      </div>
-
-      <!-- Assets Table -->
-      <section
-        id="assets"
-        class="my-[1.25rem] border border-black rounded-md p-[1.25rem]"
-      >
-        <h2 class="font-bold text-2xl text-gray-950">Assets</h2>
-        <app-assets-table (complete)="hideDialog()"> </app-assets-table>
-      </section>
-    } @else {
-      <!-- No Assets Placeholder -->
-      <div class="flex flex-col items-center justify-center space-y-5">
-        <img
-          ngSrc="/assets/no-assets-portfolio.png"
-          width="240"
-          height="240"
-          priority="true"
-        />
-        <h1 class="text-3xl font-bold text-gray-950">
-          This portfolio needs some final touches…
-        </h1>
-        <h2 class="text-lg font-semibold text-gray-500">
-          Add a coin to get started
-        </h2>
-        <p-button
-          (click)="showDialog()"
-          icon="pi pi-spin pi-bitcoin"
-          label="Add Transaction"
-          iconPos="right"
-          [raised]="true"
-        ></p-button>
       </div>
     }
-  }
+  <!-- Assets Table -->
+  <section
+          id="assets"
+          class="p-3 mt-3 border border-black rounded-md "
+        >
+          <h2 class="font-bold text-3xl text-gray-950">Assets</h2>
+          <app-assets-table (complete)="hideDialog()"> </app-assets-table>
+        </section>
 </div>
+

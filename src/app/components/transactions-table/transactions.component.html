@@ -1,4 +1,4 @@
-<div class="flex flex-col items-start justify-center">
+<div class="flex flex-col items-start justify-center p-3">
   <div class="my-[2rem]">
     <p-button
       label="back"
@@ -12,37 +12,41 @@
   </div>
 
   @if (transactionPageData$ | async; as tp) {
-    <div class="flex flex-row">
+
+    <div class="flex flex-row items-center gap-3">
       <img
         ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
           tp?.coinId
         }}.png"
         width="32"
         height="32"
-        class="mr-2"
+        class=""
       />
-      <h2 class="text-gray-400 font-semibold">{{ tp?.name }}</h2>
+      <h2 class="text-2xl font-semibold">{{ tp?.name }}</h2>
     </div>
     <div>
-      <h1 class="text-4xl text-gray-900 font-extrabold">
+      <h1 class="text-4xl text-gray-900 font-extrabold pt-3">
         {{ tp?.totalValue | currency }}
       </h1>
     </div>
 
-    <div class="flex flex-row mt-[2.5rem] justify-normal items-start flex-wrap">
-      <p-card header="Total Quantity">
+
+    <div class="flex flex-row justify-normal items-start flex-wrap pt-3 gap-3">
+
+      <p-card header="Total Quantity" class="rounded-md shadow-md ">
         <span class="text-gray-950 font-bold text-2xl">{{
           tp?.totalQuantity
         }}</span>
       </p-card>
-      <p-card header="Avg buy Price">
+
+      <p-card header="Avg buy Price" class="rounded-md shadow-md ">
         <span class="text-gray-950 font-bold text-2xl">{{
           tp?.avgBuyPrice | currency
         }}</span>
       </p-card>
 
-      <div>
-        <p-card header="P/L">
+      
+        <p-card header="P/L" class="rounded-md shadow-md ">
           @if (tp?.totalProfitAndLossAmount! > 0) {
             <span class="text-green-800 font-bold text-2xl text-center">{{
               tp?.totalProfitAndLossAmount | currency
@@ -57,11 +61,11 @@
             >
           }
         </p-card>
-      </div>
+      
     </div>
 
     <div class="mt-[2rem] w-full">
-      <h1 class="text-2xl text-gray-950 font-bold">Transactions:</h1>
+      <h1 class="text-3xl text-gray-950 font-bold">Transactions:</h1>
 
       <p-table
         styleClass="p-datatable-striped p-datatable-sm "
