@@ -1,24 +1,26 @@
-<header
-  class="z-50 max-w-fit bg-white/70 backdrop-blur-sm shadow-md border rounded-full mx-auto mt-5"
->
-  <nav class="flex items-center justify-center md:px-8 p-3 ">
-    <ul
-      class="flex flex-wrap items-center justify-center gap-3"
-    >
-      @for (link of Links; track $index) {
-        <li class="flex items-center">
-          <a
-            class="text-gray-700 cursor-pointer transition-all duration-300 hover:bg-slate-500 hover:text-white border border-transparent rounded-full px-2 py-1"
-            [class.active]="isActive(link.route)"
-            (click)="navigate(link.route)"
-          >
-            {{ link.name }}
-          </a>
-        </li>
-      }
-    </ul>
-  </nav>
-</header>
+<div class="p-3">
+  <header
+    class="z-50 max-w-fit bg-white/70 backdrop-blur-sm shadow-md border rounded-full mx-auto"
+  >
+    <nav class="flex items-center justify-center md:px-8 p-2 ">
+      <ul
+        class="flex flex-wrap items-center justify-center gap-3"
+      >
+        @for (link of Links; track $index) {
+          <li class="flex items-center">
+            <a
+              class="text-gray-700 cursor-pointer transition-all duration-300 hover:bg-slate-500 hover:text-white border border-transparent rounded-full px-2 py-1"
+              [class.active]="isActive(link.route)"
+              (click)="navigate(link.route)"
+            >
+              {{ link.name }}
+            </a>
+          </li>
+        }
+      </ul>
+    </nav>
+  </header>
+</div>
 
 <!-- <header
   class="z-50 w-1/2 bg-white/70 backdrop-blur-sm shadow-md border rounded-full mx-auto mt-5"
