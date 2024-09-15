@@ -14,7 +14,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (
     req.url ===
       'http://localhost:8765/swappy-user-service/api/v1/auth/register' ||
-    req.url === 'http://localhost:8765/swappy-user-service/api/v1/auth/login'
+    req.url === 'http://localhost:8765/swappy-user-service/api/v1/auth/login' ||
+    req.url ===
+      'http://localhost:8765/swappy-user-service/api/v1/user/reset-password-email' ||
+    req.url ===
+      'http://localhost:8765/swappy-user-service/api/v1/user/reset-password-token-check' ||
+    req.url ===
+      'http://localhost:8765/swappy-user-service/api/v1/user/reset-password'
   ) {
     // Return the original request without modifying it
     return next(req);

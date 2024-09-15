@@ -77,7 +77,7 @@ export class MenuActionsComponent implements OnInit {
   confirm() {
     this.confirmationService.confirm({
       message:
-        'Are you sure that you want to delete this asset and all associated transactions ?',
+        'Are you sure that you want to delete this portfolio and all associated assets ?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       acceptIcon: 'none',

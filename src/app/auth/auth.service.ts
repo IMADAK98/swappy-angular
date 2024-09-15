@@ -7,10 +7,15 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { catchError, map } from 'rxjs';
+import { catchError, map, takeUntil } from 'rxjs';
 import { customErrorHandler } from '../errors/handleError';
 import { environment } from '../../environments/environment.development';
-import { UserLogin, UserSignup } from '../interfaces/auth.interfaces';
+import {
+  ResetPasswordRequest,
+  TokenRequest,
+  UserLogin,
+  UserSignup,
+} from '../interfaces/auth.interfaces';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Injectable({
@@ -47,10 +52,7 @@ export class AuthService {
 
   logIn(user: UserLogin) {
     return this.http
-      .post<any>(
-        `http://localhost:8765/swappy-user-service/api/v1/auth/login`,
-        user,
-      )
+      .post<any>(`${this.apiUrl}swappy-user-service/api/v1/auth/login`, user)
       .pipe(
         map((response) => {
           if (response && response.token) {
@@ -61,6 +63,33 @@ export class AuthService {
         }),
         catchError((err) => customErrorHandler(err)), // Correct placement of catchError
       );
+  }
+
+  sendResetPasswordEmail(email: string) {
+    return this.http
+      .post<any>(
+        `${this.apiUrl}swappy-user-service/api/v1/user/reset-password-email`,
+        email,
+      )
+      .pipe(catchError((err) => customErrorHandler(err)));
+  }
+
+  checkResetPasswordToken(req: TokenRequest) {
+    return this.http
+      .post<boolean>(
+        `${this.apiUrl}swappy-user-service/api/v1/user/reset-password-token-check`,
+        req,
+      )
+      .pipe(catchError((err) => customErrorHandler(err)));
+  }
+
+  resetPassword(request: ResetPasswordRequest) {
+    return this.http
+      .post<string>(
+        `${this.apiUrl}swappy-user-service/api/v1/user/reset-password`,
+        request,
+      )
+      .pipe(catchError((err) => customErrorHandler(err)));
   }
 
   logout() {

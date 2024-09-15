@@ -16,3 +16,14 @@ export interface LoginForm {
   email: FormControl<string | null>;
   password: FormControl<string | null>;
 }
+
+export interface TokenRequest {
+  token: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  token: string;
+}

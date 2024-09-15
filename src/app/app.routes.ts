@@ -22,6 +22,9 @@ import { slideInAnimation } from './animations'; // Adjust the path as necessary
 import { animation } from '@angular/animations';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
 import { BarChartComponent } from './components/bar-chart/bar-chart.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { resetPasswordGuard } from './reset-password.guard';
+import { ResetPasswordFormComponent } from './reset-password-form/reset-password-form.component';
 
 export const routes: Routes = [
   {
@@ -41,6 +44,19 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'login',
+  },
+
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
+    title: 'reset password',
+  },
+
+  {
+    path: 'reset-form',
+    component: ResetPasswordFormComponent,
+    canActivate: [resetPasswordGuard],
+    title: 'reset password',
   },
 
   {

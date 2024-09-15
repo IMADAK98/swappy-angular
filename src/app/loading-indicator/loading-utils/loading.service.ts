@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,10 @@ export class LoadingService {
   }
 
   loadingOff() {
-    console.log('loading off');
-    this.loadingSubject.next(false);
+    console.log('loading off (with delay)');
+    // Adding a delay before turning off the loading indicator
+    timer(500).subscribe(() => {
+      this.loadingSubject.next(false);
+    });
   }
 }

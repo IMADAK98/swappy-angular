@@ -6,47 +6,50 @@
       <!-- <h1 class="text-gray-400 font-semibold text-xl">{{ portfolio.name }} 🚀</h1> -->
       <h1 class="text-3xl pb-3">{{ portfolio.portfolioName | titlecase }}</h1>
       <div class="flex flex-row justify-between flex-wrap gap-3">
-        <div class="flex flex-wrap gap-3">
-          <div class="p-3 bg-gray-200 rounded-md shadow-md">
-
-            <p class=" text-gray-600">
-              Current Balance
-            </p>
-            <p class="text-2xl font-extrabold">
-              
-              {{ portfolio.totalValue | currency }}
-            </p>
-            <p class="text-green-400 font-medium text-lg">
-              <!-- +1215478 (24h prices change) 📈 -->
-            </p>
-          </div>
-          <div>
-            <div class="flex items-center gap-3">
-              <div header="Profit/Loss" class="flex flex-col p-3 bg-gray-200 rounded-md shadow-md  gap-3">
-                <h1>Profit/Loss</h1>
-                @if (portfolio.totalProfitAndLossAmount > 0) {
-                  <span class=" text-green-700 text-lg font-bold">
-                    +{{ portfolio.totalProfitAndLossAmount | currency }} 💸
-                  </span>
-                } @else if (portfolio.totalProfitAndLossAmount < 0) {
-                  <span class=" text-red-700 text-lg font-bold">
-                    {{ portfolio.totalProfitAndLossAmount | currency }} 🩸
-                  </span>
-                } @else if (portfolio.totalProfitAndLossAmount === 0) {
-                  <span class="text-grey-900 text-lg">
-                    {{ portfolio.totalProfitAndLossAmount | currency }}
-                  </span>
-                }
+        @if (portfolio.assets.length > 0) {
+          <div class="flex flex-wrap gap-3">
+            <div class="p-3 bg-gray-200 rounded-md shadow-md">
+              <p class="text-gray-600">Current Balance</p>
+              <p class="text-2xl font-extrabold">
+                {{ portfolio.totalValue | currency }}
+              </p>
+              <p class="text-green-400 font-medium text-lg">
+                <!-- +1215478 (24h prices change) 📈 -->
+              </p>
+            </div>
+            <div>
+              <div class="flex items-center gap-3">
+                <div
+                  header="Profit/Loss"
+                  class="flex flex-col p-3 bg-gray-200 rounded-md shadow-md gap-3"
+                >
+                  <h1>Profit/Loss</h1>
+                  @if (portfolio.totalProfitAndLossAmount > 0) {
+                    <span class="text-green-700 text-lg font-bold">
+                      +{{ portfolio.totalProfitAndLossAmount | currency }} 💸
+                    </span>
+                  } @else if (portfolio.totalProfitAndLossAmount < 0) {
+                    <span class="text-red-700 text-lg font-bold">
+                      {{ portfolio.totalProfitAndLossAmount | currency }} 🩸
+                    </span>
+                  } @else if (portfolio.totalProfitAndLossAmount === 0) {
+                    <span class="text-grey-900 text-lg">
+                      {{ portfolio.totalProfitAndLossAmount | currency }}
+                    </span>
+                  }
+                </div>
               </div>
-          </div>
-        </div>
+            </div>
 
-    
-          <div header="Number of Assets held"  class="flex flex-col text-wrap gap-3  p-3 bg-gray-200 rounded-md shadow-md">
-            <h1>Number of Assets held</h1>
-            <p class=" text-center">{{ portfolio.assets.length }}</p>
+            <div
+              header="Number of Assets held"
+              class="flex flex-col text-wrap gap-3 p-3 bg-gray-200 rounded-md shadow-md"
+            >
+              <h1>Number of Assets held</h1>
+              <p class="text-center">{{ portfolio.assets.length }}</p>
+            </div>
           </div>
-        </div>
+        }
 
         <!-- Action Buttons -->
         <div class="flex flex-row items-center justify-center">
@@ -79,42 +82,34 @@
               [portfolioId]="portfolio.id"
             ></menu-actions>
           </div>
-
         </div>
       </div>
-
-      
-
     </div>
 
-    <div>
-      
-    </div>
-    <!-- Pie Chart -->
-    <div class="flex  lg:justify-start md:justify-evenly  gap-3  pt-5 flex-wrap ">
-      <div class=" p-3 w-6/12  bg-gray-200 rounded-md shadow-md">
-        <app-line-chart ></app-line-chart>
-      </div>
+    <div></div>
 
-      <div class="flex flex-col items-center gap-6">
-
-        <div class="bg-gray-200 rounded-md shadow-md p-3">
-          <app-pie-chart ></app-pie-chart>
+    <!--  Charts  -->
+    <div class="flex lg:justify-start md:justify-evenly gap-3 pt-5 flex-wrap">
+      @if (portfolio.assets.length > 0) {
+        <div class="p-3 w-6/12 bg-gray-200 rounded-md shadow-md">
+          <app-line-chart></app-line-chart>
         </div>
-        <div class=" bg-gray-200 rounded-md shadow-md p-3">
-          <bar-chart ></bar-chart>
-        </div>
-        
-        
-      </div>
-      
 
-      <div class="flex  ">
+        <div class="flex flex-col items-center gap-6">
+          <div class="bg-gray-200 rounded-md shadow-md p-3">
+            <app-pie-chart></app-pie-chart>
+          </div>
+          <div class="bg-gray-200 rounded-md shadow-md p-3">
+            <bar-chart></bar-chart>
+          </div>
+        </div>
+      }
+
+      <div class="flex">
         <!-- If Theres no assets so the no asset layout -->
         <!-- Portfolio Summary Cards -->
-        @if (portfolio.assets.length != 0) {
-          <div class="flex lg:flex-col md:flex-row items-center gap-5 ">
-    
+        @if (portfolio.assets.length > 0) {
+          <div class="flex lg:flex-col md:flex-row items-center gap-5">
             @if (portfolioStats$ | async; as stats) {
               <p-card header="Top performer">
                 <img
@@ -135,7 +130,7 @@
                   Percent change {{ stats.topPerformerPercentChange }}
                 </p>
               </p-card>
-    
+
               <p-card header="Worst performer">
                 <img
                   ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
@@ -181,18 +176,15 @@
             ></p-button>
           </div>
         }
-        
       </div>
+    </div>
 
-      </div>
+    @if (portfolio.assets.length > 0) {
+      <!-- Assets Table -->
+      <section id="assets" class="p-3 mt-3 border border-black rounded-md">
+        <h2 class="font-bold text-3xl text-gray-950">Assets</h2>
+        <app-assets-table (complete)="hideDialog()"> </app-assets-table>
+      </section>
     }
-  <!-- Assets Table -->
-  <section
-          id="assets"
-          class="p-3 mt-3 border border-black rounded-md "
-        >
-          <h2 class="font-bold text-3xl text-gray-950">Assets</h2>
-          <app-assets-table (complete)="hideDialog()"> </app-assets-table>
-        </section>
+  }
 </div>
-
