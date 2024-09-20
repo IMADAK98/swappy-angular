@@ -11,7 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../auth/auth.service';
 import { ResetPasswordRequest } from '../interfaces/auth.interfaces';
@@ -37,6 +37,7 @@ export class ResetPasswordFormComponent implements OnInit {
     private route: ActivatedRoute,
     private messageService: MessageService,
     private authService: AuthService,
+    private router: Router,
   ) {}
 
   resetPasswordForm = this.fb.group(
@@ -75,7 +76,6 @@ export class ResetPasswordFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.token + ' tojeeeeeeeeenk');
     if (this.resetPasswordForm.invalid) {
       this.messageService.add({
         severity: 'error',
@@ -93,12 +93,15 @@ export class ResetPasswordFormComponent implements OnInit {
 
     this.authService.resetPassword(req).subscribe({
       next: (res) => {
-        console.log(res);
         this.messageService.add({
           severity: 'success',
           summary: 'Password Reset',
           detail: 'Password reset successful.',
         });
+
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 1000);
       },
 
       error: (err) => {

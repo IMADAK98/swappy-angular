@@ -49,7 +49,7 @@ export class LoadingIndicatorComponent {
             ) {
               setTimeout(() => {
                 this.loadingService.loadingOff();
-              }, 2000);
+              }, 500);
             }
           }),
         )

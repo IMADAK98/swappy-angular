@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { Subject } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { ResetEmailRequest } from '../interfaces/auth.interfaces';
 
 @Component({
   selector: 'app-reset-password',
@@ -42,7 +43,11 @@ export class ResetPasswordComponent implements OnDestroy {
       return;
     }
 
-    this.authService.sendResetPasswordEmail(this.email?.value!).subscribe({
+    const req: ResetEmailRequest = {
+      email: this.email?.value!,
+    };
+
+    this.authService.sendResetPasswordEmail(req).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',

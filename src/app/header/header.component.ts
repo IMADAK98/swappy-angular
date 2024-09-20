@@ -48,7 +48,6 @@ export class HeaderComponent implements OnInit {
   }
 
   isActive(route: string): boolean {
-    return this.currentUrl === route;
+    return this.currentUrl.includes(route);
   }
-  
 }

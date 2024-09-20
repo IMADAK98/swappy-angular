@@ -27,3 +27,7 @@ export interface ResetPasswordRequest {
   confirmPassword: string;
   token: string;
 }
+
+export interface ResetEmailRequest {
+  email: string;
+}

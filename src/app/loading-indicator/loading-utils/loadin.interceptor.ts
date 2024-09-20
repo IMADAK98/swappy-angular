@@ -16,7 +16,7 @@ export const loadinInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     finalize(() => {
-      delay(300), loading.loadingOff();
+      delay(150), loading.loadingOff();
     }),
   );
 };

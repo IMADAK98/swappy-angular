@@ -11,6 +11,7 @@ import { catchError, map, takeUntil } from 'rxjs';
 import { customErrorHandler } from '../errors/handleError';
 import { environment } from '../../environments/environment.development';
 import {
+  ResetEmailRequest,
   ResetPasswordRequest,
   TokenRequest,
   UserLogin,
@@ -65,11 +66,11 @@ export class AuthService {
       );
   }
 
-  sendResetPasswordEmail(email: string) {
+  sendResetPasswordEmail(req: ResetEmailRequest) {
     return this.http
       .post<any>(
         `${this.apiUrl}swappy-user-service/api/v1/user/reset-password-email`,
-        email,
+        req,
       )
       .pipe(catchError((err) => customErrorHandler(err)));
   }
