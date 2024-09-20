@@ -22,30 +22,27 @@ import {
   styleUrl: './home.component.css',
   animations: [
     trigger('rotate', [
-      state(
-        'rotating',
-        style({
-          transform: 'rotate(360deg)',
-        }),
-      ),
-      transition('* => rotating', [
-        animate(
-          '5s linear',
-          keyframes([
-            style({ transform: 'rotate(0deg)', offset: 0 }),
-            style({ transform: 'rotate(360deg)', offset: 1 }),
-          ]),
-        ),
-      ]),
+      state('normal', style({ transform: 'rotate(0deg)' })),
+      state('rotated', style({ transform: 'rotate(360deg)' })),
+      transition('normal <=> rotated', animate('5s linear')),
     ]),
   ],
 })
 export class HomeComponent {
+  videoSource = 'assets/stocks_vid.mp4';
+  imageSource = 'assets/bg-image-white.png';
+  imageState = 'normal';
   constructor(
     private auth: AuthService,
     private router: Router,
   ) {}
-  imageState = 'rotating'; // Initial state for the animation
+  // imageState = 'rotating'; // Initial state for the animation
+
+  rotateImage() {
+    setInterval(() => {
+      this.imageState = this.imageState === 'normal' ? 'rotated' : 'normal';
+    }, 5000);
+  }
 
   onAccess() {
     this.router.navigateByUrl('/dashboard');

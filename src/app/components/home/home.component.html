@@ -36,7 +36,16 @@
       </button>
     </div>
   </nav> -->
-  <div class="flex justify-between gap-3 p-2 z-10 ">
+  <!-- <div class="flex justify-between gap-3 p-2 z-10">
+    <video
+      #videoPlayer
+      class="absolute top-0 left-0 min-w-full min-h-full w-auto h-auto object-cover"
+      [src]="videoSource"
+      autoplay
+      loop
+      muted
+      playsinline
+    ></video>
     <div class="flex flex-col gap-4 p-10">
       <h1 class="text-8xl text-slate-800">The world Is In Your Hands</h1>
       <h3 class="text-4xl text-slate-600">Discover the potential</h3>
@@ -47,6 +56,48 @@
     </div>
     <div class="p-5 hidden md:block">
       <img src="assets/bg-image-white.png" alt="" [@rotate]="imageState" />
+    </div>
+  </div> -->
+
+  <!-- Component Template (e.g., app.component.html) -->
+  <div class="relative h-screen w-full overflow-hidden">
+    <!-- Background Video -->
+    <video
+      #videoPlayer
+      class="absolute top-0 left-0 min-w-full min-h-full w-auto h-auto object-cover"
+      [src]="videoSource"
+      autoplay
+      loop
+      muted
+      playsinline
+    ></video>
+
+    <!-- Content Overlay -->
+    <div class="relative z-10 flex justify-between gap-3 p-2 h-full">
+      <!-- Left Column -->
+      <div class="flex flex-col gap-4 p-10">
+        <h1 class="text-8xl text-white">The world Is In Your Hands</h1>
+        <h3 class="text-4xl text-gray-300">Discover the potential</h3>
+        <p class="pl-2 text-base opacity-75 text-gray-400">
+          <span class="text-red-600">Beta version</span>
+        </p>
+        <button
+          (click)="onAccess()"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-fit"
+        >
+          Access App
+        </button>
+      </div>
+
+      <!-- Right Column (Hidden on small screens) -->
+      <div class="p-5 hidden md:block">
+        <!-- <img
+          [src]="imageSource"
+          alt="Rotating image"
+          class="w-full h-auto"
+          [@rotate]="imageState"
+        /> -->
+      </div>
     </div>
   </div>
 </div>
