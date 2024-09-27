@@ -13,8 +13,8 @@ import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../auth/auth.service';
-import { ResetPasswordRequest } from '../interfaces/auth.interfaces';
+import { AuthService } from '../../auth/auth.service';
+import { ResetPasswordRequest } from '../../interfaces/auth.interfaces';
 @Component({
   selector: 'app-reset-password-form',
   standalone: true,

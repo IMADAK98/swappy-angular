@@ -12,7 +12,6 @@
   </div>
 
   @if (transactionPageData$ | async; as tp) {
-
     <div class="flex flex-row items-center gap-3">
       <img
         ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
@@ -30,38 +29,34 @@
       </h1>
     </div>
 
-
     <div class="flex flex-row justify-normal items-start flex-wrap pt-3 gap-3">
-
-      <p-card header="Total Quantity" class="rounded-md shadow-md ">
+      <p-card header="Total Quantity" class="rounded-md shadow-md">
         <span class="text-gray-950 font-bold text-2xl">{{
           tp?.totalQuantity
         }}</span>
       </p-card>
 
-      <p-card header="Avg buy Price" class="rounded-md shadow-md ">
+      <p-card header="Avg buy Price" class="rounded-md shadow-md">
         <span class="text-gray-950 font-bold text-2xl">{{
           tp?.avgBuyPrice | currency
         }}</span>
       </p-card>
 
-      
-        <p-card header="P/L" class="rounded-md shadow-md ">
-          @if (tp?.totalProfitAndLossAmount! > 0) {
-            <span class="text-green-800 font-bold text-2xl text-center">{{
-              tp?.totalProfitAndLossAmount | currency
-            }}</span>
-          } @else if (tp?.totalProfitAndLossAmount! < 0) {
-            <span class="text-red-800 font-bold text-2xl text-center">{{
-              tp?.totalProfitAndLossAmount | currency
-            }}</span>
-          } @else {
-            <span class="text-grey-900 text-lg text-center">
-              {{ tp?.totalProfitAndLossAmount }}</span
-            >
-          }
-        </p-card>
-      
+      <p-card header="P/L" class="rounded-md shadow-md">
+        @if (tp?.totalProfitAndLossAmount! > 0) {
+          <span class="text-green-800 font-bold text-2xl text-center">{{
+            tp?.totalProfitAndLossAmount | currency
+          }}</span>
+        } @else if (tp?.totalProfitAndLossAmount! < 0) {
+          <span class="text-red-800 font-bold text-2xl text-center">{{
+            tp?.totalProfitAndLossAmount | currency
+          }}</span>
+        } @else {
+          <span class="text-grey-900 text-lg text-center">
+            {{ tp?.totalProfitAndLossAmount }}</span
+          >
+        }
+      </p-card>
     </div>
 
     <div class="mt-[2rem] w-full">
@@ -120,6 +115,14 @@
           <div
             class="bg-white sm:w-[30rem] w-full border border-black rounded-lg p-10"
           >
+            <div class="flex justify-end">
+              <button
+                (click)="visible = !visible"
+                class="p-2 m-1 text-xl font-semibold"
+              >
+                x
+              </button>
+            </div>
             <app-edit-transaction-form
               [transactionId]="transactionId"
               [assetId]="assetId"

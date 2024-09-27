@@ -18,7 +18,7 @@ import {
   StatsResponse,
 } from '../interfaces/portfolio.interface';
 import { Asset } from '../interfaces/crypto.interfaces';
-import { CentralizedStateService } from '../centralized-state.service';
+import { CentralizedStateService } from './centralized-state.service';
 import { Router } from '@angular/router';
 import { SkipLoading } from '../loading-indicator/loading-utils/loadin.interceptor';
 

@@ -5,26 +5,25 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { SignupComponent } from './components/signup/signup.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AssetsTableComponent } from './components/assets-table/assets-table.component';
-import { PortfolioWizardComponent } from './components/portfolio-wizard/portfolio-wizard.component';
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
 import { TransactionsComponent } from './components/transactions-table/transactions.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { PiChartComponent } from './components/pi-chart/pi-chart.component';
 import { HeaderComponent } from './header/header.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { LoginComponent } from './components/login/login.component';
 import { WizardComponent } from './components/wizard/wizard.component';
 import { PortfolioComponent } from './components/new-portfolio-form/new-portfolio-form.component';
 import { NoPortfolioComponent } from './components/no-portfolio/no-portfolio.component';
-import { portfolioGuard } from './portfolio.guard';
-import { noPortfolioGuard } from './no-portfolio.guard';
+
 import { slideInAnimation } from './animations'; // Adjust the path as necessary
 import { animation } from '@angular/animations';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
 import { BarChartComponent } from './components/bar-chart/bar-chart.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { resetPasswordGuard } from './reset-password.guard';
-import { ResetPasswordFormComponent } from './reset-password-form/reset-password-form.component';
+import { ForgotPasswordPageComponent } from './components/forgot-password-page/forgot-password-page.component';
+import { ResetPasswordFormComponent } from './components/reset-password-form/reset-password-form.component';
+import { noPortfolioGuard } from './guards/no-portfolio.guard';
+import { portfolioGuard } from './guards/portfolio.guard';
+import { resetPasswordGuard } from './guards/reset-password.guard';
 
 export const routes: Routes = [
   {
@@ -48,7 +47,7 @@ export const routes: Routes = [
 
   {
     path: 'reset-password',
-    component: ResetPasswordComponent,
+    component: ForgotPasswordPageComponent,
     title: 'reset password',
   },
 
@@ -77,11 +76,6 @@ export const routes: Routes = [
   {
     path: 'wizard',
     component: WizardComponent,
-  },
-
-  {
-    path: 'port-wiz',
-    component: PortfolioWizardComponent,
   },
 
   {
@@ -122,11 +116,6 @@ export const routes: Routes = [
   {
     path: 'header',
     component: HeaderComponent,
-  },
-
-  {
-    path: 'sidebar',
-    component: SidebarComponent,
   },
 
   {

@@ -14,7 +14,7 @@ import {
 import { customErrorHandler } from '../errors/handleError';
 import { PortfolioService } from './portfolio.service';
 import { environment } from '../../environments/environment.development';
-import { CentralizedStateService } from '../centralized-state.service';
+import { CentralizedStateService } from './centralized-state.service';
 import { Portfolio } from '../interfaces/portfolio.interface';
 import { count } from 'console';
 

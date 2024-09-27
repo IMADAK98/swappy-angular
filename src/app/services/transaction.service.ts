@@ -22,7 +22,7 @@ import {
   UpdateTransactionDto,
 } from '../interfaces/crypto.interfaces';
 import { customErrorHandler } from '../errors/handleError';
-import { CentralizedStateService } from '../centralized-state.service';
+import { CentralizedStateService } from './centralized-state.service';
 import { Portfolio } from '../interfaces/portfolio.interface';
 import { SkipLoading } from '../loading-indicator/loading-utils/loadin.interceptor';
 
@@ -63,6 +63,7 @@ export class TransactionService implements ITransactionService {
     return this.http
       .get<AssetResponse>(
         `${this.url}swappy-portfolio-service/api/v1/assets/transactions/${assetId}`,
+        { context: new HttpContext().set(SkipLoading, true) },
       )
       .pipe(
         retry({ count: 3, delay: 2000 }),

@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from './auth/auth.service';
 import { map, tap } from 'rxjs';
-import { TokenRequest } from './interfaces/auth.interfaces';
+import { TokenRequest } from '../interfaces/auth.interfaces';
+import { AuthService } from '../auth/auth.service';
 
 export const resetPasswordGuard: CanActivateFn = (route, state) => {
   const token = route.queryParamMap.get('token');

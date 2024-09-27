@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CentralizedStateService } from './centralized-state.service';
+import { CentralizedStateService } from './services/centralized-state.service';
 
 describe('CentralizedStateService', () => {
   let service: CentralizedStateService;

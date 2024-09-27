@@ -1,10 +1,10 @@
-import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { map } from 'rxjs';
-import { PortfolioService } from './services/portfolio.service';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { tap, map } from 'rxjs';
 import { isPlatformServer } from '@angular/common';
+import { PortfolioService } from '../services/portfolio.service';
 
-export const noPortfolioGuard: CanActivateFn = (route, state) => {
+export const portfolioGuard: CanActivateFn = (route, state) => {
   const pService = inject(PortfolioService);
   const router = inject(Router);
 
@@ -14,8 +14,8 @@ export const noPortfolioGuard: CanActivateFn = (route, state) => {
 
   return pService.hasPortfolio().pipe(
     map((portfolioExists) => {
-      if (portfolioExists) {
-        router.navigate(['/dashboard']);
+      if (!portfolioExists) {
+        router.navigateByUrl('/no-portfolio', { skipLocationChange: true });
         return false;
       }
       return true;

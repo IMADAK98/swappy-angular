@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
-import { CryptoService } from '../../services/crypto.service';
 import { CoinSearchComponent } from '../coin-search/coin-search.component';
 
 //TODO implement caching for performance optimization
@@ -32,10 +31,6 @@ export class WizardComponent {
   constructor() {}
 
   coinID!: string;
-
-  ngOnInit() {
-    console.log('onInit on wiz component');
-  }
 
   handleCoinSelected(coinID: string, nextCallback: EventEmitter<any>) {
     this.coinID = coinID;

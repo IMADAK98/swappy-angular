@@ -7,11 +7,13 @@ import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { Subject } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
-import { ResetEmailRequest } from '../interfaces/auth.interfaces';
+import { AuthService } from '../../auth/auth.service';
+import { ResetEmailRequest } from '../../interfaces/auth.interfaces';
+import { HttpErrorResponse } from '@angular/common/http';
+import { NotFoundError } from '../../errors/not-found-error';
 
 @Component({
-  selector: 'app-reset-password',
+  selector: 'app-forgot-password-page',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -21,11 +23,11 @@ import { ResetEmailRequest } from '../interfaces/auth.interfaces';
     CardModule,
     RouterLink,
   ],
-  templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.css',
+  templateUrl: './forgot-password-page.component.html',
+  styleUrl: './forgot-password-page.component.css',
   providers: [MessageService],
 })
-export class ResetPasswordComponent implements OnDestroy {
+export class ForgotPasswordPageComponent implements OnDestroy {
   destroy$: Subject<void> = new Subject();
   constructor(
     private fb: FormBuilder,
@@ -55,13 +57,20 @@ export class ResetPasswordComponent implements OnDestroy {
           detail: 'A password reset link has been sent to your email.',
         });
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error resetting password:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to reset password. Please try again later.',
-        });
+        if (error instanceof NotFoundError) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No User Found with this email address',
+          });
+        } else
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to reset password. Please try again later.',
+          });
       },
     });
   }
