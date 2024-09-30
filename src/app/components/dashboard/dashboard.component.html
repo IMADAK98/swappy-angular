@@ -64,11 +64,20 @@
             ></p-button>
 
             <!-- Add Transaction Dialog -->
-            <p-dialog [(visible)]="visible" [modal]="true">
+            <p-dialog [(visible)]="visible" [modal]="true" closable="true">
               <ng-template pTemplate="headless">
                 <div
                   class="bg-white overflow-auto border-black border rounded-md sm:w-[35rem] w-full"
                 >
+                  <div class="flex justify-end">
+                    <button
+                      (click)="visible = !visible"
+                      class="p-2 m-1 text-xl font-semibold"
+                    >
+                      x
+                    </button>
+                  </div>
+
                   <app-wizard (complete)="hideDialog()"></app-wizard>
                 </div>
               </ng-template>

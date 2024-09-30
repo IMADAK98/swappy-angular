@@ -73,8 +73,8 @@ export class TransactionFormComponent {
     this.wizForm = this.fb.group({
       action: [Action.BUY, Validators.required],
       date: [new Date(), [Validators.required]],
-      amount: [0, [Validators.required, Validators.min(0.002)]],
-      price: [0, [Validators.required]],
+      amount: [null, [Validators.required, Validators.min(0.002)]],
+      price: [null, [Validators.required]],
       total: [
         { value: 0, disabled: true },
         Validators.required,

@@ -107,6 +107,14 @@
           <div
             class="bg-white sm:w-[30rem] w-full border border-black rounded-lg p-10"
           >
+            <div class="flex justify-end">
+              <button
+                (click)="visible = !visible"
+                class="p-2 m-1 text-xl font-semibold"
+              >
+                x
+              </button>
+            </div>
             <app-transaction-form
               [coinID]="coinID"
               (completedSubmission)="handleFormCompletion()"
