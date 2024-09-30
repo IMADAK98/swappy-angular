@@ -1,24 +1,18 @@
-<div class="p-3 bg-transparent">
-  <header
-    class="z-999 max-w-fit bg-white/70 backdrop-blur-sm shadow-md border rounded-full mx-auto"
-  >
-    <nav class="flex items-center justify-center md:px-8 p-2">
-      <ul class="flex flex-wrap items-center justify-center gap-3">
-        @for (link of Links; track $index) {
-          <li class="flex items-center">
-            <a
-              class="text-gray-700 cursor-pointer transition-all duration-300 hover:bg-slate-500 hover:text-white border border-transparent rounded-full px-2 py-1"
-              [class.active]="isActive(link.route)"
-              (click)="navigate(link.route)"
-            >
-              {{ link.name }}
-            </a>
-          </li>
-        }
-      </ul>
-    </nav>
-  </header>
-</div>
+<nav class="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-fit bg-white/50 backdrop-blur-md shadow-md border rounded-full p-1 mt-4">
+  <ul class="flex flex-wrap items-center justify-center gap-3">
+    <li *ngFor="let link of getFilteredLinks()" class="flex items-center">
+      <a
+        class="text-gray-700 cursor-pointer transition-all duration-300 hover:bg-slate-500 hover:text-white rounded-full px-2 py-1"
+        [ngClass]="{ 'active': isActive(link.route) }"
+        (click)="navigate(link.route)"
+      >
+        {{ link.name }}
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
 
 <!-- <header
   class="z-50 w-1/2 bg-white/70 backdrop-blur-sm shadow-md border rounded-full mx-auto mt-5"

@@ -1,5 +1,4 @@
-/* header.component.css */
 a.active {
-  background-color: slategray; /* Example active state background color */
-  color: white; /* Example active state text color */
+  background-color: #1E56A0;
+  color: white;
 }

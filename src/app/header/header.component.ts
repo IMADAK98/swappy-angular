@@ -3,11 +3,12 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../auth/auth.service';
 import { filter } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [ButtonModule],
+  imports: [ButtonModule, CommonModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
@@ -18,16 +19,13 @@ export class HeaderComponent implements OnInit {
     { name: 'Home', route: '/home' },
     { name: 'Dashboard', route: '/dashboard' },
     { name: 'Login', route: '/login' },
-    // { name: 'Signup', route: '/signup' },
     { name: 'Logout', route: '/logout' },
-  ] as const;
+  ];
 
-  constructor(
-    private router: Router,
-    private auth: AuthService,
-  ) {}
+  constructor(private router: Router, private auth: AuthService) {}
 
   ngOnInit() {
+    // Update the URL tracking
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
@@ -49,5 +47,18 @@ export class HeaderComponent implements OnInit {
 
   isActive(route: string): boolean {
     return this.currentUrl.includes(route);
+  }
+
+
+  getFilteredLinks() {
+    return this.Links.filter(link => {
+      if (link.route === '/login') {
+        return !this.auth.isLoggedIn();
+      }
+      if (link.route === '/logout') {
+        return this.auth.isLoggedIn();
+      }
+      return true;
+    });
   }
 }
