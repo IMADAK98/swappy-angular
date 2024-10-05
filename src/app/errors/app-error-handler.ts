@@ -17,6 +17,7 @@ export class AppErrorHandler implements ErrorHandler {
         detail: 'An unexpected error occurred!',
         life: 5000, // Toast display duration
       });
+      console.error(error);
     } else {
       console.error('An error occurred:', error); // Log the error on server-side
     }

@@ -22,6 +22,15 @@ export interface BarChartDto {
   coinId: string;
   assetSymbol: string;
 }
+
+export enum LineChartParams {
+  HOUR = 'HOUR',
+  DAY = 'DAY',
+  WEEK = 'WEEK',
+  MONTH = 'MONTH',
+  ALL = 'ALL_TIME',
+}
+
 export interface BarChartResponse extends BaseResponse<BarChartDto[]> {}
 export interface PiChartResponse extends BaseResponse<PiChart[]> {}
 export interface SnapshotResponse extends BaseResponse<SnapshotDto[]> {}

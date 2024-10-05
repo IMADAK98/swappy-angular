@@ -1,66 +1,6 @@
-<div class="min-h-screen">
-  <!-- <nav class="flex justify-between bg-gray-900 p-2">
-    <div class="p-1">
-      <img
-        src="assets/logo.png"
-        class="h-10 w-auto rounded-md hidden sm:block"
-        alt=""
-      />
-    </div>
-
-    <div class="flex justify-center flex-wrap gap-5 p-1">
-      <button class="btn text-slate-400 hover:text-slate-100">Home</button>
-
-      <button class="btn text-slate-400 hover:text-slate-100">About</button>
-
-      <button class="btn text-slate-400 hover:text-slate-100">Services</button>
-
-      <button class="btn text-slate-400 hover:text-slate-100">Contact</button>
-    </div>
-
-    <div class="flex justify-center flex-wrap gap-2">
-      <button
-        class="btn text-slate-50 rounded-md p-1 bg-[#14b8a6] shadow-lg shadow-teal-500/50 hover:text-slate-400 hover:bg-slate-700 hover:shadow-none"
-      >
-        <a href="/login">Login</a>
-      </button>
-      <button
-        class="btn text-slate-50 rounded-md p-1 bg-[#14b8a6] shadow-lg shadow-teal-500/50 hover:text-slate-400 hover:bg-slate-700 hover:shadow-none"
-      >
-        <a
-          routerLink="/signup"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          >Sign Up</a
-        >
-      </button>
-    </div>
-  </nav> -->
-  <!-- <div class="flex justify-between gap-3 p-2 z-10">
-    <video
-      #videoPlayer
-      class="absolute top-0 left-0 min-w-full min-h-full w-auto h-auto object-cover"
-      [src]="videoSource"
-      autoplay
-      loop
-      muted
-      playsinline
-    ></video>
-    <div class="flex flex-col gap-4 p-10">
-      <h1 class="text-8xl text-slate-800">The world Is In Your Hands</h1>
-      <h3 class="text-4xl text-slate-600">Discover the potential</h3>
-      <p class="pl-2 text-base opacity-75 text-slate-500">
-        <span class="text-red-600">Beta version </span>
-      </p>
-      <p-button label="Access App" (click)="onAccess()" />
-    </div>
-    <div class="p-5 hidden md:block">
-      <img src="assets/bg-image-white.png" alt="" [@rotate]="imageState" />
-    </div>
-  </div> -->
-
-  <!-- Component Template (e.g., app.component.html) -->
-  <div class="relative h-screen w-full overflow-hidden">
+<div class="flex flex-col md:flex-row h-screen">
+  <!-- Left Section -->
+  <div class="relative w-full md:flex-grow overflow-hidden">
     <!-- Background Video -->
     <video
       #videoPlayer
@@ -73,35 +13,51 @@
     ></video>
 
     <!-- Content Overlay -->
-    <div class="relative z-10 flex justify-between gap-3 p-2 h-full">
-      <!-- Left Column -->
-      <div class="flex flex-col gap-4 p-5 mt-16">
-        <h1 class="text-8xl text-white">The world Is In Your Hands</h1>
-        <h3 class="text-4xl text-gray-300">Discover the potential</h3>
-        <p class="pl-2 text-base opacity-75 text-gray-400">
+    <div
+      class="relative z-10 flex flex-col justify-center items-start h-full p-4 md:p-8"
+    >
+      <div class="max-w-xl md:max-w-2xl">
+        <h1
+          class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl text-white mb-2 md:mb-4"
+        >
+          The world Is In Your Hands
+        </h1>
+        <h3
+          class="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-gray-300 mb-2"
+        >
+          Discover the potential
+        </h3>
+        <p class="text-sm md:text-base opacity-75 text-gray-400 mb-4">
           <span class="text-red-600">Beta version</span>
         </p>
-        <button
-          (click)="onAccess()"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-fit"
-        >
-          Access App
-        </button>
-      </div>
-
-      <!-- Right Column (Hidden on small screens) -->
-      <div class="p-5 hidden md:block">
-        <!-- <img
-          [src]="imageSource"
-          alt="Rotating image"
-          class="w-full h-auto"
-          [@rotate]="imageState"
-        /> -->
       </div>
     </div>
   </div>
+
+  <!-- Vertical Separator (hidden on small screens) -->
+  <div class="hidden md:block w-px bg-gray-900 h-full"></div>
+
+  <!-- Right Section -->
+  <div
+    class="flex flex-col justify-center items-center p-4 bg-gray-900 w-full md:w-1/4"
+  >
+    <div class="space-y-4 w-full max-w-xs">
+      <button
+        (click)="onAccess()"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+      >
+        Log In
+      </button>
+      <button
+        (click)="onAccess()"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+      >
+        Sign Up
+      </button>
+    </div>
+  </div>
 </div>
-<footer class="flex w-full bg-gray-800 text-stone-50 p-4">
+<!-- <footer class="flex w-full bg-gray-800 text-stone-50 p-4">
   <div class="container mx-auto flex justify-between items-center">
     <div class="flex flex-col">
       <h1>Contact Us:</h1>
@@ -128,4 +84,4 @@
       <p-button class="inline-block" label="language" />
     </div>
   </div>
-</footer>
+</footer> -->

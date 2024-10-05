@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
@@ -22,7 +22,10 @@ export class HeaderComponent implements OnInit {
     { name: 'Logout', route: '/logout' },
   ];
 
-  constructor(private router: Router, private auth: AuthService) {}
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+  ) {}
 
   ngOnInit() {
     // Update the URL tracking
@@ -49,9 +52,8 @@ export class HeaderComponent implements OnInit {
     return this.currentUrl.includes(route);
   }
 
-
   getFilteredLinks() {
-    return this.Links.filter(link => {
+    return this.Links.filter((link) => {
       if (link.route === '/login') {
         return !this.auth.isLoggedIn();
       }

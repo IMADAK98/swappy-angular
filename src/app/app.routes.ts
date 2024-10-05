@@ -9,7 +9,7 @@ import { TransactionFormComponent } from './components/transaction-form/transact
 import { TransactionsComponent } from './components/transactions-table/transactions.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { PiChartComponent } from './components/pi-chart/pi-chart.component';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/login/login.component';
 import { WizardComponent } from './components/wizard/wizard.component';
 import { PortfolioComponent } from './components/new-portfolio-form/new-portfolio-form.component';

@@ -1,10 +1,11 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import {
   BehaviorSubject,
   Observable,
   catchError,
+  combineLatest,
   merge,
   shareReplay,
   switchMap,
@@ -13,10 +14,12 @@ import { customErrorHandler } from '../errors/handleError';
 import {
   BarChartResponse,
   ChartTypeParams,
+  LineChartParams,
   PiChartResponse,
   SnapshotResponse,
 } from '../interfaces/charts.interfaces';
 import { CentralizedStateService } from './centralized-state.service';
+import { SkipLoading } from '../loading-indicator/loading-utils/loadin.interceptor';
 
 export interface IChartsService {
   getPieChart(): Observable<PiChartResponse>;
@@ -31,6 +34,9 @@ export interface IChartsService {
 export class ChartsService implements IChartsService {
   private readonly url: string = environment.apiUrl;
   private readonly refreshTrigger$ = new BehaviorSubject<void>(undefined);
+  private readonly lineChartFilter$ = new BehaviorSubject<LineChartParams>(
+    LineChartParams.DAY,
+  );
 
   private readonly sharedRefresh$ = merge(
     this.refreshTrigger$,
@@ -41,9 +47,7 @@ export class ChartsService implements IChartsService {
   readonly barChart$ = this.createChartObservable(() =>
     this.fetchBarChartData(),
   );
-  readonly lineChart$ = this.createChartObservable(() =>
-    this.fetchLineChartData(),
-  );
+  readonly lineChart$ = this.createLineChartObservable();
 
   constructor(
     private http: HttpClient,
@@ -59,6 +63,12 @@ export class ChartsService implements IChartsService {
     );
   }
 
+  private createLineChartObservable(): Observable<SnapshotResponse> {
+    return combineLatest([this.sharedRefresh$, this.lineChartFilter$]).pipe(
+      switchMap(([_, filter]) => this.fetchLineChartData(filter)),
+      shareReplay(1),
+    );
+  }
   private fetchPieChart(): Observable<PiChartResponse> {
     return this.http
       .get<PiChartResponse>(
@@ -67,10 +77,26 @@ export class ChartsService implements IChartsService {
       .pipe(catchError(customErrorHandler));
   }
 
-  private fetchLineChartData(): Observable<SnapshotResponse> {
+  // private fetchLineChartData(
+  //   params: LineChartParams,
+  // ): Observable<SnapshotResponse> {
+  //   return this.http
+  //     .get<SnapshotResponse>(
+  //       `${this.url}swappy-portfolio-service/api/v1/charts/line-chart-snapshots`,
+  //       { params: { params } },
+  //     )
+  //     .pipe(catchError(customErrorHandler));
+  // }
+  private fetchLineChartData(
+    params: LineChartParams,
+  ): Observable<SnapshotResponse> {
     return this.http
       .get<SnapshotResponse>(
         `${this.url}swappy-portfolio-service/api/v1/charts/line-chart-snapshots`,
+        {
+          params: { period: params },
+          context: new HttpContext().set(SkipLoading, true),
+        },
       )
       .pipe(catchError(customErrorHandler));
   }
@@ -104,5 +130,10 @@ export class ChartsService implements IChartsService {
 
   triggerFetch(): void {
     this.refreshTrigger$.next();
+  }
+
+  updateLineChartFilter(filter: LineChartParams): void {
+    console.log(filter, 'filter is ');
+    this.lineChartFilter$.next(filter);
   }
 }
