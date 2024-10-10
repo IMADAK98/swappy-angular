@@ -28,6 +28,15 @@
     [closable]="true"
     [modal]="true"
   >
+    <div class="flex justify-end">
+      <button
+        (click)="showFormDialog = !showFormDialog"
+        class="p-2 m-1 text-xl font-semibold"
+      >
+        x
+      </button>
+    </div>
+
     <portfolio-form></portfolio-form>
   </p-dialog>
 </div>

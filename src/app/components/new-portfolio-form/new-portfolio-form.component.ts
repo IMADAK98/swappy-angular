@@ -19,16 +19,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'portfolio-form',
   standalone: true,
-  imports: [
-    StepperModule,
-    ButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DividerModule,
-    DropdownModule,
-    InputTextModule,
-    CommonModule,
-  ],
+  imports: [ButtonModule, ReactiveFormsModule, InputTextModule, CommonModule],
   templateUrl: './new-portfolio-form.component.html',
   styleUrl: './new-portfolio-form.component.css',
 })

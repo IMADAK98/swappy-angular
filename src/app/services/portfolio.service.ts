@@ -49,20 +49,6 @@ export class PortfolioService implements IPortfolioService {
     // });
   }
 
-  getPortfolioV2(): Observable<PortfolioResponse> {
-    return this.http.get<PortfolioResponse>(
-      `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
-    );
-    //  .pipe(
-    //     map((response: Portfolio) => this.mapToPortfolio(response)),
-    //     catchError((err) => {
-    //       customErrorHandler(err);
-    //       return of(null); // Return null in case of an error
-    //     }),
-    //     shareReplay(1),
-    //   );
-  }
-
   getPortfolioStats(): Observable<StatsResponse> {
     return this.http
       .get<StatsResponse>(
@@ -70,33 +56,6 @@ export class PortfolioService implements IPortfolioService {
       )
       .pipe(catchError((err) => customErrorHandler(err)));
   }
-
-  // checkPortfolioExistance(): Observable<boolean> {
-  //   return this.http
-  //     .get<PortfolioResponse>(
-  //       `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
-  //       { context: new HttpContext().set(SkipLoading, true) },
-  //     )
-  //     .pipe(
-  //       tap((response: PortfolioResponse) => {
-  //         if (response.data) {
-  //           this.portfolioSubject.next(this.mapToPortfolio(response.data));
-  //         } else {
-  //           this.portfolioSubject.next(null);
-  //         }
-  //       }),
-  //       map((response: PortfolioResponse) => !!response.data), // !! converts to boolean
-  //       catchError((err) => {
-  //         if (err.status === 404) {
-  //           console.log(err);
-  //           return of(false);
-  //         } else {
-  //           customErrorHandler(err);
-  //           return of(false);
-  //         }
-  //       }),
-  //     );
-  // }
 
   hasPortfolio(): Observable<boolean> {
     return this.http
@@ -117,24 +76,6 @@ export class PortfolioService implements IPortfolioService {
         }),
       );
   }
-
-  // fetchPortfolio(): Observable<Portfolio | null> {
-  //   const apiUrl = environment.apiUrl;
-  //   return this.http
-  //     .get<PortfolioResponse>(
-  //       `${apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
-  //     )
-  //     .pipe(
-  //       map((response: PortfolioResponse) =>
-  //         this.mapToPortfolio(response.data),
-  //       ),
-  //       catchError((err) => {
-  //         customErrorHandler(err);
-  //         return of(null); // Return null in case of an error
-  //       }),
-  //       shareReplay(1),
-  //     );
-  // }
 
   // Fetches portfolio data from the backend and returns an observable
   fetchPortfolio(): Observable<Portfolio | null> {
@@ -174,7 +115,6 @@ export class PortfolioService implements IPortfolioService {
       .pipe(
         tap((response: PortfolioResponse) => {
           if (response.data) {
-            console.log(response.data);
             this.portfolioSubject.next(this.mapToPortfolio(response.data));
           } else {
             this.portfolioSubject.next(null);

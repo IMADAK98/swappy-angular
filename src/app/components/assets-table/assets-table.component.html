@@ -78,17 +78,26 @@
               />
             </td>
             <td>
-              <p class="text-gray-900 font-medium">
+              <p
+                class="font-medium"
+                [ngClass]="getFontStyle(assets.realizedProfitLossAmount)"
+              >
                 {{ assets.realizedProfitLossAmount | currency }}
               </p>
             </td>
             <td>
-              <p class="text-gray-900 font-medium">
+              <p
+                class="font-medium"
+                [ngClass]="getFontStyle(assets.unrealizedProfitLossAmount)"
+              >
                 {{ assets.unrealizedProfitLossAmount | currency }}
               </p>
             </td>
             <td>
-              <p class="text-gray-900 font-medium">
+              <p
+                class="font-medium"
+                [ngClass]="getFontStyle(assets.totalProfitAndLossAmount)"
+              >
                 {{ assets.totalProfitAndLossAmount | currency }}
               </p>
             </td>
