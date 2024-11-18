@@ -5,7 +5,7 @@
       <div class="flex flex-col font-bold">
         <!-- Portfolio Name and Total Value -->
         <!-- <h1 class="text-gray-400 font-semibold text-xl">{{ portfolio.name }} 🚀</h1> -->
-        <h1 class="text-3xl pb-3">{{ portfolio.portfolioName | titlecase }}</h1>
+        <h1 class="text-3xl pb-3 pt-5">{{ portfolio.portfolioName | titlecase }}</h1>
         <div class="flex flex-row justify-between flex-wrap gap-3">
           @if (portfolio.assets.length > 0) {
             <div class="flex flex-wrap gap-3">
@@ -99,27 +99,27 @@
       <div></div>
 
       <!--  Charts  -->
-      <div class="flex lg:justify-start md:justify-evenly gap-3 pt-5 flex-wrap">
+      <div class="flex justify-start  gap-10 pt-5 flex-wrap">
         @if (portfolio.assets.length > 0) {
-          <div class="p-3 w-6/12 bg-gray-200 rounded-md shadow-md">
+          <div class="p-3 lg:w-6/12 bg-gray-200 rounded-md shadow-md">
             <app-line-chart></app-line-chart>
           </div>
 
-          <div class="flex flex-col items-center gap-6">
-            <div class="bg-gray-200 rounded-md shadow-md p-3">
+          <div class="flex flex-col space-y-16">
+            <div class="bg-gray-200 rounded-md shadow-md p-3 h-fit">
               <app-pie-chart></app-pie-chart>
             </div>
-            <div class="bg-gray-200 rounded-md shadow-md p-3">
+            <div class="bg-gray-200 rounded-md shadow-md p-3 h-fit w-full">
               <bar-chart></bar-chart>
             </div>
           </div>
         }
 
-        <div class="flex">
+        <div class="">
           <!-- If Theres no assets so the no asset layout -->
           <!-- Portfolio Summary Cards -->
           @if (portfolio.assets.length > 0) {
-            <div class="flex lg:flex-col md:flex-row items-center gap-5">
+            <div class="flex  gap-5 items-stretch">
               @if (portfolioStats$ | async; as stats) {
                 <p-card header="Top performer">
                   <img
