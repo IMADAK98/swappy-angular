@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CardComponent } from '../../card/card.component';
 import { HeaderComponent } from '../header/header.component';
 import { DialogModule } from 'primeng/dialog';
@@ -24,6 +24,13 @@ import { PortfolioComponent } from '../new-portfolio-form/new-portfolio-form.com
 import { NoPortfolioComponent } from '../no-portfolio/no-portfolio.component';
 import { LineChartComponent } from '../line-chart/line-chart.component';
 import { BarChartComponent } from '../bar-chart/bar-chart.component';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+} from '@angular/animations';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -49,10 +56,39 @@ import { BarChartComponent } from '../bar-chart/bar-chart.component';
     LineChartComponent,
     BarChartComponent,
   ],
+
+  animations: [
+    // Existing slide-in from left animation
+    trigger('slideInFromLeft', [
+      state('void', style({ transform: 'translateX(-100%)', opacity: 0 })),
+      state('*', style({ transform: 'translateX(0)', opacity: 1 })),
+      transition('void => *', [animate('800ms ease-out')]),
+    ]),
+    // New slide-in from right animation
+    trigger('slideInFromRight', [
+      state('void', style({ transform: 'translateX(100%)', opacity: 0 })),
+      state('*', style({ transform: 'translateX(0)', opacity: 1 })),
+      transition('void => *', [animate('800ms ease-out')]),
+    ]),
+
+    trigger('slideInFromBottom', [
+      state('void', style({ transform: 'translateY(100%)', opacity: 0 })),
+      state('*', style({ transform: 'translateY(0)', opacity: 1 })),
+      transition('void => *', [animate('200ms ease-out')]),
+    ]),
+  ],
 })
 export class DashboardComponent {
   portfolio$!: Observable<Portfolio | null>;
   portfolioStats$!: Observable<StatsDto | null>;
+
+  @ViewChild('assetsSection', { static: false }) assetsSection!: ElementRef;
+  inView = false;
+  visible: boolean = false;
+
+  observerInitialized = false;
+
+  showFormDialog = false;
 
   constructor(private pService: PortfolioService) {}
 
@@ -64,9 +100,27 @@ export class DashboardComponent {
       .pipe(map((res: StatsResponse) => res.data));
   }
 
-  visible: boolean = false;
+  // ngAfterViewChecked() {
+  //   if (this.assetsSection && !this.observerInitialized) {
+  //     this.observerInitialized = true; // Prevent multiple initializations
 
-  showFormDialog = false;
+  //     const observer = new IntersectionObserver(
+  //       (entries) => {
+  //         entries.forEach((entry) => {
+  //           if (entry.isIntersecting) {
+  //             this.inView = true;
+  //             observer.unobserve(entry.target); // Stop observing once in view
+  //           }
+  //         });
+
+  //       },
+
+  //       { threshold: 0.1 }, // Trigger when 10% of the element is in view
+  //     );
+
+  //     observer.observe(this.assetsSection.nativeElement);
+  //   }
+  // }
 
   showDialog() {
     this.visible = true;

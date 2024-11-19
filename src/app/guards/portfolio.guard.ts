@@ -15,7 +15,7 @@ export const portfolioGuard: CanActivateFn = (route, state) => {
   return pService.hasPortfolio().pipe(
     map((portfolioExists) => {
       if (!portfolioExists) {
-        router.navigateByUrl('/no-portfolio', { skipLocationChange: true });
+        router.navigateByUrl('/no-portfolio');
         return false;
       }
       return true;

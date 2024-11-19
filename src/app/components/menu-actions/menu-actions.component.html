@@ -1,9 +1,10 @@
-<p-menu #menu [model]="items" [popup]="true" />
+<p-menu #menu [model]="items" [popup]="true" appendTo="body" />
 <p-button
   (click)="menu.toggle($event)"
   icon="pi pi-ellipsis-v"
   [raised]="true"
   text="true"
+  styleClass="bg-sky-100"
 ></p-button>
 
 <div class="flex items-center justify-center">

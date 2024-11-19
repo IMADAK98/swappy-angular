@@ -161,7 +161,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
             maxTicksLimit: this.getMaxTicksLimit(),
           },
           grid: {
-            color: this.surfaceBorder,
+            display: false, // Turn off the x-axis grid lines
           },
         },
         y: {

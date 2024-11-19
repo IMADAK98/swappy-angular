@@ -65,6 +65,14 @@ export class BarChartComponent implements OnInit, OnDestroy {
           display: false,
         },
       },
+      layout: {
+        padding: {
+          top: 10,
+          right: 20,
+          bottom: 10,
+          left: 20,
+        },
+      },
       scales: {
         y: {
           beginAtZero: true,
@@ -80,10 +88,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
           ticks: {
             color: textColorSecondary,
           },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false,
-          },
+          display: false, // Turn off the x-axis grid lines
         },
       },
     };
