@@ -1,12 +1,12 @@
-<div class="flex flex-col items-start justify-center p-3 pt-16">
+<div class="flex flex-col items-start justify-center p-3 pt-16  sm:px-20 px-5">
   <div class="my-[2rem]">
     <p-button
-      class="text-4xl"
+      class="text-2xl"
       label="Back"
       [link]="true"
       icon=" pi pi-arrow-left"
       text="true"
-      size="large"
+      size="small"
       (click)="onBack()"
     >
     </p-button>
@@ -31,19 +31,19 @@
     </div>
 
     <div class="flex flex-row justify-normal items-start flex-wrap pt-3 gap-3">
-      <p-card header="Total Quantity" class="rounded-md shadow-md">
+      <p-card header="Total Quantity" class="bg-white rounded-md shadow-md">
         <span class="text-gray-950 font-bold text-2xl">{{
           tp?.totalQuantity
         }}</span>
       </p-card>
 
-      <p-card header="Avg buy Price" class="rounded-md shadow-md">
+      <p-card header="Avg buy Price" class="bg-white rounded-md shadow-md">
         <span class="text-gray-950 font-bold text-2xl">{{
           tp?.avgBuyPrice | currency
         }}</span>
       </p-card>
 
-      <p-card header="P/L" class="rounded-md shadow-md">
+      <p-card header="P/L" class="bg-white rounded-md shadow-md">
         @if (tp?.totalProfitAndLossAmount! > 0) {
           <span class="text-green-800 font-bold text-2xl text-center">{{
             tp?.totalProfitAndLossAmount | currency
@@ -60,7 +60,7 @@
       </p-card>
     </div>
 
-    <div class="mt-[2rem] w-full">
+    <div class="mt-[2rem] w-full bg-white rounded-md shadow-md p-3">
       <h1 class="text-3xl text-gray-950 font-bold">Transactions:</h1>
 
       <p-table
