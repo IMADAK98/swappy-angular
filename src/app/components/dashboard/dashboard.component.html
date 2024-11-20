@@ -1,9 +1,12 @@
-<div class="px-20 bg-gray-900">
+<div class="sm:px-20 px-5 mt-20">
   @defer (on timer(0.8s)) {
     <div class="mt-8">
       @if (portfolio$ | async; as portfolio) {
         <!-- Main Container for Portfolio -->
-        <div class="flex flex-col font-bold" @slideInFromLeft>
+        <div
+          class="flex flex-col font-bold justify-items-stretch"
+          @slideInFromLeft
+        >
           <!-- Portfolio Name and Total Value -->
           <!-- <h1 class="text-gray-400 font-semibold text-xl">{{ portfolio.name }} 🚀</h1> -->
 
@@ -11,7 +14,7 @@
             @if (portfolio.assets.length > 0) {
               <div class="flex flex-col font-bold">
                 <!-- Portfolio Name -->
-                <h1 class="text-2xl pb-3 pt-5 text-sky-200">
+                <h1 class="text-2xl pb-3 pt-5 bg-white">
                   {{ portfolio.portfolioName | titlecase }}
                 </h1>
 
@@ -21,7 +24,7 @@
                 >
                   <!-- Current Balance Card -->
                   <div
-                    class="flex flex-col p-4 bg-cyan-50 rounded-md shadow-md items-center text-center"
+                    class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center"
                   >
                     <p class="text-gray-500">Current Balance</p>
                     <div class="text-2xl font-extrabold">
@@ -32,7 +35,7 @@
 
                   <!-- Profit/Loss Card -->
                   <div
-                    class="flex flex-col p-4 bg-cyan-50 rounded-md shadow-md items-center text-center"
+                    class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center"
                   >
                     <label class="text-sky-400">Profit/Loss</label>
                     @if (portfolio.totalProfitAndLossAmount > 0) {
@@ -61,7 +64,7 @@
                   </div> -->
                   @if (portfolioStats$ | async; as stats) {
                     <div
-                      class="flex flex-col p-4 bg-cyan-50 rounded-md shadow-md items-center text-center"
+                      class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center"
                     >
                       <p class="text-gray-500">Top Performer</p>
 
@@ -115,7 +118,7 @@
                     </div>
 
                     <div
-                      class="flex flex-col p-4 bg-cyan-50 rounded-md shadow-md items-center text-center"
+                      class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center"
                     >
                       <p class="text-gray-500">Worst Performer</p>
 
@@ -187,7 +190,7 @@
               </div>
 
               <!-- Options Button -->
-              <div>
+              <div class="">
                 <menu-actions
                   (complete)="hideDialog()"
                   [portfolioId]="portfolio.id"
@@ -201,7 +204,7 @@
         <p-dialog [(visible)]="visible" [modal]="true" closable="true">
           <ng-template pTemplate="headless">
             <div
-              class="bg-cyan-50 overflow-auto border-black border rounded-md sm:w-[35rem] w-full px-3 pt-0"
+              class="bg-whiteoverflow-auto border-black border rounded-md sm:w-[35rem] w-full px-3 pt-0"
             >
               <div class="flex justify-end">
                 <button
@@ -224,19 +227,19 @@
         >
           @if (portfolio.assets.length > 0) {
             <!-- First Chart -->
-            <div class="p-3 w-full lg:w-1/2 bg-cyan-50 rounded-md shadow-md">
+            <div class="p-3 w-full lg:w-1/2 bg-white rounded-md shadow-md">
               <app-line-chart></app-line-chart>
             </div>
 
             <!-- Second Column -->
             <div class="flex flex-col space-y-5 w-full lg:w-1/2">
               <!-- Pie Chart -->
-              <div class="bg-cyan-50 rounded-md shadow-md p-3 h-fit w-full">
+              <div class="bg-white rounded-md shadow-md p-3 h-fit w-full">
                 <app-pie-chart></app-pie-chart>
               </div>
 
               <!-- Bar Chart -->
-              <div class="bg-cyan-50 rounded-md shadow-md p-3 h-full w-full">
+              <div class="bg-white rounded-md shadow-md p-3 h-full w-full">
                 <bar-chart></bar-chart>
               </div>
             </div>
@@ -244,7 +247,7 @@
         </div>
 
         @if (portfolio.assets.length > 0) {
-          <div class="bg-cyan-50 rounded-md shadow-md">
+          <div class="bg-white rounded-md shadow-md mt-5">
             <!-- Assets Table -->
             <section id="assets" class="p-3 mt-3">
               <h2 class="font-bold text-3xl text-gray-950">Assets</h2>
