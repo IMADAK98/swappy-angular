@@ -88,7 +88,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
           ticks: {
             color: textColorSecondary,
           },
-          display: false, // Turn off the x-axis grid lines
+          display: true, // Turn off the x-axis grid lines
         },
       },
     };

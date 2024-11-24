@@ -8,6 +8,7 @@ export interface Portfolio {
   assets: Asset[];
   creationDate: Date;
   totalValue: number;
+  totalCapitalInvested: number;
   totalProfitAndLossAmount: number;
 }
 

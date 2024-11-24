@@ -31,6 +31,9 @@ import {
   transition,
   animate,
 } from '@angular/animations';
+
+import { TooltipModule } from 'primeng/tooltip';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -55,6 +58,7 @@ import {
     NoPortfolioComponent,
     LineChartComponent,
     BarChartComponent,
+    TooltipModule,
   ],
 
   animations: [

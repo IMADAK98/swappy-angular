@@ -46,7 +46,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
     { label: '24h', value: LineChartParams.DAY },
     { label: '7d', value: LineChartParams.WEEK },
     { label: '30d', value: LineChartParams.MONTH },
-    { label: 'All', value: LineChartParams.ALL },
+    // { label: 'All', value: LineChartParams.ALL },
   ];
   value: LineChartParams = LineChartParams.DAY;
 

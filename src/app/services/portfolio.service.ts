@@ -172,6 +172,7 @@ export class PortfolioService implements IPortfolioService {
       creationDate: new Date(data.creationDate),
       totalValue: data.totalValue,
       totalProfitAndLossAmount: data.totalProfitAndLossAmount,
+      totalCapitalInvested: data.totalCapitalInvested,
     };
   }
 

@@ -3,10 +3,7 @@
     <div class="mt-8">
       @if (portfolio$ | async; as portfolio) {
         <!-- Main Container for Portfolio -->
-        <div
-          class="flex flex-col font-bold "
-          @slideInFromLeft
-        >
+        <div class="flex flex-col font-bold" @slideInFromLeft>
           <!-- Portfolio Name and Total Value -->
           <!-- <h1 class="text-gray-400 font-semibold text-xl">{{ portfolio.name }} 🚀</h1> -->
 
@@ -14,21 +11,46 @@
             @if (portfolio.assets.length > 0) {
               <div class="flex flex-col font-bold">
                 <!-- Portfolio Name -->
-                <h1 class="text-3xl pb-3 pt-5 ">
+                <h1 class="text-3xl pb-3 pt-5">
                   {{ portfolio.portfolioName | titlecase }}
                 </h1>
 
                 <!-- Card Container -->
                 <div
-                  class="flex flex-wrap gap-5 px-0 py-3 justify-center items-stretch "
+                  class="flex flex-wrap gap-5 px-0 py-3 justify-center items-stretch"
                 >
                   <!-- Current Balance Card -->
                   <div
                     class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center md:max-w-fit w-full"
                   >
-                    <p class="text-sky-400">Current Balance</p>
+                    <p class="text-gray-400">
+                      Current Balance
+                      <i
+                        class="pi pi-info-circle text-blue-500 ml-2"
+                        pTooltip="The current value of all your investments in this portfolio."
+                        tooltipPosition="top"
+                      ></i>
+                    </p>
                     <div class="text-lg font-bold">
                       {{ portfolio.totalValue | currency }}
+                    </div>
+                    <p class="text-green-400 font-medium text-lg"></p>
+                  </div>
+
+                  <!-- capital Balance Card -->
+                  <div
+                    class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center md:max-w-fit w-full"
+                  >
+                    <p class="text-gray-400">
+                      Capital Invested
+                      <i
+                        class="pi pi-info-circle text-blue-500 ml-2"
+                        pTooltip="The total amount of money you initially invested in this portfolio."
+                        tooltipPosition="top"
+                      ></i>
+                    </p>
+                    <div class="text-lg font-bold">
+                      {{ portfolio.totalCapitalInvested | currency }}
                     </div>
                     <p class="text-green-400 font-medium text-lg"></p>
                   </div>
@@ -37,13 +59,20 @@
                   <div
                     class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center md:max-w-fit w-full"
                   >
-                    <label class="text-sky-400">Profit/Loss</label>
+                    <p class="text-gray-400">
+                      Profit/Loss
+                      <i
+                        class="pi pi-info-circle text-blue-500 ml-2"
+                        pTooltip="The total profit or loss from your investments in this portfolio."
+                        tooltipPosition="top"
+                      ></i>
+                    </p>
                     @if (portfolio.totalProfitAndLossAmount > 0) {
                       <span class="text-green-700 text-lg font-bold">
                         +{{ portfolio.totalProfitAndLossAmount | currency }} 💸
                       </span>
                     } @else if (portfolio.totalProfitAndLossAmount < 0) {
-                      <span class="text-red-700 text-lg font-bold">
+                      <span class="text-red-600 text-lg">
                         {{ portfolio.totalProfitAndLossAmount | currency }} 🩸
                       </span>
                     } @else {
@@ -66,7 +95,14 @@
                     <div
                       class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center"
                     >
-                      <p class="text-sky-400">Top Performer</p>
+                      <p class="text-gray-400">
+                        Top Performer
+                        <i
+                          class="pi pi-info-circle text-blue-500 ml-2"
+                          pTooltip="The asset in your portfolio that has achieved the highest returns."
+                          tooltipPosition="top"
+                        ></i>
+                      </p>
 
                       <!-- Top Performer Details -->
                       <div
@@ -120,7 +156,14 @@
                     <div
                       class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center"
                     >
-                      <p class="text-sky-400">Worst Performer</p>
+                      <p class="text-gray-400">
+                        Worst Performer
+                        <i
+                          class="pi pi-info-circle text-blue-500 ml-2"
+                          pTooltip="The asset in your portfolio that has experienced the largest losses."
+                          tooltipPosition="top"
+                        ></i>
+                      </p>
 
                       <!-- Top Performer Details -->
                       <div
@@ -204,7 +247,7 @@
         <p-dialog [(visible)]="visible" [modal]="true" closable="true">
           <ng-template pTemplate="headless">
             <div
-              class="bg-whiteoverflow-auto border-black border rounded-md sm:w-[35rem] w-full px-3 pt-0"
+              class="bg-white overflow-auto border-black border rounded-md sm:w-[35rem] w-full px-3 pt-0"
             >
               <div class="flex justify-end">
                 <button

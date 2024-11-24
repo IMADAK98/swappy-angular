@@ -8,24 +8,45 @@
       >
         <ng-template pTemplate="header">
           <tr class="space-x-5">
-            <th pSortableColumn="name">
+            <th class="text-black font-semibold" pSortableColumn="name">
               Name <p-sortIcon field="name"></p-sortIcon>
             </th>
-            <th>Price</th>
-            <th pSortableColumn="totalQuantity">
+            <th class="text-black font-semibold">Price</th>
+            <th
+              class="text-black font-semibold"
+              pSortableColumn="totalQuantity"
+            >
               Holdings <p-sortIcon field="totalQuantity"></p-sortIcon>
             </th>
-            <th>Actions</th>
-            <th>realized P/L</th>
-            <th>unrealized P/L</th>
-            <th>Total Profit/Loss</th>
+            <th class="text-black font-semibold">Actions</th>
+            <th
+              class="text-black font-semibold"
+              pSortableColumn="realizedProfitLossAmount"
+            >
+              Realized P/L
+              <p-sortIcon field="realizedProfitLossAmount"></p-sortIcon>
+            </th>
+            <th
+              pSortableColumn="unrealizedProfitLossAmount"
+              class="text-black font-semibold"
+            >
+              Unrealized P/L
+              <p-sortIcon field="unrealizedProfitLossAmount"></p-sortIcon>
+            </th>
+            <th
+              class="text-black font-semibold"
+              pSortableColumn="totalProfitAndLossAmount"
+            >
+              Total Profit/Loss
+              <p-sortIcon field="totalProfitAndLossAmount"></p-sortIcon>
+            </th>
           </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-assets>
           <tr>
             <td>
-              <div class="flex flex-row items-center ">
+              <div class="flex flex-row items-center">
                 <span>
                   <img
                     ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
@@ -46,7 +67,7 @@
                 {{ assets.currentPrice | currency }}
               </p>
             </td>
-            <td class="flex flex-col justify-center  space-y-1">
+            <td class="flex flex-col justify-center space-y-1">
               <span class="text-gray-900 font-medium">
                 {{ assets.totalValue | currency }}
               </span>

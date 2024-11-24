@@ -21,6 +21,7 @@ import { ToastModule } from 'primeng/toast';
 import { EditTransactionFormComponent } from '../edit-transaction-form/edit-transaction-form.component';
 import { DialogModule } from 'primeng/dialog';
 import { LoadingIndicatorComponent } from '../../loading-indicator/loading-indicator.component';
+import { Action } from '../../interfaces/portfolio.interface';
 
 @Component({
   selector: 'app-transactions',
@@ -51,6 +52,8 @@ export class TransactionsComponent {
   selectedItem: any = null;
   visible: boolean = false;
   transactionId: number | undefined;
+
+  action = Action;
   @ViewChild('menu') menu!: Menu;
 
   constructor(
@@ -171,5 +174,10 @@ export class TransactionsComponent {
   showDialog(transactionId: number) {
     this.visible = true;
     this.transactionId = transactionId;
+  }
+
+  getFormattedAmount(transaction: TransactionDto): string {
+    const sign = transaction.action === Action.BUY ? '+' : '-';
+    return `${sign} ${transaction.transactionAmount}`;
   }
 }

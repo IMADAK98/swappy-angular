@@ -4,14 +4,13 @@
   icon="pi pi-ellipsis-v"
   [raised]="true"
   text="true"
-  styleClass="bg-sky-100"
 ></p-button>
 
 <div class="flex items-center justify-center">
   <p-toast appendTo="body"></p-toast>
-<p-confirmDialog
-  [breakpoints]="{ '0px': '100vw', '768px': '50vw', '1024px': '30vw' }"
-  [style]="{ width: 'auto' }"
-  appendTo="body"
-></p-confirmDialog>
+  <p-confirmDialog
+    [breakpoints]="{ '0px': '100vw', '768px': '50vw', '1024px': '30vw' }"
+    [style]="{ width: 'auto' }"
+    appendTo="body"
+  ></p-confirmDialog>
 </div>
