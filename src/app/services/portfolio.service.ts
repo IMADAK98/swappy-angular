@@ -173,6 +173,7 @@ export class PortfolioService implements IPortfolioService {
       totalValue: data.totalValue,
       totalProfitAndLossAmount: data.totalProfitAndLossAmount,
       totalCapitalInvested: data.totalCapitalInvested,
+      totalPlPercent: data.totalPlPercent,
     };
   }
 

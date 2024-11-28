@@ -13,8 +13,8 @@
   </div>
 
   @if (transactionPageData$ | async; as tp) {
-    <div class="flex flex-col mb-5">
-      <div class="flex flex-row">
+    <div class="flex flex-col mb-3 w-full">
+      <div class="flex flex-row gap-2">
         <img
           ngSrc="https://s2.coinmarketcap.com/static/img/coins/32x32/{{
             tp?.coinId
@@ -23,47 +23,117 @@
           height="32"
           class=""
         />
-        <h2 class="text-2xl font-semibold">{{ tp?.name }} ({{ tp.symbol }})</h2>
+        <h2 class="text-xl font-medium text-gray-400">
+          {{ tp?.name }} ({{ tp.symbol }})
+        </h2>
+      </div>
+      <span class="text-4xl text-gray-900 font-bold">
+        {{ tp?.totalValue | currency }}
+      </span>
+      <!-- Add Transaction Button -->
+      <div class="flex flex-row justify-end">
+        <p-button
+          (click)="showAddDialog(tp.coinId)"
+          icon="pi pi-spin  pi-bitcoin"
+          label="Add Transaction"
+          iconPos="right"
+          [raised]="true"
+        ></p-button>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="flex flex-row flex-wrap gap-3 mt-3">
+      <div
+        class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center md:max-w-fit w-full"
+      >
+        <p class="text-gray-400">
+          Total Quantity
+          <i
+            class="pi pi-info-circle text-blue-500 ml-2"
+            pTooltip="The total number of assets you hold in this portfolio."
+            tooltipPosition="top"
+          ></i>
+        </p>
+
+        <span class="text-lg font-bold">{{ tp?.totalQuantity }}</span>
       </div>
 
-      <h1 class="text-4xl text-gray-900 font-extrabold pt-3">
-        {{ tp?.totalValue | currency }}
-      </h1>
-    </div>
+      <div
+        class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center md:max-w-fit w-full"
+      >
+        <p class="text-gray-400">
+          Average Buying Price
+          <i
+            class="pi pi-info-circle text-blue-500 ml-2"
+            pTooltip="The average price at which you purchased all the assets in this portfolio."
+            tooltipPosition="top"
+          ></i>
+        </p>
 
-    <div
-      class="flex flex-row justify-normal items-start flex-wrap pt-3 gap-3 mt-5"
-    >
-      <p-card header="Total Quantity" class="bg-white rounded-md shadow-md">
-        <span class="text-gray-950 font-bold text-2xl">{{
-          tp?.totalQuantity
-        }}</span>
-      </p-card>
+        <span class="text-lg font-bold">{{ tp?.avgBuyPrice | currency }}</span>
+      </div>
 
-      <p-card header="Avg buy Price" class="bg-white rounded-md shadow-md">
-        <span class="text-gray-950 font-bold text-2xl">{{
-          tp?.avgBuyPrice | currency
-        }}</span>
-      </p-card>
+      <div
+        class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center md:max-w-fit w-full"
+      >
+        <p class="text-gray-400">
+          Invested Amount
+          <i
+            class="pi pi-info-circle text-blue-500 ml-2"
+            pTooltip="The total amount you have spent to acquire assets in this portfolio."
+            tooltipPosition="top"
+          ></i>
+        </p>
 
-      <p-card header="P/L" class="bg-white rounded-md shadow-md">
-        @if (tp?.totalProfitAndLossAmount! > 0) {
-          <span class="text-green-800 font-bold text-2xl text-center">{{
-            tp?.totalProfitAndLossAmount | currency
-          }}</span>
-        } @else if (tp?.totalProfitAndLossAmount! < 0) {
-          <span class="text-red-800 font-bold text-2xl text-center">{{
-            tp?.totalProfitAndLossAmount | currency
-          }}</span>
-        } @else {
-          <span class="text-grey-900 text-lg text-center">
-            {{ tp?.totalProfitAndLossAmount }}</span
+        <span class="text-lg font-bold">{{ tp?.initialValue | currency }}</span>
+      </div>
+
+      <div
+        class="flex flex-col p-4 bg-white rounded-md shadow-md items-center text-center md:max-w-fit w-full"
+      >
+        <p class="text-gray-400">
+          Profit/Loss
+          <i
+            class="pi pi-info-circle text-blue-500 ml-2"
+            pTooltip="The total profit or loss in your portfolio, calculated as the difference between the current value and the invested amount."
+            tooltipPosition="top"
+          ></i>
+        </p>
+
+        <div class="flex flex-col">
+          @if (tp?.totalProfitAndLossAmount! > 0) {
+            <span class="text-green-600 text-lg font-bold text-center"
+              >{{ tp?.totalProfitAndLossAmount | currency }}💸</span
+            >
+          } @else if (tp?.totalProfitAndLossAmount! < 0) {
+            <span class="text-red-600 text-lg font-bold text-center"
+              >{{ tp?.totalProfitAndLossAmount | currency }}🩸</span
+            >
+          } @else {
+            <span class="text-grey-900 text-lg font-bold text-center">
+              {{ tp?.totalProfitAndLossAmount }}</span
+            >
+          }
+          <span
+            class="text-sm font-medium"
+            [ngClass]="{
+              'text-green-600': tp.totalPlPercentage > 0,
+              'text-red-600': tp.totalPlPercentage < 0,
+            }"
           >
-        }
-      </p-card>
+            (
+            {{
+              tp.totalProfitAndLossAmount >= 0
+                ? (tp?.totalProfitAndLossAmount | number: "1.2-2") + "% ↑"
+                : (tp?.totalProfitAndLossAmount | number: "1.2-2") + "% ↓"
+            }})
+          </span>
+        </div>
+      </div>
     </div>
 
-    <div class="mt-[2rem] w-full bg-white rounded-md shadow-md p-3">
+    <div class="mt-9 w-full bg-white rounded-md shadow-md p-3">
       <h1 class="text-xl text-gray-950 font-semibold mb-5">Transactions</h1>
 
       <p-table
@@ -159,6 +229,33 @@
       </p-dialog>
     </div>
   }
+
+  <p-dialog
+    [(visible)]="isAddDialogVisible"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ overflow: 'auto' }"
+    class="w-full sm:w-[50rem] overflow-auto"
+  >
+    <ng-template pTemplate="headless">
+      <div
+        class="bg-white sm:w-[30rem] w-full border border-black rounded-lg p-10"
+      >
+        <div class="flex justify-end">
+          <button
+            (click)="isAddDialogVisible = !isAddDialogVisible"
+            class="p-2 m-1 text-xl font-semibold"
+          >
+            x
+          </button>
+        </div>
+        <app-transaction-form
+          [coinID]="coinID"
+          (completedSubmission)="handleFormCompletion()"
+        ></app-transaction-form>
+      </div>
+    </ng-template>
+  </p-dialog>
 
   <div class="flex items-center justify-center">
     <p-toast />

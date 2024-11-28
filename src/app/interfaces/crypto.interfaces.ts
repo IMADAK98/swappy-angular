@@ -99,6 +99,8 @@ export interface AssetDto {
   realizedProfitLossPercentage: number;
   piPercentage: number;
   transactions: TransactionDto[];
+  initialValue: number;
+  totalPlPercentage: number;
 }
 
 export interface AssetResponse extends BaseResponse<AssetDto> {}

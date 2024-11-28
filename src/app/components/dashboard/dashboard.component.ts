@@ -40,8 +40,6 @@ import { TooltipModule } from 'primeng/tooltip';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
   imports: [
-    HeaderComponent,
-    CardComponent,
     DialogModule,
     ButtonModule,
     WizardComponent,

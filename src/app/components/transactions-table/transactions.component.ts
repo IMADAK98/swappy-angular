@@ -22,6 +22,7 @@ import { EditTransactionFormComponent } from '../edit-transaction-form/edit-tran
 import { DialogModule } from 'primeng/dialog';
 import { LoadingIndicatorComponent } from '../../loading-indicator/loading-indicator.component';
 import { Action } from '../../interfaces/portfolio.interface';
+import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 
 @Component({
   selector: 'app-transactions',
@@ -40,6 +41,7 @@ import { Action } from '../../interfaces/portfolio.interface';
     EditTransactionFormComponent,
     DialogModule,
     LoadingIndicatorComponent,
+    TransactionFormComponent,
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
@@ -55,6 +57,9 @@ export class TransactionsComponent {
 
   action = Action;
   @ViewChild('menu') menu!: Menu;
+  coinID: any;
+
+  isAddDialogVisible: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -176,8 +181,17 @@ export class TransactionsComponent {
     this.transactionId = transactionId;
   }
 
+  showAddDialog(coinId: string) {
+    this.isAddDialogVisible = !this.isAddDialogVisible;
+    this.coinID = coinId;
+  }
+
   getFormattedAmount(transaction: TransactionDto): string {
     const sign = transaction.action === Action.BUY ? '+' : '-';
     return `${sign} ${transaction.transactionAmount}`;
+  }
+
+  handleFormCompletion() {
+    this.visible = false;
   }
 }

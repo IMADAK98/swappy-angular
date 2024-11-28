@@ -78,8 +78,9 @@ export class LineChartComponent implements OnInit, OnDestroy {
           label: 'Portfolio Value',
           data: chartData.values,
           fill: true,
-          borderColor: this.documentStyle.getPropertyValue('--blue-500'),
-          tension: 0,
+          borderColor: this.documentStyle.getPropertyValue('--blue-400'),
+          tension: 0.4,
+          pointRadius: 0,
         },
       ],
     };

@@ -10,6 +10,7 @@ export interface Portfolio {
   totalValue: number;
   totalCapitalInvested: number;
   totalProfitAndLossAmount: number;
+  totalPlPercent: number;
 }
 
 export interface PortfolioRequest {

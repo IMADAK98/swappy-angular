@@ -31,8 +31,25 @@
                         tooltipPosition="top"
                       ></i>
                     </p>
-                    <div class="text-lg font-bold">
+                    <div class="text-lg font-bold flex flex-col">
                       {{ portfolio.totalValue | currency }}
+
+                      <span
+                        class="text-sm font-medium"
+                        [ngClass]="{
+                          'text-green-600': portfolio.totalPlPercent > 0,
+                          'text-red-600': portfolio.totalPlPercent < 0,
+                        }"
+                      >
+                        (
+                        {{
+                          portfolio.totalPlPercent >= 0
+                            ? (portfolio?.totalPlPercent | number: "1.2-2") +
+                              "% ↑"
+                            : (portfolio?.totalPlPercent | number: "1.2-2") +
+                              "% ↓"
+                        }})
+                      </span>
                     </div>
                     <p class="text-green-400 font-medium text-lg"></p>
                   </div>
