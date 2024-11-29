@@ -32,13 +32,13 @@ export class MenuActionsComponent implements OnInit {
     this.items = [
       {
         items: [
-          {
-            label: 'Edit Portfolio',
-            icon: 'pi pi-pencil',
-            command: () => {
-              console.log('Edit Portfolio');
-            },
-          },
+          // {
+          //   label: 'Edit Portfolio',
+          //   icon: 'pi pi-pencil',
+          //   command: () => {
+          //     console.log('Edit Portfolio');
+          //   },
+          // },
           {
             label: 'Delete Portfolio',
             icon: 'pi pi-trash',

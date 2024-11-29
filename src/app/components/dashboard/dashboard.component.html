@@ -1,5 +1,5 @@
 <div class="sm:px-20 px-5 mt-20">
-  @defer (on timer(0.8s)) {
+  @defer (on timer(0.5s)) {
     <div class="mt-8">
       @if (portfolio$ | async; as portfolio) {
         <!-- Main Container for Portfolio -->
@@ -35,7 +35,7 @@
                       {{ portfolio.totalValue | currency }}
 
                       <span
-                        class="text-sm font-medium"
+                        class="text-sm"
                         [ngClass]="{
                           'text-green-600': portfolio.totalPlPercent > 0,
                           'text-red-600': portfolio.totalPlPercent < 0,
@@ -85,7 +85,7 @@
                       ></i>
                     </p>
                     @if (portfolio.totalProfitAndLossAmount > 0) {
-                      <span class="text-green-700 text-lg font-bold">
+                      <span class="text-green-600 text-lg">
                         +{{ portfolio.totalProfitAndLossAmount | currency }} 💸
                       </span>
                     } @else if (portfolio.totalProfitAndLossAmount < 0) {
@@ -235,7 +235,6 @@
                 </div>
               </div>
             }
-
             <!-- Action Buttons -->
             <div class="flex flex-row items-center justify-center space-x-2">
               <div class="flex flex-wrap gap-3">
@@ -313,6 +312,29 @@
               <h2 class="font-bold text-3xl text-gray-950">Assets</h2>
               <app-assets-table (complete)="hideDialog()"> </app-assets-table>
             </section>
+          </div>
+        } @else {
+          <!-- No Assets Placeholder -->
+          <div class="flex flex-col items-center justify-center space-y-5">
+            <img
+              ngSrc="/assets/no-assets-portfolio.png"
+              width="240"
+              height="240"
+              priority="true"
+            />
+            <h1 class="text-3xl font-bold text-gray-950">
+              This portfolio needs some final touches…
+            </h1>
+            <h2 class="text-lg font-semibold text-gray-500">
+              Add a coin to get started
+            </h2>
+            <p-button
+              (click)="showDialog()"
+              icon="pi pi-spin pi-bitcoin"
+              label="Add Coin"
+              iconPos="right"
+              [raised]="true"
+            ></p-button>
           </div>
         }
       }

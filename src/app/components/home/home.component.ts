@@ -1,23 +1,19 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
-import { RouterLink } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { PiChartComponent } from '../pi-chart/pi-chart.component';
 import {
   animate,
-  keyframes,
   state,
   style,
   transition,
   trigger,
 } from '@angular/animations';
+import { NgxTypedWriterModule } from 'ngx-typed-writer';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, ButtonModule, PiChartComponent],
+  imports: [NgxTypedWriterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   animations: [
@@ -32,6 +28,17 @@ export class HomeComponent {
   videoSource = 'assets/stocks_vid.mp4';
   imageSource = 'assets/bg-image-white.png';
   imageState = 'normal';
+
+  readonly sentencies: string[] = [
+    'Simplify Your Portfolio Management!',
+    'Stay Ahead with Real-Time Tracking.',
+    'All Your Crypto in One Dashboard.',
+    'Analyze. Optimize. Grow.',
+    'Track Gains, Minimize Losses.',
+    'Visualize Performance Effortlessly.',
+    'Stay Informed, Stay Empowered.',
+  ];
+
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -50,5 +57,9 @@ export class HomeComponent {
 
   onClickLogout() {
     this.auth.logout();
+  }
+
+  get isLoggedIn() {
+    return this.auth.isLoggedIn();
   }
 }

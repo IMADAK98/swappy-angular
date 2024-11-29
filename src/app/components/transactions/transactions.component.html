@@ -124,9 +124,9 @@
           >
             (
             {{
-              tp.totalProfitAndLossAmount >= 0
-                ? (tp?.totalProfitAndLossAmount | number: "1.2-2") + "% ↑"
-                : (tp?.totalProfitAndLossAmount | number: "1.2-2") + "% ↓"
+              tp.totalPlPercentage >= 0
+                ? (tp?.totalPlPercentage | number: "1.2-2") + "% ↑"
+                : (tp?.totalPlPercentage | number: "1.2-2") + "% ↓"
             }})
           </span>
         </div>
@@ -177,8 +177,10 @@
                 <span
                   [class.text-green-500]="transactions.action === action.BUY"
                   [class.text-red-500]="transactions.action === action.SELL"
-                  [innerHTML]="getFormattedAmount(transactions)"
                 >
+                  {{ getFormattedAmount(transactions) }}&nbsp;<span>{{
+                    tp.symbol
+                  }}</span>
                 </span>
               </div>
             </td>

@@ -6,7 +6,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AssetsTableComponent } from './components/assets-table/assets-table.component';
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
-import { TransactionsComponent } from './components/transactions-table/transactions.component';
+import { TransactionsComponent } from './components/transactions/transactions.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { PiChartComponent } from './components/pi-chart/pi-chart.component';
 import { HeaderComponent } from './components/header/header.component';
