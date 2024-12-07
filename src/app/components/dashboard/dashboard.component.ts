@@ -1,6 +1,4 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { CardComponent } from '../../card/card.component';
-import { HeaderComponent } from '../header/header.component';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { map, Observable } from 'rxjs';
@@ -44,16 +42,12 @@ import { TooltipModule } from 'primeng/tooltip';
     ButtonModule,
     WizardComponent,
     CommonModule,
-    PortfolioComponent,
     SkeletonModule,
     AssetsTableComponent,
     CardModule,
     PiChartComponent,
     NgOptimizedImage,
-    NoAssetsComponent,
-    RouterLink,
     MenuActionsComponent,
-    NoPortfolioComponent,
     LineChartComponent,
     BarChartComponent,
     TooltipModule,
@@ -64,19 +58,13 @@ import { TooltipModule } from 'primeng/tooltip';
     trigger('slideInFromLeft', [
       state('void', style({ transform: 'translateX(-100%)', opacity: 0 })),
       state('*', style({ transform: 'translateX(0)', opacity: 1 })),
-      transition('void => *', [animate('800ms ease-out')]),
+      transition('void => *', [animate('500ms ease-out')]),
     ]),
     // New slide-in from right animation
     trigger('slideInFromRight', [
       state('void', style({ transform: 'translateX(100%)', opacity: 0 })),
       state('*', style({ transform: 'translateX(0)', opacity: 1 })),
-      transition('void => *', [animate('800ms ease-out')]),
-    ]),
-
-    trigger('slideInFromBottom', [
-      state('void', style({ transform: 'translateY(100%)', opacity: 0 })),
-      state('*', style({ transform: 'translateY(0)', opacity: 1 })),
-      transition('void => *', [animate('200ms ease-out')]),
+      transition('void => *', [animate('500ms ease-out')]),
     ]),
   ],
 })

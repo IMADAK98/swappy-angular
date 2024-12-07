@@ -7,6 +7,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'menu-actions',
@@ -27,6 +28,7 @@ export class MenuActionsComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private router: Router,
+    private authService: AuthService,
   ) {}
   ngOnInit(): void {
     this.items = [
@@ -50,7 +52,7 @@ export class MenuActionsComponent implements OnInit {
             label: 'logout',
             icon: 'pi pi-power-off',
             command: () => {
-              console.log('Logout');
+              this.authService.logout();
             },
           },
         ],

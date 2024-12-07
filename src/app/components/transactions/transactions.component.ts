@@ -1,5 +1,4 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { CardComponent } from '../../card/card.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AssetDto,
@@ -28,7 +27,6 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
   selector: 'app-transactions',
   standalone: true,
   imports: [
-    CardComponent,
     AsyncPipe,
     NgOptimizedImage,
     CommonModule,
