@@ -1,4 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { ChartsService } from '../../services/charts.service';
 import {
@@ -10,10 +17,9 @@ import {
   SelectButtonChangeEvent,
   SelectButtonModule,
 } from 'primeng/selectbutton';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SkeletonModule } from 'primeng/skeleton';
-import { LoadingIndicatorComponent } from '../../loading-indicator/loading-indicator.component';
 import { UIChart } from 'primeng/chart';
 import { Chart, ChartOptions, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
@@ -30,7 +36,6 @@ Chart.register(...registerables);
     SelectButtonModule,
     CommonModule,
     SkeletonModule,
-    LoadingIndicatorComponent,
   ],
   templateUrl: './line-chart.component.html',
   styleUrl: './line-chart.component.css',
@@ -55,11 +60,22 @@ export class LineChartComponent implements OnInit, OnDestroy {
   textColorSecondary: any;
   surfaceBorder: any;
 
-  constructor(private chartService: ChartsService) {}
+  constructor(
+    private chartService: ChartsService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {}
 
   ngOnInit() {
     this.initializeStyles();
     this.fetchChartData();
+  }
+
+  getStyleValue(varName: string, fallback: string): string {
+    if (isPlatformBrowser(this.platformId)) {
+      const style = getComputedStyle(document.documentElement);
+      return style.getPropertyValue(varName) || fallback;
+    }
+    return fallback;
   }
 
   onFilterChange(event: SelectButtonChangeEvent) {
@@ -99,7 +115,9 @@ export class LineChartComponent implements OnInit, OnDestroy {
   }
 
   private initializeStyles() {
-    this.documentStyle = getComputedStyle(document.documentElement);
+    if (isPlatformBrowser(this.platformId)) {
+      this.documentStyle = getComputedStyle(document.documentElement);
+    }
     this.textColor = this.documentStyle.getPropertyValue('--text-color');
     this.textColorSecondary = this.documentStyle.getPropertyValue(
       '--text-color-secondary',
