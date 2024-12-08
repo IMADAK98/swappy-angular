@@ -117,13 +117,14 @@ export class LineChartComponent implements OnInit, OnDestroy {
   private initializeStyles() {
     if (isPlatformBrowser(this.platformId)) {
       this.documentStyle = getComputedStyle(document.documentElement);
+
+      this.textColor = this.documentStyle.getPropertyValue('--text-color');
+      this.textColorSecondary = this.documentStyle.getPropertyValue(
+        '--text-color-secondary',
+      );
+      this.surfaceBorder =
+        this.documentStyle.getPropertyValue('--surface-border');
     }
-    this.textColor = this.documentStyle.getPropertyValue('--text-color');
-    this.textColorSecondary = this.documentStyle.getPropertyValue(
-      '--text-color-secondary',
-    );
-    this.surfaceBorder =
-      this.documentStyle.getPropertyValue('--surface-border');
   }
 
   private fetchChartData() {
