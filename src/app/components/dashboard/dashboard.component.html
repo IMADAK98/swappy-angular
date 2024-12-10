@@ -7,7 +7,7 @@
           <!-- Portfolio Name and Total Value -->
           <!-- <h1 class="text-gray-400 font-semibold text-xl">{{ portfolio.name }} 🚀</h1> -->
 
-          <div class="flex flex-row justify-between flex-wrap gap-3">
+          <div class="flex flex-row justify-between flex-wrap gap-3 w-full">
             @if (portfolio.assets.length > 0) {
               <div class="flex flex-col font-bold">
                 <!-- Portfolio Name -->
@@ -236,7 +236,7 @@
               </div>
             }
             <!-- Action Buttons -->
-            <div class="flex flex-row items-center justify-center space-x-2">
+            <div class="flex flex-row items-center justify-end space-x-2 ml-auto">
               <div class="flex flex-wrap gap-3">
                 <!-- Add Transaction Button -->
                 <p-button
