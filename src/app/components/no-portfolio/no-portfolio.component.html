@@ -24,14 +24,14 @@
   <p-dialog
     [(visible)]="showFormDialog"
     [showHeader]="false"
-    [style]="{ width: '100%', 'max-width': '40rem', margin: 'auto' }"
+    [style]="{ width: 'fit', margin: 'auto' , borderRadius: '5px'}"
     [closable]="true"
     [modal]="true"
   >
     <div class="flex justify-end">
       <button
         (click)="showFormDialog = !showFormDialog"
-        class="p-2 m-1 text-xl font-semibold"
+        class="p-3  text-xl font-semibold"
       >
         x
       </button>
