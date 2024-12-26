@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import {
@@ -16,15 +16,8 @@ import { NgxTypedWriterModule } from 'ngx-typed-writer';
   imports: [NgxTypedWriterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
-  animations: [
-    trigger('rotate', [
-      state('normal', style({ transform: 'rotate(0deg)' })),
-      state('rotated', style({ transform: 'rotate(360deg)' })),
-      transition('normal <=> rotated', animate('5s linear')),
-    ]),
-  ],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   videoSource = 'assets/stocks_vid.mp4';
   imageSource = 'assets/bg-image-white.png';
   imageState = 'normal';
@@ -43,6 +36,7 @@ export class HomeComponent {
     private auth: AuthService,
     private router: Router,
   ) {}
+  ngOnInit(): void {}
   // imageState = 'rotating'; // Initial state for the animation
 
   rotateImage() {
@@ -57,9 +51,5 @@ export class HomeComponent {
 
   onClickLogout() {
     this.auth.logout();
-  }
-
-  get isLoggedIn() {
-    return this.auth.isLoggedIn();
   }
 }

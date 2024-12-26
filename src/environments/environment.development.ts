@@ -5,5 +5,5 @@ export interface Environment {
 
 export const environment: Environment = {
   production: false,
-  apiUrl: 'http://localhost:8765/',
+  apiUrl: 'http://209.38.177.179/',
 };

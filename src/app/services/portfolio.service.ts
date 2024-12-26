@@ -52,7 +52,7 @@ export class PortfolioService implements IPortfolioService {
   getPortfolioStats(): Observable<StatsResponse> {
     return this.http
       .get<StatsResponse>(
-        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio/statistics`,
+        `${this.apiUrl}portfolio-service/api/v1/portfolio/statistics`,
       )
       .pipe(catchError((err) => customErrorHandler(err)));
   }
@@ -60,7 +60,7 @@ export class PortfolioService implements IPortfolioService {
   hasPortfolio(): Observable<boolean> {
     return this.http
       .get<PortfolioResponse>(
-        `${this.apiUrl}swappy-portfolio-service/api/v1/has-portfolio`,
+        `${this.apiUrl}portfolio-service/api/v1/has-portfolio`,
         { context: new HttpContext().set(SkipLoading, true) },
       )
       .pipe(
@@ -81,7 +81,7 @@ export class PortfolioService implements IPortfolioService {
   fetchPortfolio(): Observable<Portfolio | null> {
     return this.http
       .get<PortfolioResponse>(
-        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
+        `${this.apiUrl}portfolio-service/api/v1/portfolio-by-email`,
         { context: new HttpContext().set(SkipLoading, true) },
       )
       .pipe(
@@ -109,7 +109,7 @@ export class PortfolioService implements IPortfolioService {
   ): Observable<PortfolioResponse | void> {
     return this.http
       .post<PortfolioResponse>(
-        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio`,
+        `${this.apiUrl}portfolio-service/api/v1/portfolio`,
         portfolioReq,
       )
       .pipe(
@@ -131,7 +131,7 @@ export class PortfolioService implements IPortfolioService {
   deletePortfolio(portfolioId: number): Observable<void> {
     return this.http
       .delete<void>(
-        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio/${portfolioId}`,
+        `${this.apiUrl}portfolio-service/api/v1/portfolio/${portfolioId}`,
       )
       .pipe(catchError((error: any) => customErrorHandler(error)));
   }
@@ -146,7 +146,7 @@ export class PortfolioService implements IPortfolioService {
   updatePortfolioData(): Observable<any> {
     return this.http
       .get<PortfolioResponse>(
-        `${this.apiUrl}swappy-portfolio-service/api/v1/portfolio-by-email`,
+        `${this.apiUrl}portfolio-service/api/v1/portfolio-by-email`,
       )
       .pipe(
         tap((response: PortfolioResponse) => {

@@ -3,6 +3,7 @@ import { Inject, InjectionToken, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { inject } from '@angular/core';
 import { of } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId: any = inject(PLATFORM_ID);
@@ -10,17 +11,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     ? null
     : localStorage.getItem('token');
 
+  const url: string = environment.apiUrl;
+
   //   Check if the request URL matches the route to exempt
   if (
-    req.url ===
-      'http://localhost:8765/swappy-user-service/api/v1/auth/register' ||
-    req.url === 'http://localhost:8765/swappy-user-service/api/v1/auth/login' ||
-    req.url ===
-      'http://localhost:8765/swappy-user-service/api/v1/user/reset-password-email' ||
-    req.url ===
-      'http://localhost:8765/swappy-user-service/api/v1/user/reset-password-token-check' ||
-    req.url ===
-      'http://localhost:8765/swappy-user-service/api/v1/user/reset-password'
+    req.url === `${url}user-service/api/v1/auth/register` ||
+    req.url === `${url}user-service/api/v1/auth/login` ||
+    req.url === `${url}user-service/api/v1/user/reset-password-email` ||
+    req.url === `${url}user-service/api/v1/user/reset-password-token-check` ||
+    req.url === `${url}user-service/api/v1/user/reset-password`
   ) {
     // Return the original request without modifying it
     return next(req);

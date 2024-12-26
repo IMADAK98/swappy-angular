@@ -32,7 +32,7 @@ export class CryptoService {
 
   queryCoin(query: string): Observable<Coin[]> {
     return this.http.get<Coin[]>(
-      `${this.apiUrl}swappy-exchange-service/api/v1/coins`,
+      `${this.apiUrl}exchange-service/api/v1/coins`,
       {
         params: { query },
       },
@@ -41,7 +41,7 @@ export class CryptoService {
 
   fetchPrice(id: string): Observable<CoinResponse> {
     return this.http
-      .get<CoinResponse>(`${this.apiUrl}swappy-exchange-service/api/v1/price`, {
+      .get<CoinResponse>(`${this.apiUrl}exchange-service/api/v1/price`, {
         params: { coinID: id },
         context: new HttpContext().set(SkipLoading, true),
       })
@@ -50,7 +50,7 @@ export class CryptoService {
 
   private fetchAllCoinsList(): Observable<Coin[]> {
     return this.http
-      .get<Coin[]>(`${this.apiUrl}swappy-exchange-service/api/v1/allCoins`)
+      .get<Coin[]>(`${this.apiUrl}exchange-service/api/v1/allCoins`)
       .pipe(
         retry({ count: 3, delay: 2000 }),
         catchError((err) => customErrorHandler(err)),

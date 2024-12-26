@@ -253,7 +253,7 @@
         </div>
         <app-transaction-form
           [coinID]="coinID"
-          (completedSubmission)="handleFormCompletion()"
+          (completedSubmission)="handleFormCompletion($event)"
         ></app-transaction-form>
       </div>
     </ng-template>

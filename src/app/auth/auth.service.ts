@@ -38,7 +38,7 @@ export class AuthService {
 
   signUp(user: UserSignup) {
     return this.http
-      .post<any>(`${this.apiUrl}swappy-user-service/api/v1/auth/register`, user)
+      .post<any>(`${this.apiUrl}user-service/api/v1/auth/register`, user)
       .pipe(
         map((response: any) => {
           if (response && response.token) {
@@ -53,7 +53,7 @@ export class AuthService {
 
   logIn(user: UserLogin) {
     return this.http
-      .post<any>(`${this.apiUrl}swappy-user-service/api/v1/auth/login`, user)
+      .post<any>(`${this.apiUrl}user-service/api/v1/auth/login`, user)
       .pipe(
         map((response) => {
           if (response && response.token) {
@@ -69,7 +69,7 @@ export class AuthService {
   sendResetPasswordEmail(req: ResetEmailRequest) {
     return this.http
       .post<any>(
-        `${this.apiUrl}swappy-user-service/api/v1/user/reset-password-email`,
+        `${this.apiUrl}user-service/api/v1/user/reset-password-email`,
         req,
       )
       .pipe(catchError((err) => customErrorHandler(err)));
@@ -78,7 +78,7 @@ export class AuthService {
   checkResetPasswordToken(req: TokenRequest) {
     return this.http
       .post<boolean>(
-        `${this.apiUrl}swappy-user-service/api/v1/user/reset-password-token-check`,
+        `${this.apiUrl}user-service/api/v1/user/reset-password-token-check`,
         req,
       )
       .pipe(catchError((err) => customErrorHandler(err)));
@@ -87,7 +87,7 @@ export class AuthService {
   resetPassword(request: ResetPasswordRequest) {
     return this.http
       .post<string>(
-        `${this.apiUrl}swappy-user-service/api/v1/user/reset-password`,
+        `${this.apiUrl}user-service/api/v1/user/reset-password`,
         request,
       )
       .pipe(catchError((err) => customErrorHandler(err)));

@@ -46,7 +46,7 @@ export class TransactionService implements ITransactionService {
   createTransaction(transaction: TransactionRequest): Observable<boolean> {
     return this.http
       .post<TransactionRequest>(
-        `${this.url}swappy-portfolio-service/api/v1/transaction`,
+        `${this.url}portfolio-service/api/v1/transaction`,
         transaction,
       )
       .pipe(
@@ -62,7 +62,7 @@ export class TransactionService implements ITransactionService {
   fetchTransactionsByAssetId(assetId: number): Observable<AssetResponse> {
     return this.http
       .get<AssetResponse>(
-        `${this.url}swappy-portfolio-service/api/v1/assets/transactions/${assetId}`,
+        `${this.url}portfolio-service/api/v1/assets/transactions/${assetId}`,
         { context: new HttpContext().set(SkipLoading, true) },
       )
       .pipe(
@@ -74,7 +74,7 @@ export class TransactionService implements ITransactionService {
   fetchTransactionById(transactionId: number): Observable<TransactionResponse> {
     return this.http
       .get<TransactionResponse>(
-        `${this.url}swappy-portfolio-service/api/v1/transaction/${transactionId}`,
+        `${this.url}portfolio-service/api/v1/transaction/${transactionId}`,
         { context: new HttpContext().set(SkipLoading, true) },
       )
       .pipe(
@@ -88,7 +88,7 @@ export class TransactionService implements ITransactionService {
   ): Observable<TransactionResponse> {
     return this.http
       .put<TransactionResponse>(
-        `${this.url}swappy-portfolio-service/api/v1/transaction`,
+        `${this.url}portfolio-service/api/v1/transaction`,
         input,
         { context: new HttpContext().set(SkipLoading, true) },
       )
@@ -98,7 +98,7 @@ export class TransactionService implements ITransactionService {
   deleteTransactionById(transactionId: number) {
     return this.http
       .delete<DeleteResponse>(
-        `${this.url}swappy-portfolio-service/api/v1/transaction/${transactionId}`,
+        `${this.url}portfolio-service/api/v1/transaction/${transactionId}`,
       )
       .pipe(
         tap(() => this.cs.triggerRefresh()),

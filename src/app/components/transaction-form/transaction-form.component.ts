@@ -1,21 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import {
-  FormsModule,
   FormBuilder,
   Validators,
   ReactiveFormsModule,
-  FormControl,
   FormGroup,
 } from '@angular/forms';
 import { Action } from '../../interfaces/portfolio.interface';
@@ -161,13 +153,15 @@ export class TransactionFormComponent {
 
   private handleTransactionSuccess(res: any): void {
     console.log('Transaction successful:', res);
-    this.completedSubmission.emit();
+    this.completedSubmission.emit('Success');
+    this.wizForm.reset();
     // Optionally, reset the form or navigate away
   }
 
   private handleTransactionError(err: any): void {
+    this.completedSubmission.emit('Error');
+    this.loadingService.loadingOff();
     console.error('Transaction failed:', err);
-    // Optionally, show an error message to the user
     // this.notificationService.showError('Transaction failed. Please try again.');
   }
 

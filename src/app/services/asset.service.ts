@@ -44,7 +44,7 @@ export class AssetService implements IAssetService {
     return this.http
       .get<
         Asset[]
-      >(`${this.apiurl}swappy-portfolio-service/api/v1/assets/portfolio/${portfolioId}`)
+      >(`${this.apiurl}portfolio-service/api/v1/assets/portfolio/${portfolioId}`)
       .pipe(
         retry({ count: 3, delay: 2000 }),
         catchError((err) => customErrorHandler(err)),
@@ -53,9 +53,7 @@ export class AssetService implements IAssetService {
 
   deleteAsset(assetId: number) {
     return this.http
-      .delete<void>(
-        `${this.apiurl}swappy-portfolio-service/api/v1/assets/${assetId}`,
-      )
+      .delete<void>(`${this.apiurl}portfolio-service/api/v1/assets/${assetId}`)
       .pipe(
         tap(() => this.cs.triggerRefresh()),
         catchError((err) => customErrorHandler(err)),

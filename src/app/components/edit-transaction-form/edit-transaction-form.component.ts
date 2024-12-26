@@ -75,7 +75,6 @@ export class EditTransactionFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.assetId);
     this.initEditForm();
     this.today = new Date();
     this.subscribeToValueChanges();
@@ -176,9 +175,6 @@ export class EditTransactionFormComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.completed.emit('Error');
           console.error(error);
-        },
-        complete: () => {
-          // this.loadingService.loadingOff();
         },
       });
   }

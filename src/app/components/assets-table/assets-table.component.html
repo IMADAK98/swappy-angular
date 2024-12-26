@@ -11,7 +11,9 @@
             <th class="text-black font-semibold" pSortableColumn="name">
               Name <p-sortIcon field="name"></p-sortIcon>
             </th>
-            <th class="text-black font-semibold">Price</th>
+            <th class="text-black font-semibold" pSortableColumn="price">
+              Price <p-sortIcon field="price"></p-sortIcon>
+            </th>
             <th
               class="text-black font-semibold"
               pSortableColumn="totalQuantity"
@@ -64,7 +66,7 @@
             </td>
             <td>
               <p class="text-gray-900 font-medium">
-                {{ assets.currentPrice | currency }}
+                {{ assets.currentPrice | currency: "USD" : "symbol" : "1.2-4" }}
               </p>
             </td>
             <td class="flex flex-col justify-center space-y-1">
@@ -140,7 +142,7 @@
             <div class="flex justify-end">
               <button
                 (click)="visible = !visible"
-                class="p-3  text-xl font-semibold"
+                class="p-3 text-xl font-semibold"
               >
                 x
               </button>

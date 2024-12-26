@@ -10,7 +10,6 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 import { CommonModule } from '@angular/common';
-import { LoadingIndicatorComponent } from '../../loading-indicator/loading-indicator.component';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -30,7 +29,6 @@ import { PortfolioService } from '../../services/portfolio.service';
     DialogModule,
     TransactionFormComponent,
     CommonModule,
-    LoadingIndicatorComponent,
     MenuModule,
     ConfirmDialogModule,
     ToastModule,

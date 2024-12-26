@@ -123,6 +123,7 @@ export class TransactionsComponent {
         detail: 'Transaction updated successfully.',
         life: 5000,
       });
+      this.initObservable();
     } else if (event === 'Error') {
       this.messageService.add({
         severity: 'error',
@@ -131,9 +132,6 @@ export class TransactionsComponent {
         life: 5000,
       });
     }
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
   }
 
   confirmDelete(transaction: TransactionDto) {
@@ -159,7 +157,7 @@ export class TransactionsComponent {
           detail: `Deleted successfully`,
           life: 5000,
         });
-        window.location.reload();
+        this.initObservable();
       },
     });
   }
@@ -189,7 +187,23 @@ export class TransactionsComponent {
     return `${sign} ${transaction.transactionAmount}`;
   }
 
-  handleFormCompletion() {
-    this.visible = false;
+  handleFormCompletion(event: string) {
+    this.isAddDialogVisible = false;
+    if (event === 'Success') {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Transaction updated successfully.',
+        life: 5000,
+      });
+      this.initObservable();
+    } else if (event === 'Error') {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'An error occurred',
+        life: 5000,
+      });
+    }
   }
 }

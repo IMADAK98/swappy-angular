@@ -72,7 +72,7 @@ export class ChartsService implements IChartsService {
   private fetchPieChart(): Observable<PiChartResponse> {
     return this.http
       .get<PiChartResponse>(
-        `${this.url}swappy-portfolio-service/api/v1/charts/pie-chart`,
+        `${this.url}portfolio-service/api/v1/charts/pie-chart`,
       )
       .pipe(catchError(customErrorHandler));
   }
@@ -82,7 +82,7 @@ export class ChartsService implements IChartsService {
   // ): Observable<SnapshotResponse> {
   //   return this.http
   //     .get<SnapshotResponse>(
-  //       `${this.url}swappy-portfolio-service/api/v1/charts/line-chart-snapshots`,
+  //       `${this.url}portfolio-service/api/v1/charts/line-chart-snapshots`,
   //       { params: { params } },
   //     )
   //     .pipe(catchError(customErrorHandler));
@@ -92,7 +92,7 @@ export class ChartsService implements IChartsService {
   ): Observable<SnapshotResponse> {
     return this.http
       .get<SnapshotResponse>(
-        `${this.url}swappy-portfolio-service/api/v1/charts/line-chart-snapshots`,
+        `${this.url}portfolio-service/api/v1/charts/line-chart-snapshots`,
         {
           params: { period: params },
           context: new HttpContext().set(SkipLoading, true),
@@ -110,7 +110,7 @@ export class ChartsService implements IChartsService {
     }
     return this.http
       .get<BarChartResponse>(
-        `${this.url}swappy-portfolio-service/api/v1/charts/bar-chart`,
+        `${this.url}portfolio-service/api/v1/charts/bar-chart`,
         { params },
       )
       .pipe(catchError(customErrorHandler));
@@ -133,7 +133,6 @@ export class ChartsService implements IChartsService {
   }
 
   updateLineChartFilter(filter: LineChartParams): void {
-    console.log(filter, 'filter is ');
     this.lineChartFilter$.next(filter);
   }
 }
