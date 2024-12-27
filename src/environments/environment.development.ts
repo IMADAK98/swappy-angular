@@ -5,5 +5,5 @@ export interface Environment {
 
 export const environment: Environment = {
   production: false,
-  apiUrl: 'https://cryptfolio.pro/',
+  apiUrl: 'https://api.cryptfolio.pro/',
 };
