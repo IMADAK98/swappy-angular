@@ -102,9 +102,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             });
           }
         },
-        complete: () => {
-          console.log('Observations completed');
-        },
       });
   }
 

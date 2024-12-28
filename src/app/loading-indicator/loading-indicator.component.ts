@@ -39,7 +39,6 @@ export class LoadingIndicatorComponent {
         .pipe(
           filter(() => isPlatformBrowser(this.platformId)), // Check platform before tap
           tap((event) => {
-            console.log('detected route transition');
             if (event instanceof NavigationStart) {
               this.loadingService.loadingOn();
             } else if (

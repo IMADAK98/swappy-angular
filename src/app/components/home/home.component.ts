@@ -37,16 +37,9 @@ export class HomeComponent implements OnInit {
     private router: Router,
   ) {}
   ngOnInit(): void {}
-  // imageState = 'rotating'; // Initial state for the animation
 
-  rotateImage() {
-    setInterval(() => {
-      this.imageState = this.imageState === 'normal' ? 'rotated' : 'normal';
-    }, 5000);
-  }
-
-  onAccess() {
-    this.router.navigateByUrl('/dashboard');
+  onAccess(redirectTo: string) {
+    this.router.navigate(['/dashboard'], { state: { redirectTo } });
   }
 
   onClickLogout() {

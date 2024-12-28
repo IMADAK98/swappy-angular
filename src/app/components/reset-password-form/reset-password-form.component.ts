@@ -53,7 +53,6 @@ export class ResetPasswordFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');
-    console.log(this.token + ' is the token ');
   }
 
   mustMatch(password: string, confirmPassword: string) {

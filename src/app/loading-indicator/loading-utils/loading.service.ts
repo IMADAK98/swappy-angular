@@ -12,7 +12,6 @@ export class LoadingService {
   constructor() {}
 
   loadingOn() {
-    console.log('loading on');
     this.loadingSubject.next(true);
   }
 

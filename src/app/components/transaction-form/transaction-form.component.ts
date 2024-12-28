@@ -152,7 +152,6 @@ export class TransactionFormComponent {
   }
 
   private handleTransactionSuccess(res: any): void {
-    console.log('Transaction successful:', res);
     this.completedSubmission.emit('Success');
     this.wizForm.reset();
     // Optionally, reset the form or navigate away

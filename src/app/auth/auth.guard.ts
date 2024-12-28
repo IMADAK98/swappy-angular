@@ -15,12 +15,17 @@ export const authGuard: CanActivateFn = (
   if (isPlatformServer(inject(PLATFORM_ID))) {
     return false;
   }
-  console.log('guard activated');
   const authService: AuthService = inject(AuthService);
   const router: Router = inject(Router);
 
   if (authService.isLoggedIn()) return true;
-  return router.createUrlTree(['/login'], {
+
+  const navigation = router.getCurrentNavigation();
+  const redirectTo = navigation?.extras.state?.['redirectTo'];
+
+  const targetRoute = redirectTo === 'signup' ? '/signup' : '/login';
+
+  return router.createUrlTree([targetRoute], {
     queryParams: { returnUrl: state.url },
   });
 };

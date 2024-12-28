@@ -34,6 +34,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'dashboard',
+    component: DashboardComponent,
+    title: 'dashboard',
+    canActivate: [authGuard, portfolioGuard],
+    data: { animation: 'DashboardPage' },
+  },
+
+  {
     path: 'signup',
     component: SignupComponent,
     title: 'signup',
@@ -56,14 +64,6 @@ export const routes: Routes = [
     component: ResetPasswordFormComponent,
     canActivate: [resetPasswordGuard],
     title: 'reset password',
-  },
-
-  {
-    path: 'dashboard',
-    component: DashboardComponent,
-    title: 'dashboard',
-    canActivate: [authGuard, portfolioGuard],
-    data: { animation: 'DashboardPage' },
   },
 
   {

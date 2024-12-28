@@ -81,9 +81,6 @@ export class SignupComponent {
           console.error(err);
         } else throw err;
       },
-      complete: () => {
-        console.log('Observations completed');
-      },
     });
   }
 
