@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   currentUrl: string = '';
 
   Links = [
-    { name: 'Home', route: '/home' },
+    { name: 'Home', route: '' },
     { name: 'Dashboard', route: '/dashboard' },
     { name: 'Login', route: '/login' },
     { name: 'Logout', route: '/logout' },
@@ -48,8 +48,14 @@ export class HeaderComponent implements OnInit {
     this.auth.logout();
   }
 
+  // isActive(route: string): boolean {
+  //   return this.currentUrl.includes(route);
+  // }
   isActive(route: string): boolean {
-    return this.currentUrl.includes(route);
+    if (route === '') {
+      return this.currentUrl === '/'; // Match only the exact root URL
+    }
+    return this.currentUrl.startsWith(route);
   }
 
   getFilteredLinks() {

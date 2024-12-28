@@ -1,13 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+
 import { NgxTypedWriterModule } from 'ngx-typed-writer';
 
 @Component({
@@ -42,6 +36,10 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/dashboard'], { state: { redirectTo } });
   }
 
+  // ngAfterViewInit() {
+  //   const video = document.querySelector('video');
+  //   video?.load();
+  // }
   onClickLogout() {
     this.auth.logout();
   }

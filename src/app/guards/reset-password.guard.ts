@@ -9,7 +9,7 @@ export const resetPasswordGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
   if (!token) {
-    return router.createUrlTree(['/home']);
+    return router.createUrlTree(['/']);
   }
 
   const req: TokenRequest = {
@@ -22,7 +22,7 @@ export const resetPasswordGuard: CanActivateFn = (route, state) => {
         router.createUrlTree(['/reset-form']);
         return true;
       } else {
-        return router.createUrlTree(['/home']);
+        return router.createUrlTree(['/']);
       }
     }),
   );

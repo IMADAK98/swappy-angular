@@ -27,7 +27,7 @@ import { resetPasswordGuard } from './guards/reset-password.guard';
 
 export const routes: Routes = [
   {
-    path: 'home',
+    path: '',
     title: 'home page',
     component: HomeComponent,
     data: { animation: 'HomePage' },
@@ -93,11 +93,11 @@ export const routes: Routes = [
     component: LoadingIndicatorComponent,
   },
 
-  {
-    path: '',
-    redirectTo: '/home',
-    pathMatch: 'full',
-  },
+  // {
+  //   path: '',
+  //   redirectTo: '/home',
+  //   pathMatch: 'full',
+  // },
 
   {
     path: 'table',
