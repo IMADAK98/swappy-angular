@@ -20,7 +20,6 @@
             >
               Holdings <p-sortIcon field="totalQuantity"></p-sortIcon>
             </th>
-            <th class="text-black font-semibold">Actions</th>
             <th
               class="text-black font-semibold"
               pSortableColumn="realizedProfitLossAmount"
@@ -42,6 +41,8 @@
               Total Profit/Loss
               <p-sortIcon field="totalProfitAndLossAmount"></p-sortIcon>
             </th>
+
+            <th class="text-black font-semibold">Actions</th>
           </tr>
         </ng-template>
 
@@ -77,29 +78,7 @@
                 {{ assets.totalQuantity | number }} {{ assets.symbol }}
               </span>
             </td>
-            <td>
-              <p-button
-                icon="pi pi-plus"
-                (onClick)="showDialog(assets.coinId)"
-                [raised]="true"
-                [rounded]="true"
-                [text]="true"
-                [outlined]="true"
-                size="small"
-              >
-              </p-button>
 
-              <p-menu #menu [model]="items" [popup]="true" appendTo="body" />
-              <p-button
-                [raised]="true"
-                [rounded]="true"
-                [text]="true"
-                [outlined]="true"
-                size="small"
-                icon="pi pi-ellipsis-v"
-                (click)="selectedItem = assets; menu.toggle($event)"
-              />
-            </td>
             <td>
               <p
                 class="font-medium"
@@ -123,6 +102,30 @@
               >
                 {{ assets.totalProfitAndLossAmount | currency }}
               </p>
+            </td>
+
+            <td>
+              <p-button
+                icon="pi pi-plus"
+                (onClick)="showDialog(assets.coinId)"
+                [raised]="true"
+                [rounded]="true"
+                [text]="true"
+                [outlined]="true"
+                size="small"
+              >
+              </p-button>
+
+              <p-menu #menu [model]="items" [popup]="true" appendTo="body" />
+              <p-button
+                [raised]="true"
+                [rounded]="true"
+                [text]="true"
+                [outlined]="true"
+                size="small"
+                icon="pi pi-ellipsis-v"
+                (click)="selectedItem = assets; menu.toggle($event)"
+              />
             </td>
           </tr>
         </ng-template>
