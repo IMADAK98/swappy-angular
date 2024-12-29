@@ -14,12 +14,9 @@ import { AssetsTableComponent } from '../assets-table/assets-table.component';
 import { CardModule } from 'primeng/card';
 import { PiChartComponent } from '../pi-chart/pi-chart.component';
 import { NgOptimizedImage } from '@angular/common';
-import { NoAssetsComponent } from '../no-assets/no-assets.component';
-import { RouterLink } from '@angular/router';
 import { MenuActionsComponent } from '../menu-actions/menu-actions.component';
 import { WizardComponent } from '../wizard/wizard.component';
-import { PortfolioComponent } from '../new-portfolio-form/new-portfolio-form.component';
-import { NoPortfolioComponent } from '../no-portfolio/no-portfolio.component';
+
 import { LineChartComponent } from '../line-chart/line-chart.component';
 import { BarChartComponent } from '../bar-chart/bar-chart.component';
 import {
