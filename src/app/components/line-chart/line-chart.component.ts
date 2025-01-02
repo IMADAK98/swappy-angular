@@ -176,9 +176,10 @@ export class LineChartComponent implements OnInit, OnDestroy {
             above: `${this.documentStyle.getPropertyValue('--blue-400')}20`, // 20 is opacity in hex
           },
           borderColor: this.documentStyle.getPropertyValue('--blue-400'),
-          tension: 0.4,
+          tension: 0.6,
           pointRadius: 0,
           borderWidth: 2,
+          cubicInterpolationMode: 'monotone',
         },
       ],
     };
@@ -251,23 +252,23 @@ export class LineChartComponent implements OnInit, OnDestroy {
             color: this.surfaceBorder,
           },
 
-          // Add suggested minimum/maximum padding to prevent data from touching edges
-          suggestedMin: (context: any) => {
-            const min = Math.min(
-              ...context.chart.data.datasets[0].data.map(
-                (point: any) => point.y,
-              ),
-            );
-            return min - min * 0.05; // 5% padding below minimum
-          },
-          suggestedMax: (context: any) => {
-            const max = Math.max(
-              ...context.chart.data.datasets[0].data.map(
-                (point: any) => point.y,
-              ),
-            );
-            return max + max * 0.05; // 5% padding above maximum
-          },
+          // // Add suggested minimum/maximum padding to prevent data from touching edges
+          // suggestedMin: (context: any) => {
+          //   const min = Math.min(
+          //     ...context.chart.data.datasets[0].data.map(
+          //       (point: any) => point.y,
+          //     ),
+          //   );
+          //   return min - min * 0.05; // 5% padding below minimum
+          // },
+          // suggestedMax: (context: any) => {
+          //   const max = Math.max(
+          //     ...context.chart.data.datasets[0].data.map(
+          //       (point: any) => point.y,
+          //     ),
+          //   );
+          //   return max + max * 0.05; // 5% padding above maximum
+          // },
         },
       },
     };
