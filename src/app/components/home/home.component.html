@@ -16,32 +16,17 @@
     <div
       class="relative z-10 flex flex-col justify-center items-start h-full p-4 md:p-8"
     >
-      <div class="max-w-xl md:max-w-2xl">
+      <div class="">
         <ngx-typed-writer
-          class="text-6xl sm:text-5xl md:text-7xl lg:text-5xl text-white mb-2 md:mb-4 font-medium italic"
+          class="text-6xl sm:text-5xl md:text-7xl lg:text-5xl text-white mb-2 md:mb-4 font-medium"
           [strings]="sentencies"
-          [typeSpeed]="50"
-          [backSpeed]="40"
+          [typeSpeed]="60"
+          [backSpeed]="60"
           [showCursor]="true"
           cursorChar="|"
           loop="true"
         >
         </ngx-typed-writer>
-
-        <!-- <h1
-          class="text-3xl sm:text-6xl md:text-7xl lg:text-9xl text-white mb-2 md:mb-4 font-medium"
-        >
-          The <span class="text-sky-400 font-bold">world</span> Is In Your
-          <span class="text-sky-400 font-bold">Hands</span>
-        </h1>
-        <h3
-          class="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-gray-300 mb-2"
-        >
-          Discover the potential
-        </h3>
-        <p class="text-sm md:text-base opacity-75 text-gray-400 mb-4">
-          <span class="text-red-600">Beta version</span>
-        </p> -->
       </div>
     </div>
   </div>
@@ -54,15 +39,6 @@
     class="flex flex-col justify-between items-center bg-gray-900 p-4 w-full md:w-1/4"
   >
     <div></div>
-    <!-- Conditional Buttons -->
-    <!-- <div class="space-y-4 w-full max-w-xs">
-        <button
-          (click)="onAccess()"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-        >
-          Access App
-        </button>
-      </div> -->
 
     <div class="space-y-4 w-full max-w-xs">
       <button

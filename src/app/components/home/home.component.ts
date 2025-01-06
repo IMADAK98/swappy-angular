@@ -20,10 +20,10 @@ export class HomeComponent implements OnInit {
     'Simplify Your Portfolio Management!',
     'Stay Ahead with Real-Time Tracking.',
     'All Your Crypto in One Dashboard.',
-    'Analyze. Optimize. Grow.',
-    'Track Gains, Minimize Losses.',
+    'Analyze.Optimize.Grow.',
+    'Track Gains,Minimize Losses.',
     'Visualize Performance Effortlessly.',
-    'Stay Informed, Stay Empowered.',
+    'Stay Informed,Stay Empowered.',
   ];
 
   constructor(

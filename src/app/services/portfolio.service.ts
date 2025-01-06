@@ -28,7 +28,6 @@ export interface IPortfolioService {
   createPortfolio(
     portfolioReq: PortfolioRequest,
   ): Observable<PortfolioResponse | void>;
-  refreshPortfolio(): void;
   deletePortfolio(portfolioId: number): Observable<void>;
 }
 
@@ -134,33 +133,6 @@ export class PortfolioService implements IPortfolioService {
         `${this.apiUrl}portfolio-service/api/v1/portfolio/${portfolioId}`,
       )
       .pipe(catchError((error: any) => customErrorHandler(error)));
-  }
-
-  refreshPortfolio() {
-    this.fetchPortfolio().subscribe((portfolio) => {
-      this.portfolioSubject.next(portfolio);
-    });
-    this.cs.triggerRefresh();
-  }
-
-  updatePortfolioData(): Observable<any> {
-    return this.http
-      .get<PortfolioResponse>(
-        `${this.apiUrl}portfolio-service/api/v1/portfolio-by-email`,
-      )
-      .pipe(
-        tap((response: PortfolioResponse) => {
-          if (response.data) {
-            this.portfolioSubject.next(this.mapToPortfolio(response.data));
-          } else {
-            this.portfolioSubject.next(null);
-          }
-        }),
-        catchError((err) => {
-          customErrorHandler(err);
-          return of(null);
-        }),
-      );
   }
 
   private mapToPortfolio(data: Portfolio): Portfolio {
